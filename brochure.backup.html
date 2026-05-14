@@ -36,11 +36,6 @@
       to   { opacity: 1; transform: translateX(0); }
     }
 
-    @keyframes marqueeSlide {
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
     a { text-decoration: none; color: inherit; }
     img { max-width: 100%; display: block; }
 
@@ -622,96 +617,6 @@
       .numeros-inner { grid-template-columns: 1fr 1fr; gap: 24px; }
       .proceso-steps::before { display: none; }
     }
-
-    /* =========================================
-       MEJORAS MÓVIL / TABLET — BROCHURE
-    ========================================= */
-
-    /* ── Tablet (≤ 900px) ── */
-    @media (max-width: 900px) {
-      .valor-grid        { grid-template-columns: 1fr; }
-      .bancos-inner      { grid-template-columns: 1fr; gap: 36px; }
-      .bancos-video-wrap { aspect-ratio: 16/9; }
-      .numeros-inner     { grid-template-columns: repeat(2,1fr); gap: 32px; }
-      .servicios-grid    { grid-template-columns: repeat(2,1fr); }
-      .estandares-grid   { grid-template-columns: repeat(2,1fr); }
-    }
-
-    /* ── Mobile (≤ 680px) ── */
-    @media (max-width: 680px) {
-      section { padding: 60px 5%; }
-
-      /* Topbar */
-      .topbar            { padding: 0 4%; height: 56px; }
-      .topbar-logo img   { height: 34px; }
-      .btn-volver        { font-size: 0.75rem; padding: 7px 14px; }
-
-      /* Portada */
-      #portada           { padding: 80px 5% 64px; min-height: 100svh; }
-      .portada-title     { font-size: clamp(2rem, 8vw, 3rem); }
-      .portada-sub       { font-size: 0.92rem; }
-      .portada-stats     { gap: 20px 32px; }
-      .pstat-num         { font-size: 2rem; }
-      .pstat-label       { font-size: 0.72rem; }
-      .portada-eyebrow   { font-size: 0.65rem; padding: 5px 14px; }
-
-      /* Propuesta de valor */
-      .valor-grid        { grid-template-columns: 1fr; }
-      .valor-item        { padding: 32px 24px; }
-
-      /* Servicios */
-      .servicios-grid    { grid-template-columns: 1fr; }
-      .srv-card          { padding: 28px 22px; }
-      .srv-num           { font-size: 2.2rem; margin-bottom: 10px; }
-
-      /* Bancos */
-      .bancos-inner      { grid-template-columns: 1fr; gap: 32px; }
-      .bancos-video-wrap { border-radius: 12px; }
-      .bfeat             { font-size: 0.83rem; }
-
-      /* Proceso */
-      .proceso-steps::before { display: none; }
-      .paso              { grid-template-columns: 44px 1fr; gap: 16px; padding: 20px 0; }
-      .paso-num          { width: 44px; height: 44px; font-size: 0.9rem; }
-      .paso-body h3      { font-size: 0.92rem; padding-top: 10px; }
-      .paso-body p       { font-size: 0.8rem; }
-
-      /* Estándares */
-      .estandares-grid   { grid-template-columns: 1fr 1fr; gap: 12px; }
-      .estandar-card     { padding: 24px 18px; }
-      .estandar-logo     { width: 52px; height: 52px; font-size: 1.1rem; }
-
-      /* Números */
-      #numeros           { padding: 56px 5%; }
-      .numeros-inner     { grid-template-columns: repeat(2,1fr); gap: 24px; }
-      .nstat-num         { font-size: 2.2rem; }
-
-      /* Contacto final */
-      #contacto-final    { padding: 80px 5%; }
-      .cf-inner h2       { font-size: 1.7rem; }
-      .cf-inner p        { font-size: 0.9rem; }
-      .cf-item           { font-size: 0.82rem; flex-wrap: wrap; justify-content: center; text-align: center; }
-      .cf-btns           { flex-direction: column; gap: 12px; }
-      .btn-primary,
-      .btn-wa            { width: 100%; justify-content: center; }
-
-      /* Footer brochure */
-      .br-footer         { flex-direction: column; align-items: flex-start; gap: 10px; }
-      .br-footer img     { height: 28px; }
-      .br-footer p       { font-size: 0.7rem; }
-
-      /* Video proceso badge */
-      .proceso-video-badge { display: none; }
-    }
-
-    /* ── Móvil pequeño (≤ 420px) ── */
-    @media (max-width: 420px) {
-      .portada-title     { font-size: 1.8rem; }
-      .portada-stats     { flex-direction: column; align-items: center; gap: 16px; }
-      .estandares-grid   { grid-template-columns: 1fr; }
-      .numeros-inner     { grid-template-columns: 1fr 1fr; }
-      .servicios-grid    { grid-template-columns: 1fr; }
-    }
   </style>
 </head>
 <body>
@@ -1113,29 +1018,6 @@
         <div class="nstat-label">Niveles TIER que manejamos</div>
       </div>
     </div>
-  </section>
-
-  <!-- ═══ CLIENTES ═══ -->
-  <section id="clientes" style="background:var(--fondo-card); padding:72px 0; border-top:1px solid var(--borde-sutil); border-bottom:1px solid var(--borde-sutil); overflow:hidden;">
-    <div style="text-align:center; padding:0 5%; margin-bottom:52px;" class="reveal">
-      <div class="section-tag">Quienes nos eligen</div>
-      <h2 class="section-title" style="margin-bottom:8px;">Empresas que <span>confían en DATCER</span></h2>
-      <p style="font-size:0.9rem; color:var(--texto-2);">Organizaciones líderes que respaldan su infraestructura crítica con nuestra ingeniería.</p>
-    </div>
-    <div style="position:relative; overflow:hidden; mask-image:linear-gradient(to right,transparent 0%,black 12%,black 88%,transparent 100%); -webkit-mask-image:linear-gradient(to right,transparent 0%,black 12%,black 88%,transparent 100%);">
-      <div style="display:flex; align-items:center; width:max-content; animation:marqueeSlide 22s linear infinite;">
-        <div style="display:flex; align-items:center; justify-content:center; padding:0 56px; border-right:1px solid var(--borde-sutil); height:80px; flex-shrink:0;"><img src="Assets/images.jpg" alt="Smart Cloud" style="height:36px; width:auto; max-width:140px; object-fit:contain; filter:brightness(0) invert(0.7); transition:filter 0.4s,transform 0.3s;" onmouseover="this.style.filter='brightness(1) invert(0) saturate(1)';this.style.transform='scale(1.06)'" onmouseout="this.style.filter='brightness(0) invert(0.7)';this.style.transform='scale(1)'"/></div>
-        <div style="display:flex; align-items:center; justify-content:center; padding:0 56px; border-right:1px solid var(--borde-sutil); height:80px; flex-shrink:0;"><img src="Assets/liberty-networks-600x178.webp" alt="Liberty Networks" style="height:36px; width:auto; max-width:140px; object-fit:contain; filter:brightness(0) invert(0.7); transition:filter 0.4s,transform 0.3s;" onmouseover="this.style.filter='brightness(1) invert(0) saturate(1)';this.style.transform='scale(1.06)'" onmouseout="this.style.filter='brightness(0) invert(0.7)';this.style.transform='scale(1)'"/></div>
-        <div style="display:flex; align-items:center; justify-content:center; padding:0 56px; border-right:1px solid var(--borde-sutil); height:80px; flex-shrink:0;"><img src="Assets/IFF_Company_Logo.png" alt="IFF" style="height:36px; width:auto; max-width:140px; object-fit:contain; filter:brightness(0) invert(0.7); transition:filter 0.4s,transform 0.3s;" onmouseover="this.style.filter='brightness(1) invert(0) saturate(1)';this.style.transform='scale(1.06)'" onmouseout="this.style.filter='brightness(0) invert(0.7)';this.style.transform='scale(1)'"/></div>
-        <div style="display:flex; align-items:center; justify-content:center; padding:0 56px; border-right:1px solid var(--borde-sutil); height:80px; flex-shrink:0;"><img src="Assets/seffia.png" alt="Seffia AI" style="height:36px; width:auto; max-width:140px; object-fit:contain; filter:brightness(0) invert(0.7); transition:filter 0.4s,transform 0.3s;" onmouseover="this.style.filter='brightness(1) invert(0) saturate(1)';this.style.transform='scale(1.06)'" onmouseout="this.style.filter='brightness(0) invert(0.7)';this.style.transform='scale(1)'"/></div>
-        <!-- copia loop -->
-        <div style="display:flex; align-items:center; justify-content:center; padding:0 56px; border-right:1px solid var(--borde-sutil); height:80px; flex-shrink:0;"><img src="Assets/images.jpg" alt="Smart Cloud" style="height:36px; width:auto; max-width:140px; object-fit:contain; filter:brightness(0) invert(0.7); transition:filter 0.4s,transform 0.3s;" onmouseover="this.style.filter='brightness(1) invert(0) saturate(1)';this.style.transform='scale(1.06)'" onmouseout="this.style.filter='brightness(0) invert(0.7)';this.style.transform='scale(1)'"/></div>
-        <div style="display:flex; align-items:center; justify-content:center; padding:0 56px; border-right:1px solid var(--borde-sutil); height:80px; flex-shrink:0;"><img src="Assets/liberty-networks-600x178.webp" alt="Liberty Networks" style="height:36px; width:auto; max-width:140px; object-fit:contain; filter:brightness(0) invert(0.7); transition:filter 0.4s,transform 0.3s;" onmouseover="this.style.filter='brightness(1) invert(0) saturate(1)';this.style.transform='scale(1.06)'" onmouseout="this.style.filter='brightness(0) invert(0.7)';this.style.transform='scale(1)'"/></div>
-        <div style="display:flex; align-items:center; justify-content:center; padding:0 56px; border-right:1px solid var(--borde-sutil); height:80px; flex-shrink:0;"><img src="Assets/IFF_Company_Logo.png" alt="IFF" style="height:36px; width:auto; max-width:140px; object-fit:contain; filter:brightness(0) invert(0.7); transition:filter 0.4s,transform 0.3s;" onmouseover="this.style.filter='brightness(1) invert(0) saturate(1)';this.style.transform='scale(1.06)'" onmouseout="this.style.filter='brightness(0) invert(0.7)';this.style.transform='scale(1)'"/></div>
-        <div style="display:flex; align-items:center; justify-content:center; padding:0 56px; height:80px; flex-shrink:0;"><img src="Assets/seffia.png" alt="Seffia AI" style="height:36px; width:auto; max-width:140px; object-fit:contain; filter:brightness(0) invert(0.7); transition:filter 0.4s,transform 0.3s;" onmouseover="this.style.filter='brightness(1) invert(0) saturate(1)';this.style.transform='scale(1.06)'" onmouseout="this.style.filter='brightness(0) invert(0.7)';this.style.transform='scale(1)'"/></div>
-      </div>
-    </div>
-    <p style="text-align:center; font-size:0.72rem; color:rgba(138,155,176,0.45); margin-top:44px; padding:0 5%;">Confidencialidad garantizada · Los proyectos se muestran con autorización expresa del cliente.</p>
   </section>
 
   <!-- ═══ CONTACTO FINAL ═══ -->
