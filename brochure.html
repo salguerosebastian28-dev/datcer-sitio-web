@@ -617,6 +617,96 @@
       .numeros-inner { grid-template-columns: 1fr 1fr; gap: 24px; }
       .proceso-steps::before { display: none; }
     }
+
+    /* =========================================
+       MEJORAS MÓVIL / TABLET — BROCHURE
+    ========================================= */
+
+    /* ── Tablet (≤ 900px) ── */
+    @media (max-width: 900px) {
+      .valor-grid        { grid-template-columns: 1fr; }
+      .bancos-inner      { grid-template-columns: 1fr; gap: 36px; }
+      .bancos-video-wrap { aspect-ratio: 16/9; }
+      .numeros-inner     { grid-template-columns: repeat(2,1fr); gap: 32px; }
+      .servicios-grid    { grid-template-columns: repeat(2,1fr); }
+      .estandares-grid   { grid-template-columns: repeat(2,1fr); }
+    }
+
+    /* ── Mobile (≤ 680px) ── */
+    @media (max-width: 680px) {
+      section { padding: 60px 5%; }
+
+      /* Topbar */
+      .topbar            { padding: 0 4%; height: 56px; }
+      .topbar-logo img   { height: 34px; }
+      .btn-volver        { font-size: 0.75rem; padding: 7px 14px; }
+
+      /* Portada */
+      #portada           { padding: 80px 5% 64px; min-height: 100svh; }
+      .portada-title     { font-size: clamp(2rem, 8vw, 3rem); }
+      .portada-sub       { font-size: 0.92rem; }
+      .portada-stats     { gap: 20px 32px; }
+      .pstat-num         { font-size: 2rem; }
+      .pstat-label       { font-size: 0.72rem; }
+      .portada-eyebrow   { font-size: 0.65rem; padding: 5px 14px; }
+
+      /* Propuesta de valor */
+      .valor-grid        { grid-template-columns: 1fr; }
+      .valor-item        { padding: 32px 24px; }
+
+      /* Servicios */
+      .servicios-grid    { grid-template-columns: 1fr; }
+      .srv-card          { padding: 28px 22px; }
+      .srv-num           { font-size: 2.2rem; margin-bottom: 10px; }
+
+      /* Bancos */
+      .bancos-inner      { grid-template-columns: 1fr; gap: 32px; }
+      .bancos-video-wrap { border-radius: 12px; }
+      .bfeat             { font-size: 0.83rem; }
+
+      /* Proceso */
+      .proceso-steps::before { display: none; }
+      .paso              { grid-template-columns: 44px 1fr; gap: 16px; padding: 20px 0; }
+      .paso-num          { width: 44px; height: 44px; font-size: 0.9rem; }
+      .paso-body h3      { font-size: 0.92rem; padding-top: 10px; }
+      .paso-body p       { font-size: 0.8rem; }
+
+      /* Estándares */
+      .estandares-grid   { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .estandar-card     { padding: 24px 18px; }
+      .estandar-logo     { width: 52px; height: 52px; font-size: 1.1rem; }
+
+      /* Números */
+      #numeros           { padding: 56px 5%; }
+      .numeros-inner     { grid-template-columns: repeat(2,1fr); gap: 24px; }
+      .nstat-num         { font-size: 2.2rem; }
+
+      /* Contacto final */
+      #contacto-final    { padding: 80px 5%; }
+      .cf-inner h2       { font-size: 1.7rem; }
+      .cf-inner p        { font-size: 0.9rem; }
+      .cf-item           { font-size: 0.82rem; flex-wrap: wrap; justify-content: center; text-align: center; }
+      .cf-btns           { flex-direction: column; gap: 12px; }
+      .btn-primary,
+      .btn-wa            { width: 100%; justify-content: center; }
+
+      /* Footer brochure */
+      .br-footer         { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .br-footer img     { height: 28px; }
+      .br-footer p       { font-size: 0.7rem; }
+
+      /* Video proceso badge */
+      .proceso-video-badge { display: none; }
+    }
+
+    /* ── Móvil pequeño (≤ 420px) ── */
+    @media (max-width: 420px) {
+      .portada-title     { font-size: 1.8rem; }
+      .portada-stats     { flex-direction: column; align-items: center; gap: 16px; }
+      .estandares-grid   { grid-template-columns: 1fr; }
+      .numeros-inner     { grid-template-columns: 1fr 1fr; }
+      .servicios-grid    { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
