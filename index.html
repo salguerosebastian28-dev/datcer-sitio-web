@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DATCER — Diseño de Data Center e Infraestructura Crítica</title>
-  <link rel="icon" type="image/png" href="Assets/Logo Datcer 08022019 (1).png" />
+  <link rel="icon" type="image/png" href="Assets/favicon-icon.png" />
   <style>
     /* =========================================
        RESET & BASE
@@ -2490,43 +2490,61 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0 56px;
-      border-right: 1px solid var(--borde-sutil);
-      height: 80px;
+      padding: 0 40px;
+      height: 100px;
       flex-shrink: 0;
-      transition: background 0.3s;
     }
 
-    .logo-item:hover { background: rgba(232,82,32,0.05); }
+    .logo-pill {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 14px;
+      padding: 18px 32px;
+      transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+      cursor: default;
+    }
 
-    .logo-item img {
-      height: 36px;
+    .logo-pill:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(232,82,32,0.25);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.25);
+    }
+
+    .logo-pill img {
+      height: 34px;
       width: auto;
-      max-width: 140px;
+      max-width: 130px;
       object-fit: contain;
-      filter: brightness(0) invert(0.7);
-      transition: filter 0.4s ease, transform 0.3s ease;
       display: block;
+      filter: grayscale(100%) brightness(1.4) contrast(0.9);
+      opacity: 0.65;
+      transition: filter 0.4s ease, opacity 0.4s ease, transform 0.3s ease;
     }
 
-    .logo-item:hover img {
-      filter: brightness(1) invert(0) saturate(1);
-      transform: scale(1.06);
+    .logo-pill:hover img {
+      filter: grayscale(0%) brightness(1) contrast(1);
+      opacity: 1;
+      transform: scale(1.04);
     }
 
     .clientes-nota {
       text-align: center;
       font-size: 0.72rem;
-      color: rgba(138,155,176,0.45);
+      color: rgba(138,155,176,0.4);
       margin-top: 44px;
       padding: 0 5%;
       letter-spacing: 0.3px;
     }
 
     @media (max-width: 680px) {
-      #clientes     { padding: 56px 0; }
-      .logo-item    { padding: 0 36px; height: 64px; }
-      .logo-item img{ height: 28px; }
+      #clientes      { padding: 56px 0; }
+      .logo-item     { padding: 0 24px; height: 80px; }
+      .logo-pill     { padding: 14px 24px; border-radius: 10px; }
+      .logo-pill img { height: 26px; }
     }
 
     /* =========================================
@@ -3460,31 +3478,15 @@
   <div class="marquee-wrap">
     <div class="marquee-track">
       <!-- Set 1 -->
-      <div class="logo-item">
-        <img src="Assets/images.jpg" alt="Smart Cloud" />
-      </div>
-      <div class="logo-item">
-        <img src="Assets/liberty-networks-600x178.webp" alt="Liberty Networks" />
-      </div>
-      <div class="logo-item">
-        <img src="Assets/IFF_Company_Logo.png" alt="IFF International Flavors & Fragrances" />
-      </div>
-      <div class="logo-item">
-        <img src="Assets/seffia.png" alt="Seffia AI" />
-      </div>
+      <div class="logo-item"><div class="logo-pill"><img src="Assets/images.jpg" alt="Smart Cloud" /></div></div>
+      <div class="logo-item"><div class="logo-pill"><img src="Assets/liberty-networks-600x178.webp" alt="Liberty Networks" /></div></div>
+      <div class="logo-item"><div class="logo-pill"><img src="Assets/IFF_Company_Logo.png" alt="IFF International Flavors & Fragrances" /></div></div>
+      <div class="logo-item"><div class="logo-pill"><img src="Assets/seffia.png" alt="Seffia AI" /></div></div>
       <!-- Set 2 — copia para loop infinito -->
-      <div class="logo-item">
-        <img src="Assets/images.jpg" alt="Smart Cloud" />
-      </div>
-      <div class="logo-item">
-        <img src="Assets/liberty-networks-600x178.webp" alt="Liberty Networks" />
-      </div>
-      <div class="logo-item">
-        <img src="Assets/IFF_Company_Logo.png" alt="IFF International Flavors & Fragrances" />
-      </div>
-      <div class="logo-item">
-        <img src="Assets/seffia.png" alt="Seffia AI" />
-      </div>
+      <div class="logo-item"><div class="logo-pill"><img src="Assets/images.jpg" alt="Smart Cloud" /></div></div>
+      <div class="logo-item"><div class="logo-pill"><img src="Assets/liberty-networks-600x178.webp" alt="Liberty Networks" /></div></div>
+      <div class="logo-item"><div class="logo-pill"><img src="Assets/IFF_Company_Logo.png" alt="IFF International Flavors & Fragrances" /></div></div>
+      <div class="logo-item"><div class="logo-pill"><img src="Assets/seffia.png" alt="Seffia AI" /></div></div>
     </div>
   </div>
 
