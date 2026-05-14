@@ -10,3 +10,6 @@ desktop.ini
 # Claude Code internals
 .claude/
 *.md
+
+# Videos originales grandes (>100MB)
+Assets/Datcer*
