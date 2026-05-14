@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Datcer — Estrategia para Clientes Grandes</title>
+  <style>
+    :root {
+      --azul: #0d1b2a;
+      --azul-medio: #1b3a5c;
+      --acento: #00b4d8;
+      --acento2: #f0a500;
+      --texto: #e0e6ef;
+      --gris: #8ca0b3;
+      --rojo: #e63946;
+      --verde: #2dc653;
+      --fondo-card: #162032;
+      --borde: #1e3a54;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--azul);
+      color: var(--texto);
+      line-height: 1.7;
+      padding: 0 0 80px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0a1628 0%, #0d2240 60%, #0a3060 100%);
+      border-bottom: 2px solid var(--acento);
+      padding: 48px 40px 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,180,216,0.12) 0%, transparent 70%);
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(0,180,216,0.15);
+      border: 1px solid var(--acento);
+      color: var(--acento);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    header h1 span { color: var(--acento); }
+
+    header p.sub {
+      color: var(--gris);
+      font-size: 1rem;
+      max-width: 620px;
+    }
+
+    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+    /* ALERTA CLAVE */
+    .alerta-clave {
+      background: linear-gradient(135deg, #1a0a0a, #2a1010);
+      border: 1px solid var(--rojo);
+      border-left: 4px solid var(--rojo);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin: 36px 0 0;
+    }
+
+    .alerta-clave h3 {
+      color: var(--rojo);
+      font-size: 0.85rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .alerta-clave p {
+      color: #d4a0a0;
+      font-size: 0.95rem;
+    }
+
+    .alerta-clave strong { color: #fff; }
+
+    /* SECCIÓN */
+    section {
+      margin-top: 52px;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--acento);
+      margin-bottom: 6px;
+    }
+
+    section > h2 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 28px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--borde);
+    }
+
+    /* PASOS */
+    .paso {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 0 20px;
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    .paso:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 27px;
+      top: 56px;
+      bottom: -28px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--acento), transparent);
+    }
+
+    .paso-num {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 900;
+      flex-shrink: 0;
+      border: 2px solid;
+      position: relative;
+      z-index: 1;
+    }
+
+    .paso-num.p1 { background: rgba(0,180,216,0.15); border-color: var(--acento); color: var(--acento); }
+    .paso-num.p2 { background: rgba(240,165,0,0.15); border-color: var(--acento2); color: var(--acento2); }
+    .paso-num.p3 { background: rgba(45,198,83,0.15); border-color: var(--verde); color: var(--verde); }
+    .paso-num.p4 { background: rgba(167,100,255,0.15); border-color: #a764ff; color: #a764ff; }
+    .paso-num.p5 { background: rgba(255,100,100,0.12); border-color: #ff6464; color: #ff6464; }
+    .paso-num.p6 { background: rgba(0,220,180,0.12); border-color: #00dcb4; color: #00dcb4; }
+
+    .paso-body {
+      background: var(--fondo-card);
+      border: 1px solid var(--borde);
+      border-radius: 12px;
+      padding: 20px 24px;
+    }
+
+    .paso-body h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .paso-body .tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+    }
+
+    .tag-rapido { background: rgba(45,198,83,0.2); color: var(--verde); }
+    .tag-medio { background: rgba(240,165,0,0.2); color: var(--acento2); }
+    .tag-largo { background: rgba(230,57,70,0.2); color: #ff8080; }
+    .tag-clave { background: rgba(0,180,216,0.2); color: var(--acento); }
+
+    .paso-body p {
+      color: #b0c0d0;
+      font-size: 0.93rem;
+      margin-bottom: 12px;
+    }
+
+    .paso-body ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .paso-body ul li {
+      color: #c0d4e8;
+      font-size: 0.9rem;
+      padding: 5px 0 5px 20px;
+      position: relative;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .paso-body ul li:last-child { border-bottom: none; }
+
+    .paso-body ul li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--acento);
+      font-size: 0.85rem;
+    }
+
+    .paso-body .destaque {
+      background: rgba(0,180,216,0.08);
+      border-left: 3px solid var(--acento);
+      border-radius: 0 6px 6px 0;
+      padding: 10px 14px;
+      margin-top: 14px;
+      font-size: 0.88rem;
+      color: #a8d4e8;
+    }
+
+    /* ORDEN OPTIMO */
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 640px) {
+      .timeline { grid-template-columns: 1fr; }
+    }
+
+    .tl-card {
+      background: var(--fondo-card);
+      border: 1px solid var(--borde);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .tl-card .periodo {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--acento);
+      margin-bottom: 8px;
+    }
+
+    .tl-card h4 {
+      color: #fff;
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+
+    .tl-card ul {
+      list-style: none;
+    }
+
+    .tl-card ul li {
+      font-size: 0.82rem;
+      color: #8ca8c0;
+      padding: 3px 0 3px 16px;
+      position: relative;
+    }
+
+    .tl-card ul li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--acento2);
+    }
+
+    .tl-card.mes1 { border-top: 3px solid var(--acento); }
+    .tl-card.mes2 { border-top: 3px solid var(--acento2); }
+    .tl-card.mes3 { border-top: 3px solid var(--verde); }
+
+    /* PUNTOS DE ATENCION */
+    .atencion-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 580px) {
+      .atencion-grid { grid-template-columns: 1fr; }
+    }
+
+    .atencion-card {
+      background: var(--fondo-card);
+      border: 1px solid var(--borde);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .atencion-card .icono {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+    }
+
+    .atencion-card h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .atencion-card p {
+      font-size: 0.85rem;
+      color: #8ca0b3;
+      line-height: 1.6;
+    }
+
+    .atencion-card.danger { border-left: 3px solid var(--rojo); }
+    .atencion-card.warn { border-left: 3px solid var(--acento2); }
+    .atencion-card.ok { border-left: 3px solid var(--verde); }
+    .atencion-card.info { border-left: 3px solid var(--acento); }
+
+    /* CONSEJOS */
+    .consejo {
+      background: var(--fondo-card);
+      border: 1px solid var(--borde);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .consejo .num {
+      background: rgba(240,165,0,0.15);
+      border: 1px solid var(--acento2);
+      color: var(--acento2);
+      border-radius: 8px;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .consejo h4 {
+      color: #fff;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+    }
+
+    .consejo p {
+      color: #8ca0b3;
+      font-size: 0.88rem;
+    }
+
+    .consejo .ejemplo {
+      margin-top: 10px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 0.83rem;
+      color: #7ab8d0;
+      font-style: italic;
+    }
+
+    /* FOOTER */
+    footer {
+      margin-top: 60px;
+      border-top: 1px solid var(--borde);
+      padding: 30px 24px;
+      text-align: center;
+    }
+
+    footer p { color: #4a6070; font-size: 0.8rem; }
+    footer strong { color: var(--acento); }
+
+    /* RESUMEN EJECUTIVO */
+    .resumen {
+      background: linear-gradient(135deg, rgba(0,180,216,0.08), rgba(0,60,120,0.15));
+      border: 1px solid rgba(0,180,216,0.3);
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin-top: 48px;
+    }
+
+    .resumen h3 {
+      font-size: 1rem;
+      color: var(--acento);
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .resumen-items {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 580px) {
+      .resumen-items { grid-template-columns: 1fr; }
+    }
+
+    .resumen-item {
+      text-align: center;
+    }
+
+    .resumen-item .valor {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .resumen-item .label {
+      font-size: 0.78rem;
+      color: var(--gris);
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="badge">Datcer — Estrategia Comercial</div>
+    <h1>Cómo llegar a<br><span>clientes grandes</span> de verdad</h1>
+    <p class="sub">Diseño de data center e infraestructura crítica. Tácticas que mueven la aguja — sin los consejos genéricos de siempre.</p>
+
+    <div class="alerta-clave">
+      <h3>La verdad incómoda que nadie dice</h3>
+      <p>Los clientes grandes <strong>no te encuentran a ti</strong>. No responden correos fríos. No contratan al que más publica en LinkedIn. Contratan a quien <strong>alguien en quien confían ya les recomendó</strong>, o a quien demostraron ser los mejores técnicamente antes de que hubiera un proyecto. Todo lo que sigue parte de esa realidad.</p>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- PASOS -->
+  <section>
+    <div class="section-label">Paso a Paso</div>
+    <h2>Los 6 pasos que realmente funcionan</h2>
+
+    <!-- PASO 1 -->
+    <div class="paso">
+      <div class="paso-num p1">1</div>
+      <div class="paso-body">
+        <h3>Construir credibilidad técnica pública antes de vender</h3>
+        <span class="tag tag-rapido">Empezar hoy — 30 días</span>
+        <p>Un cliente grande no te va a contratar si googlea tu empresa y no aparece nada sólido. Antes de tocar una sola puerta, necesitas que tu firma tenga presencia técnica verificable.</p>
+        <ul>
+          <li>Publica 2–3 casos de estudio detallados de proyectos reales (aunque sean pequeños): problema → solución técnica → resultado medible. Nada de genérico.</li>
+          <li>Sube a LinkedIn artículos técnicos cortos: "Cómo calculamos la carga de enfriamiento en un edge data center de 200kW" — contenido que demuestra que saben lo que hacen.</li>
+          <li>Obtén o muestra certificaciones relevantes: BICSI RCDD, Uptime Institute, ASHRAE 90.4, TIER del cliente objetivo.</li>
+          <li>Crea una página de "Proyectos" en tu web con métricas reales: m², kW instalados, PUE alcanzado, uptime garantizado.</li>
+        </ul>
+        <div class="destaque">Meta: que cuando alguien investigue Datcer antes de una reunión, salga convencido de que saben lo que hacen. Ese es el trabajo que cierra contratos sin que estés en la sala.</div>
+      </div>
+    </div>
+
+    <!-- PASO 2 -->
+    <div class="paso">
+      <div class="paso-num p2">2</div>
+      <div class="paso-body">
+        <h3>Entrar al ecosistema de proveedores — no ir directo al cliente</h3>
+        <span class="tag tag-rapido">Semanas 2–6</span>
+        <p>Los grandes proyectos de data center los coordinan integradores, consultoras de ingeniería, y fabricantes de equipos. Ellos ya tienen la relación con el cliente final. Tu trabajo es ser el especialista que ellos recomiendan.</p>
+        <ul>
+          <li><strong>Schneider Electric, Vertiv, Eaton, Legrand:</strong> contácta a sus equipos de canal o socios técnicos. Solicita ser referido como especialista en diseño independiente cuando tienen proyectos donde necesitan asesoría.</li>
+          <li><strong>Consultoras de ingeniería (MEP):</strong> identifica las 5 firmas de ingeniería mecánica/eléctrica de tu ciudad que hacen proyectos corporativos. Ofrécete como subcontratista especializado en data center.</li>
+          <li><strong>Firmas de arquitectura corporativa:</strong> muchos proyectos nuevos necesitan al especialista en data center desde la fase de anteproyecto. Sé esa persona.</li>
+          <li><strong>Constructoras con proyectos industriales/corporativos:</strong> ellos ganan el contrato global; tú haces el data center dentro de su proyecto.</li>
+        </ul>
+        <div class="destaque">Este paso es el de mayor ROI. Un solo integrador que te incluye en su red puede darte más proyectos que 12 meses de marketing directo.</div>
+      </div>
+    </div>
+
+    <!-- PASO 3 -->
+    <div class="paso">
+      <div class="paso-num p3">3</div>
+      <div class="paso-body">
+        <h3>Identificar los 20 prospectos exactos — y no más</h3>
+        <span class="tag tag-medio">Mes 1–2</span>
+        <p>No persigas a todos. Los clientes grandes de infraestructura crítica son un universo pequeño y conocido. Haz una lista de 20 empresas específicas y trabájalas en profundidad.</p>
+        <ul>
+          <li>Empresas con data centers propios: bancos regionales, aseguradoras, retailers con operaciones propias de TI, manufactura con SCADA crítico, hospitales privados grandes.</li>
+          <li>Empresas en expansión o que acaban de ganar licitaciones grandes (lo sabrás por noticias del sector, cámaras de comercio, licitaciones públicas publicadas).</li>
+          <li>Para cada empresa: identifica al Director de TI, Infraestructura o Facilities. No al CTO. No al gerente general. Al que vive el problema.</li>
+          <li>Usa LinkedIn para mapear la estructura. Sigue sus publicaciones durante 2–3 semanas antes de contactar.</li>
+        </ul>
+        <div class="destaque">20 prospectos trabajados a fondo > 200 contactos masivos. La profundidad vence al volumen en ventas de alto valor.</div>
+      </div>
+    </div>
+
+    <!-- PASO 4 -->
+    <div class="paso">
+      <div class="paso-num p4">4</div>
+      <div class="paso-body">
+        <h3>El primer contacto que abre puertas — la auditoría gratuita</h3>
+        <span class="tag tag-medio">Mes 2–3</span>
+        <p>Los correos de "somos expertos en data center y queremos presentarnos" no funcionan. Lo que sí funciona: ofrecer algo de valor tangible sin costo, que solo puede hacerlo alguien realmente experto.</p>
+        <ul>
+          <li><strong>Oferta concreta:</strong> "Revisión técnica gratuita de 2 horas de su data center existente o sala de servidores. Al final, recibe un informe de riesgos críticos con el estándar ASHRAE/Uptime Institute." Sin costo, sin compromiso.</li>
+          <li>Envía esta propuesta a las personas identificadas en el Paso 3, pero personalizada: menciona su industria, su tamaño típico de instalación, un riesgo común en empresas como la suya.</li>
+          <li>Usa el nombre de quien te refirió si venía de un aliado (Paso 2). "Fulano de Schneider me comentó que…" abre la puerta que el correo frío no puede.</li>
+          <li>Si aceptan: van, hacen la auditoría, entregan el informe. El informe es la propuesta comercial implícita. El prospecto ya vio que saben lo que hacen.</li>
+        </ul>
+        <div class="destaque">La auditoría gratuita convierte a un extraño en alguien que ya vio cómo trabajas. El costo para ti: 4 horas. El retorno potencial: un contrato de diseño de seis cifras.</div>
+      </div>
+    </div>
+
+    <!-- PASO 5 -->
+    <div class="paso">
+      <div class="paso-num p5">5</div>
+      <div class="paso-body">
+        <h3>Ganar el primer cliente grande y explotarlo correctamente</h3>
+        <span class="tag tag-largo">Mes 3–6</span>
+        <p>Un solo cliente grande bien manejado puede ser el activo comercial más poderoso que tengas. La mayoría de empresas lo entregan, cobran, y no lo aprovechan.</p>
+        <ul>
+          <li>Antes de terminar el proyecto, pide activamente una carta de recomendación firmada y un caso de estudio con su logo (muchos lo dan si se lo pides bien y el trabajo fue bueno).</li>
+          <li>Pide 2–3 referidos internos: "¿Conoce a alguien más en otra empresa del sector que pueda necesitar este tipo de proyectos?"</li>
+          <li>Publica el caso de estudio (con permiso del cliente) como contenido técnico. El logo de ese cliente en tu portafolio vale más que cualquier publicidad.</li>
+          <li>Ofrece una revisión anual gratuita de 1 hora. Mantienes la relación activa para la próxima expansión o proyecto.</li>
+        </ul>
+        <div class="destaque">El primer cliente grande es el más difícil. El segundo llega solo si explotaste bien el primero.</div>
+      </div>
+    </div>
+
+    <!-- PASO 6 -->
+    <div class="paso">
+      <div class="paso-num p6">6</div>
+      <div class="paso-body">
+        <h3>Posicionarse en los espacios donde se deciden los proyectos</h3>
+        <span class="tag tag-largo">Mes 2 en adelante — continuo</span>
+        <p>Los grandes contratos no se deciden en Google. Se deciden en salas de reuniones, congresos técnicos y grupos cerrados. Tienes que estar en esos espacios.</p>
+        <ul>
+          <li><strong>Eventos sectoriales:</strong> Data Center Dynamics (si hay edición local), cámaras de la industria TI, eventos de AFCOM o asociaciones de CIOs. No vayas a ver — ve a hablar, presentar, o por lo menos a tener 5 conversaciones reales.</li>
+          <li><strong>Propón un webinar técnico gratuito</strong> con tema específico: "Diseño de sala de servidores para banca: estándares regulatorios 2025". Invita a los 20 prospectos del Paso 3. Los que asisten están activamente interesados.</li>
+          <li><strong>Grupos de LinkedIn de directores de TI/infraestructura:</strong> no para vender, sino para aportar respuestas técnicas reales a preguntas que ya hacen. Quien más ayuda gratis, más recibe en contratos.</li>
+          <li><strong>Publicar en revistas técnicas del sector</strong> (aunque sean digitales): un artículo firmado por Datcer en una publicación de infraestructura TI te posiciona diferente a cualquier competidor.</li>
+        </ul>
+        <div class="destaque">Presencia constante en los espacios correctos crea una percepción de liderazgo sin que tengas que decir que eres el mejor. Lo demuestras con cada aparición.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ORDEN OPTIMO -->
+  <section>
+    <div class="section-label">Orden Óptimo</div>
+    <h2>Qué hacer primero — cronograma real</h2>
+
+    <div class="timeline">
+      <div class="tl-card mes1">
+        <div class="periodo">Mes 1 — Cimientos</div>
+        <h4>Construir la base antes de tocar puertas</h4>
+        <ul>
+          <li>Casos de estudio de proyectos existentes</li>
+          <li>Perfil LinkedIn de Datcer actualizado</li>
+          <li>Página web con métricas de proyectos</li>
+          <li>Lista de los 20 prospectos objetivo</li>
+          <li>Contacto inicial con 3–5 proveedores/integradores</li>
+          <li>Primer artículo técnico publicado</li>
+        </ul>
+      </div>
+      <div class="tl-card mes2">
+        <div class="periodo">Mes 2–3 — Activación</div>
+        <h4>Iniciar contacto con datos en la mano</h4>
+        <ul>
+          <li>Outreach personalizado a los 20 prospectos</li>
+          <li>Oferta de auditoría gratuita enviada</li>
+          <li>2–3 auditorías realizadas</li>
+          <li>Webinar técnico programado</li>
+          <li>Alianzas formalizadas con 1–2 integradores</li>
+          <li>Asistencia a 1 evento del sector</li>
+        </ul>
+      </div>
+      <div class="tl-card mes3">
+        <div class="periodo">Mes 4–6 — Cosecha</div>
+        <h4>Convertir pipeline en contratos reales</h4>
+        <ul>
+          <li>Seguimiento activo de auditorías realizadas</li>
+          <li>Primer contrato grande cerrado</li>
+          <li>Caso de estudio publicado (con permiso)</li>
+          <li>Referidos pedidos formalmente</li>
+          <li>Sistema de revisión anual activo</li>
+          <li>Segunda ronda de 20 prospectos</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PUNTOS DE ATENCION -->
+  <section>
+    <div class="section-label">Puntos de Atención</div>
+    <h2>Errores que arruinan el proceso</h2>
+
+    <div class="atencion-grid">
+      <div class="atencion-card danger">
+        <div class="icono">⛔</div>
+        <h4>Perseguir a demasiados clientes a la vez</h4>
+        <p>20 prospectos trabajados profundamente > 200 contactos dispersos. Cada empresa grande merece investigación, personalización y seguimiento. Con más de 20 simultáneos, todo queda superficial y nadie responde.</p>
+      </div>
+
+      <div class="atencion-card danger">
+        <div class="icono">⛔</div>
+        <h4>Presentarse sin credenciales verificables</h4>
+        <p>Si un Director de TI te busca en Google y no encuentra nada concreto, estás descartado antes de la primera reunión. La credibilidad digital es prerrequisito, no opcional.</p>
+      </div>
+
+      <div class="atencion-card warn">
+        <div class="icono">⚠️</div>
+        <h4>Hablar de servicios en vez de problemas del cliente</h4>
+        <p>Nadie quiere "diseño de data center". Quieren evitar una falla catastrófica, reducir su PUE, cumplir un estándar regulatorio, o escalar sin interrupciones. Habla en sus términos, no en los tuyos.</p>
+      </div>
+
+      <div class="atencion-card warn">
+        <div class="icono">⚠️</div>
+        <h4>Enviar propuestas sin reunión previa</h4>
+        <p>Una propuesta técnica y económica enviada sin haber calificado el proyecto es tiempo perdido. Primero la auditoría o reunión de diagnóstico. Después la propuesta. Nunca al revés.</p>
+      </div>
+
+      <div class="atencion-card ok">
+        <div class="icono">✅</div>
+        <h4>El seguimiento correcto hace la diferencia</h4>
+        <p>Los proyectos de data center tienen ciclos de 6–18 meses. El que sigue siendo visible y útil durante ese tiempo (sin ser molesto) es quien se lleva el contrato cuando el presupuesto se aprueba.</p>
+      </div>
+
+      <div class="atencion-card info">
+        <div class="icono">💡</div>
+        <h4>Las licitaciones públicas son una oportunidad real</h4>
+        <p>Hospitales, universidades, gobierno: publican requerimientos de data center en plataformas de compras públicas. El proceso es burocrático, pero si calificas técnicamente, la competencia es menor de lo que parece.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONSEJOS DE EJECUCION -->
+  <section>
+    <div class="section-label">Consejos de Ejecución</div>
+    <h2>Lo que separa a los que cierran de los que no</h2>
+
+    <div class="consejo">
+      <div class="num">1</div>
+      <div>
+        <h4>El mensaje de LinkedIn que sí funciona</h4>
+        <p>No vendas en el primer mensaje. Aporta algo específico y gratuito. Una observación técnica relevante a su industria, un riesgo común, un cambio normativo. El objetivo es la respuesta, no el contrato.</p>
+        <div class="ejemplo">"Hola [nombre], vi que [empresa] está expandiendo su infraestructura en [ciudad]. En proyectos de ese tamaño, el punto más crítico suele ser la redundancia de enfriamiento en la etapa de diseño — es donde ocurren el 60% de las fallas post-implementación. Si en algún momento quieren una segunda opinión técnica gratuita antes de ejecutar, estamos disponibles."</div>
+      </div>
+    </div>
+
+    <div class="consejo">
+      <div class="num">2</div>
+      <div>
+        <h4>Hacer el trabajo antes de que exista el proyecto</h4>
+        <p>Cuando hay una convocatoria o un proyecto activo, ya llegas tarde. El que ganó la confianza del cliente 6 meses antes tiene ventaja enorme. Invierte tiempo ahora en empresas que <em>van a tener</em> un proyecto, no solo en las que lo anunciaron.</p>
+        <div class="ejemplo">Señales de que una empresa está a punto de tener un proyecto: crecimiento acelerado, mudanza de oficinas, adquisiciones, nuevos productos digitales, cambio de CEO o CTO, regulaciones nuevas que les afectan.</div>
+      </div>
+    </div>
+
+    <div class="consejo">
+      <div class="num">3</div>
+      <div>
+        <h4>No ofrecer servicios — ofrecer certeza</h4>
+        <p>Los clientes grandes pagan más por reducir el riesgo que por ahorrar dinero. Enmarca siempre tus servicios en términos de riesgo eliminado, continuidad garantizada, cumplimiento normativo asegurado.</p>
+        <div class="ejemplo">En lugar de: "Diseñamos su data center con los mejores estándares" → "Nuestro proceso de diseño elimina los 5 puntos de falla más comunes que generan downtime no planificado en su industria."</div>
+      </div>
+    </div>
+
+    <div class="consejo">
+      <div class="num">4</div>
+      <div>
+        <h4>La propuesta es el último paso, no el primero</h4>
+        <p>Muchas empresas de servicios técnicos mandan propuestas como primer paso. Error. La propuesta debe llegar cuando ya entiendes perfectamente el problema, ya generaste confianza, y el cliente ya sabe que quiere trabajar contigo. Ahí la propuesta es formalidad.</p>
+        <div class="ejemplo">Secuencia correcta: Contacto → Reunión de diagnóstico → Auditoría → Informe de hallazgos → Propuesta. Si saltas pasos, la propuesta va al archivo.</div>
+      </div>
+    </div>
+
+    <div class="consejo">
+      <div class="num">5</div>
+      <div>
+        <h4>Medir las actividades correctas, no el resultado</h4>
+        <p>El contrato no es la métrica semanal — el ciclo es muy largo. Mide lo que controlas: auditorías realizadas, artículos publicados, alianzas activadas, reuniones agendadas. Si esas métricas suben, los contratos siguen.</p>
+        <div class="ejemplo">KPIs reales de la estrategia: auditorías gratuitas/mes (meta: 2), nuevos contactos calificados/mes (meta: 5), artículos técnicos/mes (meta: 1), alianzas activas (meta: 3 en 90 días).</div>
+      </div>
+    </div>
+
+    <div class="consejo">
+      <div class="num">6</div>
+      <div>
+        <h4>Especialización visible es más poderosa que ser "completo"</h4>
+        <p>Decir que eres experto en data center para banca, o para manufactura con continuidad 24/7, o para edge computing — es 10 veces más poderoso que decir "hacemos data centers para cualquier industria". La especialización crea percepción de dominio sin esfuerzo extra.</p>
+        <div class="ejemplo">Elige 1–2 sectores donde tengas experiencia real y posiciona todo tu contenido, casos de estudio y outreach hacia esas industrias. Serás el especialista, no uno más del montón.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESUMEN EJECUTIVO -->
+  <div class="resumen">
+    <h3>Resumen ejecutivo — Lo esencial</h3>
+    <div class="resumen-items">
+      <div class="resumen-item">
+        <div class="valor">20</div>
+        <div class="label">Prospectos máximos<br>trabajados en paralelo</div>
+      </div>
+      <div class="resumen-item">
+        <div class="valor">6–18</div>
+        <div class="label">Meses promedio del<br>ciclo de venta real</div>
+      </div>
+      <div class="resumen-item">
+        <div class="valor">1er</div>
+        <div class="label">Cliente grande = el activo<br>comercial más valioso</div>
+      </div>
+    </div>
+    <p style="margin-top:20px; color:#6090a8; font-size:0.85rem; text-align:center;">La credibilidad técnica pública + ecosistema de aliados + auditoría gratuita como primer contacto = el camino más corto a clientes grandes en infraestructura crítica.</p>
+  </div>
+
+</div>
+
+<footer class="container">
+  <p>Estrategia elaborada para <strong>Datcer</strong> — Diseño de Data Center e Infraestructura Crítica · 2025</p>
+  <p style="margin-top:6px;">Ejecutado paso a paso, este plan puede generar el primer contrato grande en 90–180 días.</p>
+</footer>
+
+</body>
+</html>

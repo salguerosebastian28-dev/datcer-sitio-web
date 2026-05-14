@@ -1,0 +1,12 @@
+# System
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Editor
+.vscode/
+*.code-workspace
+
+# Claude Code internals
+.claude/
+*.md
