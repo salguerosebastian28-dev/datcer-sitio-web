@@ -3046,7 +3046,7 @@
   <!-- SLIDE 1 — Video / Propuesta principal -->
   <div class="slide active" id="slide-1" data-duration="7000">
     <div class="slide-bg">
-      <video autoplay muted playsinline id="heroVid">
+      <video muted playsinline preload="auto" id="heroVid">
         <source src="Assets/rack animation.mp4" type="video/mp4" />
       </video>
     </div>
@@ -4316,82 +4316,56 @@
   const navbar = document.getElementById('navbar');
 
   /* ══════════════════════════════════════════
-     HERO VIDEO — ping-pong · parallax · speed
+     HERO VIDEO — scroll-driven, lerp suave
+     Bajar = cables entran · Subir = salen
   ══════════════════════════════════════════ */
   const heroVideo   = document.getElementById('heroVid');
   const heroSlideBg = document.querySelector('#slide-1 .slide-bg');
   const HERO_H      = window.innerHeight;
 
-  let lastScrollY  = 0;
-  let lastScrollT  = performance.now();
-  let decayTimer   = null;
-  let isReversing  = false;
-  let revRaf       = null;
-  let prevRafT     = null;
-  let scrollVel    = 0;       // px/ms — shared con reverse
+  let targetTime  = 0;
+  let smoothTime  = 0;
+  let rafPending  = false;
 
-  /* ── Ping-pong: al terminar el video, lo invertimos ── */
+  /* Mueve currentTime con lerp — sin saltos bruscos */
+  function tickVideo() {
+    rafPending = false;
+    if (!heroVideo || !heroVideo.duration) return;
+    smoothTime += (targetTime - smoothTime) * 0.12;
+    const diff = Math.abs(smoothTime - heroVideo.currentTime);
+    if (diff > 0.005) heroVideo.currentTime = smoothTime;
+    if (Math.abs(smoothTime - targetTime) > 0.005) {
+      rafPending = true;
+      requestAnimationFrame(tickVideo);
+    }
+  }
+
+  /* Cuando el video carga, fijamos frame 0 */
   if (heroVideo) {
-    heroVideo.addEventListener('ended', () => {
-      isReversing = true;
-      prevRafT    = null;
-      cancelAnimationFrame(revRaf);
-      revRaf = requestAnimationFrame(reverseStep);
+    heroVideo.addEventListener('loadedmetadata', () => {
+      heroVideo.currentTime = 0;
     });
   }
 
-  function reverseStep(ts) {
-    if (!heroVideo) return;
-    const dt   = prevRafT ? (ts - prevRafT) / 1000 : 0.016;
-    prevRafT   = ts;
-    /* velocidad reversa: 1× base + boost si el usuario está scrolleando */
-    const spd  = 1 + Math.min(scrollVel * 10, 5);
-    heroVideo.currentTime = Math.max(0, heroVideo.currentTime - dt * spd);
-
-    if (heroVideo.currentTime <= 0.04) {
-      isReversing = false;
-      prevRafT    = null;
-      heroVideo.currentTime = 0;
-      heroVideo.play();
-      return;
-    }
-    revRaf = requestAnimationFrame(reverseStep);
-  }
-
-  /* ── Decay suave del playbackRate al dejar de scrollear ── */
-  function decayPlayback() {
-    if (!heroVideo || isReversing) return;
-    if (heroVideo.playbackRate <= 1.05) { heroVideo.playbackRate = 1; return; }
-    heroVideo.playbackRate = heroVideo.playbackRate * 0.78;
-    requestAnimationFrame(decayPlayback);
-  }
-
-  /* ── Scroll: navbar + parallax + speed boost ── */
+  /* ── Scroll: navbar + video scrubbing + parallax ── */
   window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 40);
+    const sy = window.scrollY;
+    navbar.classList.toggle('scrolled', sy > 40);
 
-    const sy  = window.scrollY;
-    const now = performance.now();
-    const dt  = Math.max(now - lastScrollT, 8);
-    scrollVel = Math.abs(sy - lastScrollY) / dt;      // px/ms (actualiza global)
-
-    /* Parallax + zoom sólo mientras el hero es visible */
-    if (sy < HERO_H) {
-      const p = sy / HERO_H;
-      if (heroSlideBg) heroSlideBg.style.transform = `translateY(${sy * 0.36}px)`;
-      if (heroVideo)   heroVideo.style.transform   = `scale(${1 + p * 0.06})`;
+    /* Parallax del contenedor */
+    if (sy < HERO_H * 1.1 && heroSlideBg) {
+      heroSlideBg.style.transform = `translateY(${sy * 0.32}px)`;
     }
 
-    /* Speed boost sólo en reproducción forward */
-    if (heroVideo && !isReversing && sy < HERO_H * 1.2) {
-      const rate = Math.min(1 + scrollVel * 16, 9);
-      if (rate > heroVideo.playbackRate) heroVideo.playbackRate = rate;
-      clearTimeout(decayTimer);
-      decayTimer = setTimeout(() => requestAnimationFrame(decayPlayback), 110);
+    /* Mapear scroll → currentTime (toda la altura del hero = toda la duración) */
+    if (heroVideo && heroVideo.duration && sy < HERO_H * 1.2) {
+      const progress = Math.min(sy / HERO_H, 1);
+      targetTime = progress * heroVideo.duration;
+      if (!rafPending) {
+        rafPending = true;
+        requestAnimationFrame(tickVideo);
+      }
     }
-
-    lastScrollY = sy;
-    lastScrollT = now;
   }, { passive: true });
 
   /* ── Mobile menu ── */
