@@ -4317,66 +4317,52 @@
   const navbar = document.getElementById('navbar');
 
   /* ══════════════════════════════════════════════════════
-     HERO VIDEO — scroll-driven fluido
-     Bajar = cables entran · Subir = salen
+     HERO VIDEO — scroll-driven, loop continuo
   ══════════════════════════════════════════════════════ */
   const heroVideo   = document.getElementById('heroVid');
   const heroSlideBg = document.querySelector('#slide-1 .slide-bg');
   const HERO_H      = window.innerHeight;
 
-  let targetTime  = 0;
-  let smoothTime  = 0;
-  let rafActive   = false;
+  let targetTime = 0;
+  let smoothTime = 0;
 
-  /* Loop de animación — siempre con RAF para máxima compatibilidad */
-  function tick() {
-    if (!heroVideo || !heroVideo.duration) { rafActive = false; return; }
-
-    const diff = targetTime - smoothTime;
-
-    if (Math.abs(diff) > 0.008) {
-      /* lerp adaptativo: proporcional a la distancia */
-      smoothTime += diff * 0.18;
-      /* solo hace seek si hay diferencia real (evita micro-seeks) */
-      if (Math.abs(smoothTime - heroVideo.currentTime) > 0.008) {
+  /* Loop continuo — sin arranque/parada, sin latencia */
+  function videoLoop() {
+    if (heroVideo && heroVideo.duration) {
+      const diff = targetTime - smoothTime;
+      if (Math.abs(diff) > 0.004) {
+        smoothTime += diff * 0.30;          /* lerp rápido */
         heroVideo.currentTime = smoothTime;
       }
-      requestAnimationFrame(tick);
-    } else {
-      smoothTime = targetTime;
-      rafActive  = false;
     }
+    requestAnimationFrame(videoLoop);
   }
 
-  function startTick() {
-    if (rafActive) return;
-    rafActive = true;
-    requestAnimationFrame(tick);
-  }
-
-  /* Asegura frame 0 al cargar */
+  /* Inicializar al final del video (rack lleno) */
   if (heroVideo) {
-    const init = () => { heroVideo.currentTime = heroVideo.duration || 0; };
+    const init = () => {
+      targetTime = smoothTime = heroVideo.duration;
+      heroVideo.currentTime   = heroVideo.duration;
+    };
     if (heroVideo.readyState >= 1) init();
     else heroVideo.addEventListener('loadedmetadata', init, { once: true });
+    videoLoop(); /* arranca inmediatamente */
   }
 
-  /* ── Scroll: actualiza target directamente (sin wrapper RAF) ── */
+  /* ── Scroll: solo actualiza target + parallax ── */
   window.addEventListener('scroll', () => {
     const sy = window.scrollY;
     navbar.classList.toggle('scrolled', sy > 40);
 
-    /* Parallax en GPU */
     if (heroSlideBg) {
       heroSlideBg.style.transform = sy < HERO_H
         ? `translate3d(0,${sy * 0.28}px,0)`
         : 'translate3d(0,0,0)';
     }
 
-    /* Mapear scroll → currentTime */
     if (heroVideo && heroVideo.duration && sy <= HERO_H) {
-      targetTime = heroVideo.duration - Math.min(sy / (HERO_H * 0.3), 1) * heroVideo.duration;
-      startTick();
+      targetTime = heroVideo.duration
+        - Math.min(sy / (HERO_H * 0.3), 1) * heroVideo.duration;
     }
   }, { passive: true });
 
