@@ -4317,78 +4317,52 @@
   const navbar = document.getElementById('navbar');
 
   /* ══════════════════════════════════════════════════════
-     HERO VIDEO — trigger-based
-     1 scroll abajo → video corre solo (nativo, fluido)
-     1 scroll arriba → reversa a velocidad constante
+     HERO VIDEO — scroll-driven, loop continuo
   ══════════════════════════════════════════════════════ */
   const heroVideo   = document.getElementById('heroVid');
   const heroSlideBg = document.querySelector('#slide-1 .slide-bg');
   const HERO_H      = window.innerHeight;
 
-  let state       = 'idle';   // 'idle' | 'forward' | 'reverse'
-  let revRaf      = null;
-  let prevSY      = 0;
-  let lastRevT    = null;
-  const FPS       = 1 / 30;  // paso por frame a ~30fps en reversa
+  let targetTime = 0;
+  let smoothTime = 0;
 
-  /* ── Forward: playback nativo del browser (más fluido imposible) ── */
-  function goForward() {
-    if (state === 'forward') return;
-    state = 'forward';
-    cancelAnimationFrame(revRaf);
-    lastRevT = null;
-    heroVideo.playbackRate = 1;
-    heroVideo.play();
-  }
-
-  /* ── Reverse: pasos secuenciales constantes (sin seeks aleatorios) ── */
-  function revStep(ts) {
-    const dt = lastRevT ? Math.min((ts - lastRevT) / 1000, 0.05) : FPS;
-    lastRevT = ts;
-    const next = heroVideo.currentTime - dt;
-    if (next <= 0) {
-      heroVideo.currentTime = 0;
-      state = 'idle';
-      lastRevT = null;
-      return;
+  /* Loop continuo — sin arranque/parada, sin latencia */
+  function videoLoop() {
+    if (heroVideo && heroVideo.duration) {
+      const diff = targetTime - smoothTime;
+      if (Math.abs(diff) > 0.004) {
+        smoothTime += diff * 0.30;          /* lerp rápido */
+        heroVideo.currentTime = smoothTime;
+      }
     }
-    heroVideo.currentTime = next;
-    revRaf = requestAnimationFrame(revStep);
+    requestAnimationFrame(videoLoop);
   }
 
-  function goReverse() {
-    if (state === 'reverse') return;
-    state = 'reverse';
-    heroVideo.pause();
-    cancelAnimationFrame(revRaf);
-    lastRevT = null;
-    revRaf = requestAnimationFrame(revStep);
-  }
-
-  /* Al terminar el forward, queda en el último frame */
+  /* Inicializar al final del video (rack lleno) */
   if (heroVideo) {
-    heroVideo.addEventListener('ended', () => { state = 'idle'; });
-    /* Frame 0 = rack lleno al cargar */
-    const init = () => { heroVideo.currentTime = 0; };
+    const init = () => {
+      targetTime = smoothTime = heroVideo.duration;
+      heroVideo.currentTime   = heroVideo.duration;
+    };
     if (heroVideo.readyState >= 1) init();
     else heroVideo.addEventListener('loadedmetadata', init, { once: true });
+    videoLoop(); /* arranca inmediatamente */
   }
 
-  /* ── Scroll: detecta dirección y dispara ── */
+  /* ── Scroll: solo actualiza target + parallax ── */
   window.addEventListener('scroll', () => {
-    const sy    = window.scrollY;
-    const delta = sy - prevSY;
-    prevSY = sy;
-
+    const sy = window.scrollY;
     navbar.classList.toggle('scrolled', sy > 40);
 
-    if (heroSlideBg && sy < HERO_H) {
-      heroSlideBg.style.transform = `translate3d(0,${sy * 0.28}px,0)`;
+    if (heroSlideBg) {
+      heroSlideBg.style.transform = sy < HERO_H
+        ? `translate3d(0,${sy * 0.28}px,0)`
+        : 'translate3d(0,0,0)';
     }
 
-    if (sy < HERO_H * 1.2 && heroVideo) {
-      if (delta > 1)  goForward();   /* bajando → cables salen */
-      if (delta < -1) goReverse();   /* subiendo → cables entran */
+    if (heroVideo && heroVideo.duration && sy <= HERO_H) {
+      targetTime = heroVideo.duration
+        - Math.min(sy / (HERO_H * 0.3), 1) * heroVideo.duration;
     }
   }, { passive: true });
 
