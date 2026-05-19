@@ -248,17 +248,6 @@
       transform-origin: center center;
       filter: brightness(0.85) contrast(1.08) saturate(1.05);
       will-change: transform;
-      transition: filter 1.2s ease;
-    }
-
-    /* Pulso idle — CSS puro, GPU, sin tocar el video */
-    @keyframes heroPulse {
-      0%   { transform: scale(1.000); opacity: 1;    }
-      50%  { transform: scale(1.018); opacity: 0.93; }
-      100% { transform: scale(1.000); opacity: 1;    }
-    }
-    #slide-1 .slide-bg.idle-pulse video {
-      animation: heroPulse 3.5s ease-in-out infinite;
     }
 
     /* Vignette cinematográfico — oscurece bordes, respira en el centro */
@@ -4336,46 +4325,33 @@
 
   let targetTime = 0;
   let smoothTime = 0;
-  const IDLE_MS  = 1600;
 
-  /* Idle: solo CSS — GPU puro, sin tocar el video */
-  function startIdle() {
-    heroSlideBg && heroSlideBg.classList.add('idle-pulse');
-  }
-  function stopIdle() {
-    heroSlideBg && heroSlideBg.classList.remove('idle-pulse');
-  }
-
-  /* Loop de scrubbing */
+  /* Loop continuo — sin arranque/parada, sin latencia */
   function videoLoop() {
     if (heroVideo && heroVideo.duration) {
       const diff = targetTime - smoothTime;
       if (Math.abs(diff) > 0.004) {
-        smoothTime += diff * 0.30;
+        smoothTime += diff * 0.30;          /* lerp rápido */
         heroVideo.currentTime = smoothTime;
       }
     }
     requestAnimationFrame(videoLoop);
   }
 
-  /* Inicializar al final (rack lleno) */
+  /* Inicializar al final del video (rack lleno) */
   if (heroVideo) {
     const init = () => {
       targetTime = smoothTime = heroVideo.duration;
       heroVideo.currentTime   = heroVideo.duration;
-      setTimeout(startIdle, IDLE_MS);
     };
     if (heroVideo.readyState >= 1) init();
     else heroVideo.addEventListener('loadedmetadata', init, { once: true });
-    videoLoop();
+    videoLoop(); /* arranca inmediatamente */
   }
 
-  let idleTimer = null;
+  /* ── Scroll: solo actualiza target + parallax ── */
   window.addEventListener('scroll', () => {
     const sy = window.scrollY;
-    stopIdle();
-    clearTimeout(idleTimer);
-    idleTimer = setTimeout(startIdle, IDLE_MS);
     navbar.classList.toggle('scrolled', sy > 40);
 
     if (heroSlideBg) {
