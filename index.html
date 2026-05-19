@@ -4317,75 +4317,66 @@
   const navbar = document.getElementById('navbar');
 
   /* ══════════════════════════════════════════════════════
-     HERO VIDEO — scroll-driven optimizado
-     · requestVideoFrameCallback  (sync con renderer video)
-     · lerp adaptativo            (rápido lejos, suave cerca)
-     · scroll throttled via RAF   (un solo write por frame)
+     HERO VIDEO — scroll-driven fluido
+     Bajar = cables entran · Subir = salen
   ══════════════════════════════════════════════════════ */
   const heroVideo   = document.getElementById('heroVid');
   const heroSlideBg = document.querySelector('#slide-1 .slide-bg');
   const HERO_H      = window.innerHeight;
 
-  /* ¿Soporta requestVideoFrameCallback? (Chrome 83+, Edge, Safari 15.4+) */
-  const useRVFC = heroVideo && ('requestVideoFrameCallback' in heroVideo);
+  let targetTime  = 0;
+  let smoothTime  = 0;
+  let rafActive   = false;
 
-  let targetTime = 0;
-  let rafActive  = false;
-  let scrollTick = false;
-
-  /* ── Tick: avanza currentTime con lerp adaptativo ── */
+  /* Loop de animación — siempre con RAF para máxima compatibilidad */
   function tick() {
-    rafActive = false;
-    if (!heroVideo || !heroVideo.duration) return;
+    if (!heroVideo || !heroVideo.duration) { rafActive = false; return; }
 
-    const curr = heroVideo.currentTime;
-    const diff = targetTime - curr;
+    const diff = targetTime - smoothTime;
 
-    if (Math.abs(diff) < 0.014) return; /* < 1 frame a 60fps — no seek */
-
-    /* paso proporcional: rápido si está lejos, suave si está cerca */
-    heroVideo.currentTime = curr + diff * 0.22;
-
-    rafActive = true;
-    if (useRVFC) heroVideo.requestVideoFrameCallback(tick);
-    else         requestAnimationFrame(tick);
+    if (Math.abs(diff) > 0.008) {
+      /* lerp adaptativo: proporcional a la distancia */
+      smoothTime += diff * 0.18;
+      /* solo hace seek si hay diferencia real (evita micro-seeks) */
+      if (Math.abs(smoothTime - heroVideo.currentTime) > 0.008) {
+        heroVideo.currentTime = smoothTime;
+      }
+      requestAnimationFrame(tick);
+    } else {
+      smoothTime = targetTime;
+      rafActive  = false;
+    }
   }
 
   function startTick() {
     if (rafActive) return;
     rafActive = true;
-    if (useRVFC) heroVideo.requestVideoFrameCallback(tick);
-    else         requestAnimationFrame(tick);
+    requestAnimationFrame(tick);
   }
 
-  /* Frame 0 al cargar */
+  /* Asegura frame 0 al cargar */
   if (heroVideo) {
-    heroVideo.addEventListener('loadedmetadata', () => {
-      heroVideo.currentTime = 0;
-    }, { once: true });
+    const init = () => { heroVideo.currentTime = 0; };
+    if (heroVideo.readyState >= 1) init();
+    else heroVideo.addEventListener('loadedmetadata', init, { once: true });
   }
 
-  /* ── Scroll handler: solo actualiza variables, un RAF escribe el DOM ── */
+  /* ── Scroll: actualiza target directamente (sin wrapper RAF) ── */
   window.addEventListener('scroll', () => {
     const sy = window.scrollY;
     navbar.classList.toggle('scrolled', sy > 40);
 
-    if (!scrollTick) {
-      scrollTick = true;
-      requestAnimationFrame(() => {
-        scrollTick = false;
+    /* Parallax en GPU */
+    if (heroSlideBg) {
+      heroSlideBg.style.transform = sy < HERO_H
+        ? `translate3d(0,${sy * 0.28}px,0)`
+        : 'translate3d(0,0,0)';
+    }
 
-        /* Parallax — translate3d fuerza capa GPU */
-        if (sy < HERO_H && heroSlideBg) {
-          heroSlideBg.style.transform = `translate3d(0, ${sy * 0.30}px, 0)`;
-        }
-
-        /* Scroll → tiempo del video */
-        if (heroVideo && heroVideo.duration && sy < HERO_H * 1.15) {
-          targetTime = Math.min((sy / HERO_H) * heroVideo.duration, heroVideo.duration);
-          startTick();
-        }
-      });
+    /* Mapear scroll → currentTime */
+    if (heroVideo && heroVideo.duration && sy <= HERO_H) {
+      targetTime = (sy / HERO_H) * heroVideo.duration;
+      startTick();
     }
   }, { passive: true });
 
