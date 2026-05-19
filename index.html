@@ -4356,7 +4356,7 @@
 
   /* Asegura frame 0 al cargar */
   if (heroVideo) {
-    const init = () => { heroVideo.currentTime = 0; };
+    const init = () => { heroVideo.currentTime = heroVideo.duration || 0; };
     if (heroVideo.readyState >= 1) init();
     else heroVideo.addEventListener('loadedmetadata', init, { once: true });
   }
@@ -4375,7 +4375,7 @@
 
     /* Mapear scroll → currentTime */
     if (heroVideo && heroVideo.duration && sy <= HERO_H) {
-      targetTime = (sy / HERO_H) * heroVideo.duration;
+      targetTime = heroVideo.duration - (sy / HERO_H) * heroVideo.duration;
       startTick();
     }
   }, { passive: true });
