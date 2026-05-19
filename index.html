@@ -239,25 +239,37 @@
 
     .slide.active .slide-bg img { transform: scale(1.07); }
 
-    /* ── Hero video: rack visible, escala reducida ── */
+    /* ── Hero video: rack pequeño, desplazado a la derecha ── */
     #slide-1 .slide-bg video {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transform: scale(0.72);
+      transform: translateX(14%) scale(0.72);
       transform-origin: center center;
       filter: brightness(0.88) contrast(1.1) saturate(1.06);
       will-change: transform;
     }
 
-    /* Vignette perimetral — funde bordes con fondo oscuro */
+    /* Oscurecer lados: izquierda (hueco grande) y derecha (hueco pequeño) + top/bottom */
     #slide-1 .slide-bg::after {
       content: '';
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse 78% 72% at 50% 50%, transparent 40%, rgba(8,12,18,0.85) 80%, #080C12 100%),
-        linear-gradient(to bottom, rgba(8,12,18,0.5) 0%, transparent 20%, transparent 75%, rgba(8,12,18,0.6) 100%);
+        linear-gradient(to right,
+          #080C12 0%,
+          #080C12 22%,
+          rgba(8,12,18,0.85) 32%,
+          rgba(8,12,18,0.3)  42%,
+          transparent        54%,
+          transparent        88%,
+          rgba(8,12,18,0.7)  96%,
+          #080C12           100%
+        ),
+        linear-gradient(to bottom,
+          rgba(8,12,18,0.55) 0%,   transparent 18%,
+          transparent        75%,  rgba(8,12,18,0.65) 100%
+        );
       pointer-events: none;
       z-index: 1;
     }
@@ -4372,7 +4384,7 @@
     if (sy < HERO_H) {
       const p = sy / HERO_H;
       if (heroSlideBg) heroSlideBg.style.transform = `translateY(${sy * 0.36}px)`;
-      if (heroVideo)   heroVideo.style.transform   = `scale(${0.72 + p * 0.05})`;
+      if (heroVideo)   heroVideo.style.transform   = `translateX(14%) scale(${0.72 + p * 0.05})`;
     }
 
     /* Speed boost sólo en reproducción forward */
