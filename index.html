@@ -241,8 +241,8 @@
 
     /* ── Hero video: depth + right shift ── */
     #slide-1 .slide-bg video {
-      object-position: 82% center;
       transform-origin: center 58%;
+      transform: translateX(13%) scale(1.42);
       filter: brightness(0.82) contrast(1.12) saturate(1.08);
       will-change: transform;
     }
@@ -4372,7 +4372,7 @@
     if (sy < HERO_H) {
       const p = sy / HERO_H;
       if (heroSlideBg) heroSlideBg.style.transform = `translateY(${sy * 0.36}px)`;
-      if (heroVideo)   heroVideo.style.transform   = `scale(${1 + p * 0.07})`;
+      if (heroVideo)   heroVideo.style.transform   = `translateX(13%) scale(${1.42 + p * 0.07})`;
     }
 
     /* Speed boost sólo en reproducción forward */
