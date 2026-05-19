@@ -4323,15 +4323,28 @@
   const heroSlideBg = document.querySelector('#slide-1 .slide-bg');
   const HERO_H      = window.innerHeight;
 
-  let targetTime = 0;
-  let smoothTime = 0;
+  let targetTime  = 0;
+  let smoothTime  = 0;
+  let lastScrollT = performance.now();
+  let idleDir     = -1;       /* -1 avanza hacia 0 (componentes salen), +1 vuelve */
+  const IDLE_MS   = 1800;     /* ms de reposo antes de activar movimiento idle */
+  const IDLE_SPD  = 0.003;    /* seg de video por frame ≈ 0.18 seg/seg — muy sutil */
 
-  /* Loop continuo — sin arranque/parada, sin latencia */
+  /* Loop continuo */
   function videoLoop() {
     if (heroVideo && heroVideo.duration) {
+      const dur  = heroVideo.duration;
+
+      /* Movimiento ambiente cuando no hay scroll */
+      if (performance.now() - lastScrollT > IDLE_MS) {
+        targetTime += idleDir * IDLE_SPD;
+        if (targetTime <= 0)   { targetTime = 0;   idleDir =  1; }
+        if (targetTime >= dur) { targetTime = dur;  idleDir = -1; }
+      }
+
       const diff = targetTime - smoothTime;
       if (Math.abs(diff) > 0.004) {
-        smoothTime += diff * 0.30;          /* lerp rápido */
+        smoothTime += diff * 0.30;
         heroVideo.currentTime = smoothTime;
       }
     }
@@ -4346,12 +4359,13 @@
     };
     if (heroVideo.readyState >= 1) init();
     else heroVideo.addEventListener('loadedmetadata', init, { once: true });
-    videoLoop(); /* arranca inmediatamente */
+    videoLoop();
   }
 
-  /* ── Scroll: solo actualiza target + parallax ── */
+  /* ── Scroll: actualiza target + reinicia timer idle ── */
   window.addEventListener('scroll', () => {
     const sy = window.scrollY;
+    lastScrollT = performance.now();   /* resetea idle */
     navbar.classList.toggle('scrolled', sy > 40);
 
     if (heroSlideBg) {
