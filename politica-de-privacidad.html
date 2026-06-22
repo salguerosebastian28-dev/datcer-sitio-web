@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Política de Privacidad y Tratamiento de Datos Personales — DATCER</title>
+  <meta name="description" content="Política de Tratamiento de Datos Personales de DATCER conforme a la Ley 1581 de 2012 y normativa colombiana de protección de datos." />
+  <link rel="icon" type="image/png" href="Assets/favicon-icon.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --naranja:    #E85220;
+      --naranja-l:  #FF6B3D;
+      --fondo:      #080C12;
+      --fondo-card: #0E1520;
+      --fondo-card2:#131D2A;
+      --borde:      rgba(232,82,32,0.18);
+      --borde-sutil:rgba(255,255,255,0.06);
+      --texto:      #E8EDF3;
+      --texto-2:    #8A9BB0;
+      --blanco:     #FFFFFF;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--fondo);
+      color: var(--texto);
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--fondo); }
+    ::-webkit-scrollbar-thumb { background: var(--naranja); border-radius: 3px; }
+
+    /* =========================================
+       NAVBAR
+    ========================================= */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 0 5%;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(8,12,18,0.86);
+      backdrop-filter: blur(18px) saturate(160%);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
+      border-bottom: 1px solid var(--borde);
+      box-shadow: 0 6px 30px rgba(0,0,0,0.35);
+    }
+
+    .nav-logo { display: flex; align-items: center; }
+    .nav-logo img {
+      height: 72px;
+      width: auto;
+      filter: drop-shadow(0 1px 6px rgba(0,0,0,0.35));
+    }
+
+    .nav-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      color: var(--texto);
+      border: 1px solid rgba(232,82,32,0.45);
+      border-radius: 999px;
+      padding: 10px 20px;
+      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+    .nav-back:hover {
+      background: var(--naranja);
+      border-color: var(--naranja);
+      color: var(--blanco);
+    }
+
+    /* =========================================
+       HEADER / HERO
+    ========================================= */
+    .doc-hero {
+      padding: 150px 8% 60px;
+      max-width: 1080px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--borde-sutil);
+    }
+    .doc-hero .eyebrow {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--naranja);
+      margin-bottom: 18px;
+    }
+    .doc-hero h1 {
+      font-size: clamp(1.9rem, 4vw, 2.9rem);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      margin-bottom: 18px;
+    }
+    .doc-hero p.lead {
+      color: var(--texto-2);
+      max-width: 760px;
+      font-size: 1.02rem;
+    }
+    .doc-meta {
+      margin-top: 26px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .doc-meta span {
+      font-size: 0.8rem;
+      color: var(--texto-2);
+      background: var(--fondo-card);
+      border: 1px solid var(--borde-sutil);
+      border-radius: 8px;
+      padding: 7px 14px;
+    }
+    .doc-meta span b { color: var(--texto); font-weight: 600; }
+
+    /* =========================================
+       LAYOUT
+    ========================================= */
+    .doc-wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 54px 8% 90px;
+    }
+
+    /* TOC */
+    .toc {
+      background: var(--fondo-card);
+      border: 1px solid var(--borde);
+      border-radius: 14px;
+      padding: 30px 34px;
+      margin-bottom: 56px;
+    }
+    .toc h2 {
+      font-size: 1.05rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--naranja);
+      margin-bottom: 18px;
+    }
+    .toc ol {
+      list-style: none;
+      counter-reset: toc;
+      columns: 2;
+      column-gap: 40px;
+    }
+    .toc ol li {
+      counter-increment: toc;
+      margin-bottom: 9px;
+      break-inside: avoid;
+    }
+    .toc ol li a {
+      color: var(--texto-2);
+      font-size: 0.92rem;
+      transition: color 0.25s;
+      display: flex;
+      gap: 10px;
+    }
+    .toc ol li a::before {
+      content: counter(toc, decimal-leading-zero);
+      color: var(--naranja);
+      font-weight: 700;
+      font-size: 0.82rem;
+      min-width: 24px;
+    }
+    .toc ol li a:hover { color: var(--texto); }
+
+    @media (max-width: 720px) {
+      .toc ol { columns: 1; }
+    }
+
+    /* SECTIONS */
+    section.block {
+      margin-bottom: 50px;
+      scroll-margin-top: 96px;
+    }
+    section.block > h2 {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      margin-bottom: 22px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--borde);
+    }
+    section.block > h2 .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 42px;
+      height: 42px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, var(--naranja), var(--naranja-l));
+      color: var(--blanco);
+      font-size: 1.02rem;
+      font-weight: 700;
+      box-shadow: 0 6px 18px rgba(232,82,32,0.3);
+    }
+
+    section.block h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--texto);
+      margin: 26px 0 12px;
+    }
+
+    section.block p { color: var(--texto-2); margin-bottom: 14px; }
+    section.block p strong, section.block li strong { color: var(--texto); font-weight: 600; }
+
+    section.block ul, section.block ol.styled {
+      list-style: none;
+      margin: 0 0 16px;
+    }
+    section.block ul li, section.block ol.styled li {
+      position: relative;
+      padding-left: 24px;
+      margin-bottom: 11px;
+      color: var(--texto-2);
+    }
+    section.block ul li::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 11px;
+      width: 8px; height: 8px;
+      border-radius: 2px;
+      background: var(--naranja);
+    }
+    section.block ol.styled { counter-reset: ol2; }
+    section.block ol.styled li { counter-increment: ol2; }
+    section.block ol.styled li::before {
+      content: counter(ol2) ".";
+      position: absolute;
+      left: 0; top: 0;
+      color: var(--naranja);
+      font-weight: 700;
+    }
+
+    /* CALLOUT */
+    .callout {
+      background: var(--fondo-card);
+      border: 1px solid var(--borde);
+      border-left: 3px solid var(--naranja);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin: 20px 0;
+    }
+    .callout p { margin: 0; color: var(--texto); }
+    .callout p + p { margin-top: 10px; }
+
+    /* DEFINITION GRID */
+    .def-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .def-card {
+      background: var(--fondo-card);
+      border: 1px solid var(--borde-sutil);
+      border-radius: 11px;
+      padding: 18px 20px;
+    }
+    .def-card h4 {
+      font-size: 0.92rem;
+      color: var(--naranja);
+      margin-bottom: 7px;
+      font-weight: 700;
+    }
+    .def-card p { font-size: 0.9rem; margin: 0; }
+    @media (max-width: 720px) { .def-grid { grid-template-columns: 1fr; } }
+
+    /* TABLE */
+    .tbl-wrap { overflow-x: auto; margin: 18px 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      min-width: 420px;
+    }
+    table th, table td {
+      text-align: left;
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--borde-sutil);
+      vertical-align: top;
+    }
+    table th {
+      background: var(--fondo-card2);
+      color: var(--texto);
+      font-weight: 600;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    table td { color: var(--texto-2); }
+    table tr:last-child td { border-bottom: none; }
+
+    /* CONTACT CARD */
+    .contact-card {
+      background: linear-gradient(135deg, rgba(232,82,32,0.10), rgba(232,82,32,0.02));
+      border: 1px solid var(--borde);
+      border-radius: 16px;
+      padding: 34px 36px;
+      margin-top: 8px;
+    }
+    .contact-card h3 { margin-top: 0; color: var(--naranja); font-size: 1.1rem; }
+    .contact-list { list-style: none; margin: 18px 0 0; }
+    .contact-list li {
+      padding: 0 0 14px !important;
+      margin: 0 !important;
+      color: var(--texto);
+    }
+    .contact-list li::before { display: none !important; }
+    .contact-list .label {
+      display: block;
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--texto-2);
+      margin-bottom: 3px;
+    }
+    .contact-list a { color: var(--naranja); font-weight: 600; }
+    .contact-list a:hover { text-decoration: underline; }
+
+    /* TOP LINK */
+    .top-link {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 0.8rem;
+      color: var(--texto-2);
+    }
+    .top-link:hover { color: var(--naranja); }
+
+    /* =========================================
+       FOOTER
+    ========================================= */
+    footer {
+      border-top: 1px solid var(--borde);
+      padding: 30px 8%;
+      text-align: center;
+    }
+    footer p { color: var(--texto-2); font-size: 0.88rem; }
+    footer p span { color: var(--naranja); font-weight: 600; }
+
+    @media (max-width: 600px) {
+      .nav-logo img { height: 56px; }
+      .nav-back { padding: 8px 14px; font-size: 0.74rem; }
+      .doc-hero { padding-top: 120px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <a href="index.html" class="nav-logo" aria-label="Inicio DATCER">
+      <img src="Assets/Logo Datcer 08022019 (1).png" alt="DATCER" />
+    </a>
+    <a href="index.html" class="nav-back">&larr; Volver al inicio</a>
+  </nav>
+
+  <!-- HERO -->
+  <header class="doc-hero">
+    <span class="eyebrow">Legal · Protección de Datos</span>
+    <h1>Política de Tratamiento de Datos Personales y Privacidad</h1>
+    <p class="lead">
+      En DATCER reconocemos la importancia de proteger la información personal de
+      nuestros clientes, proveedores, colaboradores y visitantes. La presente política
+      describe la forma en que recolectamos, usamos, almacenamos y protegemos los datos
+      personales, en cumplimiento de la Ley 1581 de 2012 y demás normativa colombiana
+      vigente en materia de protección de datos personales y Habeas Data.
+    </p>
+    <div class="doc-meta">
+      <span><b>Responsable:</b> DATCER</span>
+      <span><b>País:</b> Colombia</span>
+      <span><b>Última actualización:</b> Junio de 2026</span>
+      <span><b>Vigencia:</b> A partir de su publicación</span>
+    </div>
+  </header>
+
+  <div class="doc-wrap">
+
+    <!-- TOC -->
+    <nav class="toc" aria-label="Tabla de contenidos">
+      <h2>Contenido</h2>
+      <ol>
+        <li><a href="#s1">Identificación del Responsable del Tratamiento</a></li>
+        <li><a href="#s2">Marco legal aplicable</a></li>
+        <li><a href="#s3">Definiciones clave</a></li>
+        <li><a href="#s4">Datos personales que recopilamos</a></li>
+        <li><a href="#s5">Finalidades del tratamiento</a></li>
+        <li><a href="#s6">Bases de legitimación</a></li>
+        <li><a href="#s7">Derechos del Titular (ARCO)</a></li>
+        <li><a href="#s8">Autorización del Titular</a></li>
+        <li><a href="#s9">Datos sensibles</a></li>
+        <li><a href="#s10">Transferencia y transmisión de datos</a></li>
+        <li><a href="#s11">Medidas de seguridad</a></li>
+        <li><a href="#s12">Tiempo de conservación</a></li>
+        <li><a href="#s13">Cookies y tecnologías de seguimiento</a></li>
+        <li><a href="#s14">Menores de edad</a></li>
+        <li><a href="#s15">Cambios a la política</a></li>
+        <li><a href="#s16">Contacto para ejercer derechos</a></li>
+        <li><a href="#s17">Vigencia y actualización</a></li>
+      </ol>
+    </nav>
+
+    <!-- 1 -->
+    <section class="block" id="s1">
+      <h2><span class="num">1</span> Identificación del Responsable del Tratamiento</h2>
+      <p>
+        El responsable del tratamiento de los datos personales recolectados a través de este
+        sitio web y de los demás canales de contacto es:
+      </p>
+      <div class="callout">
+        <p><strong>Razón social:</strong> DATCER</p>
+        <p><strong>Actividad:</strong> Diseño de data centers e infraestructura crítica, infraestructura eléctrica, sistemas de enfriamiento, cableado estructurado, sistemas contra incendios y seguridad física.</p>
+        <p><strong>Domicilio:</strong> Colombia</p>
+        <p><strong>Correo electrónico:</strong> <a href="mailto:proyectos@datcer.com" style="color:var(--naranja)">proyectos@datcer.com</a></p>
+        <p><strong>Teléfonos:</strong> +57 302 484 5350 (Gerencia) · +57 315 478 8369 (Proyectos)</p>
+      </div>
+      <p>
+        DATCER actúa como <strong>Responsable del Tratamiento</strong> de los datos personales
+        que recolecta directamente. Cuando DATCER contrate terceros para apoyar la operación de
+        sus servicios (por ejemplo, proveedores de alojamiento web o herramientas de comunicación),
+        dichos terceros actuarán como <strong>Encargados del Tratamiento</strong>, sujetos a las
+        instrucciones y a la presente política.
+      </p>
+      <a class="top-link" href="#">&uarr; Volver al inicio del documento</a>
+    </section>
+
+    <!-- 2 -->
+    <section class="block" id="s2">
+      <h2><span class="num">2</span> Marco legal aplicable</h2>
+      <p>
+        La presente política se fundamenta y da cumplimiento a la normativa colombiana vigente en
+        materia de protección de datos personales, en particular:
+      </p>
+      <ul>
+        <li><strong>Constitución Política de Colombia (Artículo 15):</strong> reconoce el derecho fundamental al Habeas Data y a la intimidad personal y familiar.</li>
+        <li><strong>Ley 1581 de 2012:</strong> Ley Estatutaria de Protección de Datos Personales, por la cual se dictan disposiciones generales para la protección de datos personales.</li>
+        <li><strong>Decreto 1377 de 2013:</strong> reglamenta parcialmente la Ley 1581 de 2012 en aspectos como la autorización del titular y las políticas de tratamiento.</li>
+        <li><strong>Decreto 1074 de 2015:</strong> Decreto Único Reglamentario del Sector Comercio, Industria y Turismo, que compila las normas reglamentarias en materia de protección de datos personales.</li>
+        <li><strong>Ley 1266 de 2008:</strong> disposiciones generales del Habeas Data y manejo de la información contenida en bases de datos personales de carácter financiero, crediticio, comercial y de servicios.</li>
+        <li><strong>Circular Externa 002 de 2015 de la SIC:</strong> instrucciones de la Superintendencia de Industria y Comercio (SIC) sobre el Registro Nacional de Bases de Datos (RNBD) y demás obligaciones de los responsables.</li>
+      </ul>
+      <p>
+        La autoridad de control en Colombia es la <strong>Superintendencia de Industria y Comercio
+        (SIC)</strong>, a través de la Delegatura para la Protección de Datos Personales.
+      </p>
+      <a class="top-link" href="#">&uarr; Volver al inicio del documento</a>
+    </section>
+
+    <!-- 3 -->
+    <section class="block" id="s3">
+      <h2><span class="num">3</span> Definiciones clave</h2>
+      <p>Para los efectos de la presente política, se entiende por:</p>
+      <div class="def-grid">
+        <div class="def-card">
+          <h4>Dato personal</h4>
+          <p>Cualquier información vinculada o que pueda asociarse a una o varias personas naturales determinadas o determinables.</p>
+        </div>
+        <div class="def-card">
+          <h4>Dato sensible</h4>
+          <p>Aquel que afecta la intimidad del titular o cuyo uso indebido puede generar discriminación (salud, origen racial, opiniones políticas, datos biométricos, etc.).</p>
+        </div>
+        <div class="def-card">
+          <h4>Titular</h4>
+          <p>Persona natural cuyos datos personales son objeto de tratamiento.</p>
+        </div>
+        <div class="def-card">
+          <h4>Responsable del Tratamiento</h4>
+          <p>Persona natural o jurídica que decide sobre la base de datos y/o el tratamiento de los datos. En este caso, DATCER.</p>
+        </div>
+        <div class="def-card">
+          <h4>Encargado del Tratamiento</h4>
+          <p>Persona natural o jurídica que realiza el tratamiento de datos por cuenta del Responsable.</p>
+        </div>
+        <div class="def-card">
+          <h4>Tratamiento</h4>
+          <p>Cualquier operación sobre datos personales, tales como recolección, almacenamiento, uso, circulación o supresión.</p>
+        </div>
+        <div class="def-card">
+          <h4>Autorización</h4>
+          <p>Consentimiento previo, expreso e informado del titular para llevar a cabo el tratamiento de sus datos.</p>
+        </div>
+        <div class="def-card">
+          <h4>Base de datos</h4>
+          <p>Conjunto organizado de datos personales objeto de tratamiento.</p>
+        </div>
+        <div class="def-card">
+          <h4>Transferencia</h4>
+          <p>Envío de datos por el responsable o encargado a un receptor que también es responsable, dentro o fuera del país.</p>
+        </div>
+        <div class="def-card">
+          <h4>Transmisión</h4>
+          <p>Tratamiento de datos que implica comunicarlos a un encargado, dentro o fuera del territorio colombiano, para que preste un servicio.</p>
+        </div>
+      </div>
+      <a class="top-link" href="#">&uarr; Volver al inicio del documento</a>
+    </section>
+
+    <!-- 4 -->
+    <section class="block" id="s4">
+      <h2><span class="num">4</span> Datos personales que recopilamos</h2>
+      <p>DATCER recopila únicamente los datos necesarios para los fines descritos en esta política. Estos pueden incluir:</p>
+      <h3>4.1 Datos suministrados directamente (formulario de contacto)</h3>
+      <ul>
+        <li>Nombre y apellidos.</li>
+        <li>Empresa u organización.</li>
+        <li>Correo electrónico.</li>
+        <li>Número de teléfono.</li>
+        <li>Mensaje, requerimiento o información sobre el proyecto que el titular voluntariamente proporcione.</li>
+      </ul>
+      <h3>4.2 Datos de navegación</h3>
+      <ul>
+        <li>Dirección IP y datos técnicos del dispositivo y navegador.</li>
+        <li>Páginas visitadas, tiempo de permanencia y fecha/hora de acceso.</li>
+        <li>Sitio de procedencia (referente).</li>
+      </ul>
+      <h3>4.3 Cookies y tecnologías similares</h3>
+      <p>
+        Información recolectada mediante cookies y tecnologías de seguimiento, según se describe en
+        la sección 13 de esta política.
+      </p>
+      <a class="top-link" href="#">&uarr; Volver al inicio del documento</a>
+    </section>
+
+    <!-- 5 -->
+    <section class="block" id="s5">
+      <h2><span class="num">5</span> Finalidades del tratamiento</h2>
+      <p>Los datos personales recolectados por DATCER serán tratados con las siguientes finalidades:</p>
+      <ol class="styled">
+        <li>Atender solicitudes, consultas, cotizaciones y requerimientos enviados a través del formulario de contacto u otros canales.</li>
+        <li>Establecer y mantener relaciones comerciales con clientes, proveedores y aliados.</li>
+        <li>Elaborar propuestas técnicas y comerciales de diseño de data centers e infraestructura crítica.</li>
+        <li>Gestionar la ejecución, seguimiento y soporte de los proyectos contratados.</li>
+        <li>Enviar información sobre servicios, novedades y comunicaciones comerciales, cuando el titular lo haya autorizado.</li>
+        <li>Dar cumplimiento a obligaciones legales, contractuales, contables y tributarias.</li>
+        <li>Mejorar la experiencia de navegación y el funcionamiento del sitio web.</li>
+        <li>Realizar estadísticas y análisis internos de uso del sitio.</li>
+      </ol>
+      <a class="top-link" href="#">&uarr; Volver al inicio del documento</a>
+    </section>
+
+    <!-- 6 -->
+    <section class="block" id="s6">
+      <h2><span class="num">6</span> Bases de legitimación</h2>
+      <p>El tratamiento de datos personales por parte de DATCER se sustenta en una o varias de las siguientes bases:</p>
+      <ul>
+        <li><strong>Autorización del titular:</strong> consentimiento previo, expreso e informado otorgado al diligenciar formularios o aceptar la presente política.</li>
+        <li><strong>Ejecución de una relación contractual o precontractual:</strong> cuando el tratamiento es necesario para atender una solicitud, formular una propuesta o ejecutar un contrato.</li>
+        <li><strong>Cumplimiento de obligaciones legales:</strong> cuando una norma exige el tratamiento de determinados datos.</li>
+        <li><strong>Interés legítimo:</strong> para la operación, seguridad y mejora del sitio web, sin perjuicio de los derechos del titular.</li>
+      </ul>
+      <a class="top-link" href="#">&uarr; Volver al inicio del documento</a>
+    </section>
+
+    <!-- 7 -->
+    <section class="block" id="s7">
+      <h2><span class="num">7</span> Derechos del Titular (ARCO)</h2>
+      <p>
+        De conformidad con la Ley 1581 de 2012 y sus decretos reglamentarios, todo titular de datos
+        personales tiene los siguientes derechos:
+      </p>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th>Derecho</th><th>Descripción</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Acceso</strong></td><td>Conocer, actualizar y consultar de forma gratuita sus datos personales objeto de tratamiento.</td></tr>
+            <tr><td><strong>Rectificación</strong></td><td>Solicitar la corrección de datos parciales, inexactos, incompletos, fraccionados o que induzcan a error.</td></tr>
+            <tr><td><strong>Cancelación / Supresión</strong></td><td>Solicitar la supresión de sus datos cuando no se respeten los principios, derechos y garantías legales, salvo que exista un deber legal o contractual de conservarlos.</td></tr>
+            <tr><td><strong>Oposición</strong></td><td>Oponerse al tratamiento de sus datos cuando no exista una obligación legal o contractual que lo impida.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Adicionalmente, el titular tiene derecho a:</p>
+      <ul>
+        <li>Revocar la autorización otorgada en cualquier momento.</li>
+        <li>Solicitar prueba de la autorización otorgada a DATCER.</li>
+        <li>Ser informado, previa solicitud, sobre el uso dado a sus datos personales.</li>
+        <li>Presentar quejas ante la Superintendencia de Industria y Comercio (SIC) por infracciones a la ley, una vez agotado el trámite de consulta o reclamo ante DATCER.</li>
+        <li>Acceder de forma gratuita a sus datos personales objeto de tratamiento.</li>
+      </ul>
+      <h3>¿Cómo ejercer estos derechos?</h3>
+      <p>
+        El titular o sus causahabientes podrán ejercer sus derechos enviando una solicitud al correo
+        electrónico <a href="mailto:proyectos@datcer.com" style="color:var(--naranja)">proyectos@datcer.com</a>,
+        indicando:
+      </p>
+      <ol class="styled">
+        <li>Nombre completo e identificación del titular.</li>
+        <li>Datos de contacto para recibir respuesta.</li>
+        <li>Descripción clara de la consulta, reclamo o derecho que desea ejercer.</li>
+        <li>Documentos que soporten la solicitud, si aplica.</li>
+      </ol>
+      <div class="callout">
+        <p><strong>Tiempos de respuesta:</strong> Las consultas serán atendidas en un término máximo de <strong>diez (10) días hábiles</strong>. Los reclamos serán resueltos en un término máximo de <strong>quince (15) días hábiles</strong> contados a partir del día siguiente a su recepción, prorrogables conforme a la ley cuando no fuere posible atenderlos dentro de dicho término.</p>
+      </div>
+      <a class="top-link" href="#">&uarr; Volver al inicio del documento</a>
+    </section>
+
+    <!-- 8 -->
+    <section class="block" id="s8">
+      <h2><span class="num">8</span> Autorización del Titular</h2>
+      <p>
+        El tratamiento de los datos personales requiere la autorización previa, expresa e informada
+        del titular. Al diligenciar el formulario de contacto, enviar información a través de nuestros
+        canales o aceptar la presente política, el titular autoriza a DATCER a recolectar, almacenar,
+        usar y tratar sus datos personales conforme a las finalidades aquí descritas.
+      </p>
+      <p>
+        La autorización podrá obtenerse por cualquier medio que permita su posterior consulta, incluyendo
+        medios electrónicos. El titular podrá revocar la autorización y/o solicitar la supresión de sus
+        datos en cualquier momento, siempre que no exista un deber legal o contractual que impida su eliminación.
+      </p>
+      <a class="top-link" href="#">&uarr; Volver al inicio del documento</a>
+    </section>
+
+    <!-- 9 -->
+    <section class="block" id="s9">
+      <h2><span class="num">9</span> Datos sensibles</h2>
+      <div class="callout">
+        <p>
+          <strong>DATCER no recolecta datos personales sensibles</strong> a través de su sitio web ni de
+          sus formularios de contacto, salvo que ello resulte estrictamente necesario para una finalidad
+          específica y legítima.
+        </p>
+      </div>
+      <p>
+        En los casos excepcionales en que el tratamiento de datos sensibles sea necesario, DATCER:
+      </p>
+      <ul>
+        <li>Solicitará la autorización explícita del titular, informándole que no está obligado a autorizar dicho tratamiento.</li>
+        <li>Informará cuáles datos sensibles serán objeto de tratamiento y la finalidad correspondiente.</li>
+        <li>Adoptará medidas de seguridad reforzadas para su protección.</li>
+      </ul>
+      <p>
+        Ningún titular está obligado a suministrar datos sensibles, y la negativa a hacerlo no podrá
+        condicionar el acceso a servicios para los cuales dichos datos no sean indispensables.
+      </p>
+      <a class="top-link" href="#">&uarr; Volver al inicio del documento</a>
+    </section>
+
+    <!-- 10 -->
+    <section class="block" id="s10">
+      <h2><span class="num">10</span> Transferencia y transmisión de datos</h2>
+      <p>
+        DATCER podrá transferir o transmitir datos personales a terceros únicamente cuando sea necesario
+        para cumplir las finalidades descritas, en virtud de una obligación legal, o cuando el titular lo
+        haya autorizado.
+      </p>
+      <h3>Transmisión a Encargados</h3>
+      <p>
+        DATCER podrá transmitir datos a Encargados del Tratamiento (por ejemplo, proveedores de servicios
+        de alojamiento web, correo electrónico o herramientas de gestión), quienes tratarán los datos
+        exclusivamente conforme a las instrucciones de DATCER y bajo los deberes de confidencialidad y
+        seguridad correspondientes.
+      </p>
+      <h3>Transferencia y transmisión internacional</h3>
+      <p>
+        En caso de que algunos proveedores se encuentren ubicados fuera de Colombia, los datos podrán ser
+        objeto de transferencia o transmisión internacional. DATCER procurará que dichos terceros ofrezcan
+        niveles adecuados de protección de datos, conforme a lo previsto en la Ley 1581 de 2012 y las
+        instrucciones de la SIC. Cuando el país de destino no garantice un nivel adecuado de protección, la
+        transferencia se realizará previa autorización del titular o bajo alguna de las excepciones legales aplicables.
+      </p>
+      <a class="top-link" href="#">&uarr; Volver al inicio del documento</a>
+    </section>
+
+    <!-- 11 -->
+    <section class="block" id="s11">
+      <h2><span class="num">11</span> Medidas de seguridad</h2>
+      <p>
+        Como empresa especializada en infraestructura crítica, DATCER aplica los principios de seguridad
+        de la información a la protección de los datos personales. Adoptamos medidas técnicas, humanas y
+        administrativas razonables y proporcionales para proteger los datos contra acceso no autorizado,
+        pérdida, alteración, uso indebido o destrucción, entre ellas:
+      </p>
+      <ul>
+        <li>Cifrado de la transmisión de datos mediante protocolos seguros (HTTPS/TLS).</li>
+        <li>Controles de acceso restringido a la información personal según el principio de necesidad.</li>
+        <li>Deberes de confidencialidad para el personal y los encargados que tratan los datos.</li>
+        <li>Copias de respaldo y procedimientos de recuperación.</li>
+        <li>Revisión periódica de las medidas de seguridad implementadas.</li>
+      </ul>
+      <p>
+        Ningún sistema es completamente infalible; sin embargo, DATCER se compromete a actuar diligentemente
+        y a notificar a la autoridad competente y a los titulares afectados en caso de incidentes de seguridad
+        que lo ameriten, conforme a la normativa vigente.
+      </p>
+      <a class="top-link" href="#">&uarr; Volver al inicio del documento</a>
+    </section>
+
+    <!-- 12 -->
+    <section class="block" id="s12">
+      <h2><span class="num">12</span> Tiempo de conservación</h2>
+      <p>
+        Los datos personales serán conservados únicamente durante el tiempo necesario para cumplir las
+        finalidades para las cuales fueron recolectados y para atender las obligaciones legales, contractuales,
+        contables y tributarias aplicables.
+      </p>
+      <ul>
+        <li><strong>Datos de contacto comercial:</strong> mientras se mantenga la relación o el interés comercial y durante los plazos legales de conservación posteriores.</li>
+        <li><strong>Datos contractuales:</strong> durante la vigencia del contrato y los términos legales de conservación documental aplicables.</li>
+        <li><strong>Datos de navegación y cookies:</strong> según los plazos descritos en la sección 13 o hasta que el titular los elimine desde su navegador.</li>
+      </ul>
+      <p>
+        Una vez cumplidas las finalidades y vencidos los plazos de conservación, los datos serán suprimidos
+        o anonimizados de forma segura.
+      </p>
+      <a class="top-link" href="#">&uarr; Volver al inicio del documento</a>
+    </section>
+
+    <!-- 13 -->
+    <section class="block" id="s13">
+      <h2><span class="num">13</span> Cookies y tecnologías de seguimiento</h2>
+      <p>
+        El sitio web de DATCER puede utilizar cookies y tecnologías similares para mejorar la experiencia
+        del usuario, recordar preferencias y obtener estadísticas de uso. Las cookies son pequeños archivos
+        que se almacenan en el dispositivo del usuario.
+      </p>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th>Tipo de cookie</th><th>Finalidad</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Técnicas / necesarias</strong></td><td>Permiten el funcionamiento básico y la navegación del sitio.</td></tr>
+            <tr><td><strong>De preferencias</strong></td><td>Recuerdan opciones y configuraciones seleccionadas por el usuario.</td></tr>
+            <tr><td><strong>Analíticas</strong></td><td>Permiten medir y analizar el uso del sitio de forma agregada para mejorarlo.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        El usuario puede configurar, restringir o eliminar las cookies a través de las opciones de su
+        navegador. La desactivación de algunas cookies puede afectar el funcionamiento de ciertas
+        secciones del sitio.
+      </p>
+      <a class="top-link" href="#">&uarr; Volver al inicio del documento</a>
+    </section>
+
+    <!-- 14 -->
+    <section class="block" id="s14">
+      <h2><span class="num">14</span> Menores de edad</h2>
+      <div class="callout">
+        <p>
+          El sitio web y los servicios de DATCER están dirigidos a un público adulto y profesional.
+          <strong>DATCER no recolecta de manera consciente datos personales de niños, niñas y adolescentes.</strong>
+        </p>
+      </div>
+      <p>
+        En caso de tratarse, de forma excepcional, datos de menores de edad, se hará atendiendo a su interés
+        superior y al respeto de sus derechos fundamentales, conforme a lo dispuesto en la Ley 1581 de 2012 y
+        sus decretos reglamentarios, previa autorización del representante legal del menor. Si un padre, madre
+        o representante legal advierte que un menor ha proporcionado datos personales, puede solicitar su
+        eliminación escribiendo a <a href="mailto:proyectos@datcer.com" style="color:var(--naranja)">proyectos@datcer.com</a>.
+      </p>
+      <a class="top-link" href="#">&uarr; Volver al inicio del documento</a>
+    </section>
+
+    <!-- 15 -->
+    <section class="block" id="s15">
+      <h2><span class="num">15</span> Cambios a la política</h2>
+      <p>
+        DATCER podrá modificar o actualizar la presente política en cualquier momento, con el fin de
+        adaptarla a cambios legislativos, jurisprudenciales o a nuevas prácticas de tratamiento de datos.
+        Cualquier cambio sustancial será informado a través de este sitio web y entrará en vigencia a partir
+        de su publicación. Se recomienda al titular revisar periódicamente esta política para mantenerse
+        informado.
+      </p>
+      <a class="top-link" href="#">&uarr; Volver al inicio del documento</a>
+    </section>
+
+    <!-- 16 -->
+    <section class="block" id="s16">
+      <h2><span class="num">16</span> Contacto para ejercer derechos</h2>
+      <p>
+        Para ejercer sus derechos, presentar consultas o reclamos relacionados con el tratamiento de sus
+        datos personales, el titular puede comunicarse con el área responsable del tratamiento de datos de DATCER:
+      </p>
+      <div class="contact-card">
+        <h3>Responsable de Tratamiento de Datos — DATCER</h3>
+        <ul class="contact-list">
+          <li>
+            <span class="label">Correo electrónico</span>
+            <a href="mailto:proyectos@datcer.com">proyectos@datcer.com</a>
+          </li>
+          <li>
+            <span class="label">Teléfono — Gerencia</span>
+            <a href="tel:+573024845350">+57 302 484 5350</a>
+          </li>
+          <li>
+            <span class="label">Teléfono — Proyectos</span>
+            <a href="tel:+573154788369">+57 315 478 8369</a>
+          </li>
+          <li>
+            <span class="label">País</span>
+            Colombia
+          </li>
+        </ul>
+      </div>
+      <p style="margin-top:18px;">
+        El titular también podrá acudir a la <strong>Superintendencia de Industria y Comercio (SIC)</strong>
+        como autoridad de control, una vez agotado el trámite de consulta o reclamo ante DATCER.
+      </p>
+      <a class="top-link" href="#">&uarr; Volver al inicio del documento</a>
+    </section>
+
+    <!-- 17 -->
+    <section class="block" id="s17">
+      <h2><span class="num">17</span> Vigencia y fecha de última actualización</h2>
+      <p>
+        La presente Política de Tratamiento de Datos Personales y Privacidad rige a partir de su publicación
+        y permanecerá vigente mientras DATCER realice tratamiento de datos personales, sin perjuicio de las
+        actualizaciones que se realicen conforme a la sección 15.
+      </p>
+      <div class="callout">
+        <p><strong>Fecha de última actualización:</strong> Junio de 2026.</p>
+      </div>
+      <a class="top-link" href="#">&uarr; Volver al inicio del documento</a>
+    </section>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2026 <span>DATCER</span> &mdash; Todos los derechos reservados.</p>
+  </footer>
+
+</body>
+</html>
