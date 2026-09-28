@@ -1728,6 +1728,55 @@ gsap.utils.toArray('.figs').forEach(g=>{
   });
   calc(false);
 
+  /* ---------- plegado ----------
+     El simulador llega cerrado. Quien venia leyendo la pagina se encontraba de
+     golpe media pantalla de controles que no habia pedido; el que si quiere
+     dimensionar una sala, pulsa. El titulo y el parrafo se quedan fuera: son
+     los que cuentan que esto existe.
+
+     `hidden` lo saca del flujo entero, no es un alto cero que siga ocupando.
+     Como `height:auto` no se puede animar, al abrir se mide el alto real y se
+     va hasta el; al terminar se devuelve a `auto`, o la caja se quedaria
+     clavada en los pixeles de ese momento y no seguiria al contenido cuando
+     cambie el ancho de la ventana. */
+  var caja = document.getElementById('cfw'), go = document.getElementById('cfgGo');
+  if (caja && go){
+    var texto = go.querySelector('.t'), abierto = false, yendo = null;
+
+    function pintar(){
+      go.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+      texto.textContent = abierto ? 'Cerrar el simulador' : 'Abrir el simulador';
+      go.classList.toggle('on', abierto);
+    }
+
+    function abrir(){
+      caja.hidden = false;
+      /* la planta se redibuja con la caja ya en el flujo: mientras estuvo en
+         `display:none` el navegador no le dio caja al SVG */
+      calc(false);
+      if (RM){ gsap.set(caja, {clearProps:'all'}); ScrollTrigger.refresh(); return; }
+      if (yendo) yendo.kill();
+      yendo = gsap.fromTo(caja,
+        {height:0, opacity:0, overflow:'hidden'},
+        {height:caja.scrollHeight, opacity:1, duration:.75, ease:'power3.inOut',
+         onComplete:function(){ gsap.set(caja, {clearProps:'height,opacity,overflow'}); ScrollTrigger.refresh(); }});
+    }
+
+    function cerrar(){
+      if (RM){ caja.hidden = true; ScrollTrigger.refresh(); return; }
+      if (yendo) yendo.kill();
+      yendo = gsap.to(caja, {height:0, opacity:0, overflow:'hidden', duration:.5, ease:'power3.inOut',
+        onComplete:function(){ caja.hidden = true; gsap.set(caja, {clearProps:'height,opacity,overflow'}); ScrollTrigger.refresh(); }});
+    }
+
+    go.addEventListener('click', function(){
+      abierto = !abierto;
+      pintar();
+      if (abierto) abrir(); else cerrar();
+    });
+    pintar();
+  }
+
   /* el flujo solo se anima mientras el configurador esta en pantalla */
   const cja=document.querySelector('.plan');
   if(cja) ScrollTrigger.create({trigger:'#cfg', start:'top bottom', end:'bottom top',

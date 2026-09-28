@@ -754,6 +754,18 @@ body.mo .bg i:last-child{transform:translateY(-3.5px) rotate(-45deg);width:100%}
 /* controles · planta · resultados. La planta se lleva la columna ancha: es la
    pieza que necesita sitio, y asi el configurador entero cabe de una vez en vez
    de continuar dos pantallas mas abajo. */
+/* El boton que despliega el simulador, y la caja que despliega.
+   `button.btn` necesita su reinicio: el navegador le pone fondo, borde y una
+   tipografia propia que no son las del sitio. */
+.cf-go{display:flex;align-items:center;gap:clamp(18px,2.4vw,34px);flex-wrap:wrap;
+  margin-top:clamp(34px,4.2vw,58px)}
+.cf-go .lbl{max-width:46ch}
+button.btn{background:none;font:inherit;color:inherit;cursor:pointer;text-align:left}
+/* abierto, la flecha apunta hacia arriba: es el gesto de cerrar */
+.btn.on .a::after{transform:rotate(-45deg)}
+.cf-w[hidden]{display:none}
+.cf-w{will-change:height}
+
 .cf{display:grid;grid-template-columns:minmax(230px,.72fr) minmax(0,1.5fr) minmax(272px,.92fr);
   gap:clamp(24px,2.6vw,50px);align-items:start;margin-top:clamp(36px,4.6vw,64px)}
 .ctrl{display:grid;gap:clamp(24px,3vw,38px)}

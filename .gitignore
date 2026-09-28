@@ -26,3 +26,16 @@ assets/data center shelter image.jpg
 assets/servicios video.mp4
 assets/software tiempo real*.png
 assets/video dc.mp4
+
+# ---------------------------------------------------------------------------
+# Notas internas de desarrollo. El repositorio es PÚBLICO y estas tres traen
+# comentarios de taller: decisiones descartadas, por qué se quitó tal cosa,
+# qué no se le cuenta al visitante. Útiles para quien mantenga el sitio,
+# incómodas de leer para cualquiera que pase por ahí.
+#
+# Si se quiere que suban: borrar estas tres líneas. Mejor aún, poner el
+# repositorio en privado primero (Settings → General → Danger Zone).
+# ---------------------------------------------------------------------------
+HANDOFF.md
+ASSETS.md
+README.md

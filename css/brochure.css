@@ -271,7 +271,7 @@
 
 @media print{
   html,body{background:#fff}
-  #pre,#hd,#mn,#ch,#cr,#cx,#grain,#sc,.br-sc,#br-hero,footer,.dk-hd,.dk-bar,.dl{
+  #pre,#hd,#mn,#ch,#cr,#cx,#grain,#sc,#wa,.br-sc,#br-hero,footer,.dk-hd,.dk-bar,.dl{
     display:none!important}
 
   /* ScrollTrigger envuelve el deck en un `.pin-spacer` cuyo relleno es el
