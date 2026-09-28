@@ -1,15 +1,28 @@
-# System
-Thumbs.db
 .DS_Store
-desktop.ini
+node_modules/
+*.log
 
-# Editor
-.vscode/
-*.code-workspace
-
-# Claude Code internals
-.claude/
-*.md
-
-# Videos originales grandes (>100MB)
-Assets/Datcer, su aliado experto en diseño de Data Center (1).mp4
+# ---------------------------------------------------------------------------
+# Material de origen. Son 148 MB de brutos —renders sin graduar, vídeos con
+# marca de agua, exportaciones del configurador— de los que salieron los
+# archivos que sí usa la web. La página publicada no pide ninguno: se quedan en
+# el disco y no suben ni al repositorio ni a Vercel.
+#
+# Si algún día hace falta rehacer una imagen, están en su sitio de siempre.
+# Y si se añade uno nuevo que SÍ use la página, va en assets/img o assets/video
+# —esas dos carpetas suben enteras—, no suelto en assets/.
+# ---------------------------------------------------------------------------
+assets/_originales/
+assets/imagenes servicios/
+assets/01 *.jpg
+assets/DATA CENTER CONFINADO.mp4
+assets/Data_center_aisle_push_*.mp4
+assets/Datcer-Configurador-*.html
+assets/Datcer-SH-002-2-Tres-Pasillos-3D *.html
+assets/Dise* sin t*.png
+assets/Mismo_edificio*.jpeg
+assets/Render_arquitect*.jpeg
+assets/data center shelter image.jpg
+assets/servicios video.mp4
+assets/software tiempo real*.png
+assets/video dc.mp4

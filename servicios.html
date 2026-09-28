@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Servicios · Infraestructura crítica — DATCER</title>
+<meta name="description" content="Veintiocho servicios de infraestructura crítica para data center: diseño TIER I-IV, energía, clima, cableado estructurado, detección y supresión, seguridad, DCIM, comisionamiento y bancos de carga.">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<meta name="theme-color" content="#020D1F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/wa.css">
+<link rel="stylesheet" href="css/servicios.css">
+</head>
+<body>
+
+<div id="pre">
+  <div class="top"><span class="lbl">DATCER · Servicios</span><span class="lbl">Veintiocho servicios</span></div>
+  <div class="mid"><div class="word">SERVICIOS</div><div class="pc">0</div></div>
+  <div class="bar"><i></i></div>
+</div>
+
+<div id="grain"></div>
+<div id="cr"></div><div id="cx"></div>
+<div id="ch"><span class="c"><i>00</i></span><small id="chn">El m&oacute;dulo</small></div>
+
+<header id="hd">
+  <!-- La barra que se recompone al subir el scroll. Cada tira lleva su
+       trozo del mismo degradado, así que montadas no se ve la costura. -->
+  <div class="hd-bg" aria-hidden="true"></div>
+  <a class="lg" href="index.html">
+    <span class="lgi">
+      <img src="assets/logo-dark.png" alt="DATCER">
+      <img class="lt" src="assets/logo-barra.png" alt="" aria-hidden="true">
+    </span>
+    <span class="lgt">Data Center<br>Design &amp; Consulting</span>
+  </a>
+  <nav>
+    <a class="hs" href="index.html">Inicio</a>
+    <a class="hs" href="shelters.html">Shelters</a>
+    <a class="hs" href="brochure.html">Brochure</a>
+    <a class="hs" href="index.html#contact">Contactar</a>
+    <button class="bg" id="bg" aria-label="Men&uacute;" aria-expanded="false"><i></i><i></i></button>
+  </nav>
+</header>
+
+<div id="mn" aria-hidden="true">
+  <div class="grid">
+    <ol>
+      <li><a href="index.html#about"><em>01</em>Nosotros</a></li>
+      <li><a href="index.html#hall"><em>02</em>La sala</a></li>
+      <li><a href="index.html#design"><em>03</em>Ingenier&iacute;a de dise&ntilde;o</a></li>
+      <li><a href="servicios.html"><em>04</em>Servicios</a></li>
+      <li><a href="index.html#cfg"><em>05</em>Configurador</a></li>
+      <li><a href="shelters.html"><em>06</em>Shelters</a></li>
+      <li><a href="index.html#load"><em>07</em>Bancos de carga</a></li>
+      <li><a href="index.html#sectors"><em>08</em>Sectores</a></li>
+      <li><a href="index.html#contact"><em>09</em>Contacto</a></li>
+    </ol>
+    <div class="side">
+      <div><span class="lbl">Correo</span><a href="mailto:proyectos@datcer.com">proyectos@datcer.com</a></div>
+      <div><span class="lbl">Gerencia</span><a href="https://wa.me/573024845350" target="_blank" rel="noopener">+57 302 484 5350</a></div>
+      <div><span class="lbl">Proyectos</span><a href="https://wa.me/573154788369" target="_blank" rel="noopener">+57 315 478 8369</a></div>
+      <div><span class="lbl">Red</span><a href="https://www.linkedin.com/company/datcer-design-consulting-for-data-center" target="_blank" rel="noopener">LinkedIn</a></div>
+    </div>
+  </div>
+</div>
+
+<main id="top">
+
+<!-- HERO -->
+<section id="sv-hero" data-ch="00" data-nm="Servicios">
+  <!-- El taller de fondo: soldadura sobre azul, con las chispas en el naranja
+       de la marca. El velo cae sobre la franja del titular. -->
+  <div class="sv-bg" aria-hidden="true">
+    <video id="svbg" muted loop playsinline preload="auto" poster="assets/img/servicios-hero-poster.jpg">
+      <source src="assets/video/servicios-hero.mp4" type="video/mp4">
+    </video>
+    <span class="sv-dim"></span>
+    <!-- las mismas guías punteadas del hero del inicio -->
+    <span class="sv-rt"></span>
+  </div>
+  <div class="pad in">
+    <span class="lbl tag" data-anim="up">Veintiocho servicios &middot; Infraestructura cr&iacute;tica</span>
+    <h1 class="d1" data-split="line">Del primer c&aacute;lculo <em>a la puesta en marcha</em></h1>
+    <div class="ft">
+      <p data-anim="up">Cubrimos el ciclo completo de una sala t&eacute;cnica: el dise&ntilde;o que la define, los sistemas que la sostienen y las pruebas que demuestran que hace lo que promete.</p>
+      <div class="cta" data-anim="up">
+        <a class="btn fill" href="#sv-01"><span class="t">Ver los veintiocho</span><span class="a"></span></a>
+        <a class="btn" href="index.html#contact"><span class="t">Hablar con un ingeniero</span><span class="a"></span></a>
+      </div>
+    </div>
+  </div>
+  <div id="sc"><span>Scroll</span><i class="l"></i></div>
+</section>
+
+<!-- LOS DOCE
+     Filas alternas: foto a un lado, texto al otro. Las tres capas de cada fila
+     numero de fondo, foto y texto recorren distancias distintas con el scroll.
+     El JS no sabe cuantas filas hay ni que dicen. -->
+<section class="sv-wrap" data-ch="01" data-nm="Servicios">
+  <div class="pad">
+    <!-- Entradilla: entre el hero y la primera fila quedaba una franja de azul
+         vacío de casi media pantalla. -->
+    <div class="sv-hd">
+      <div class="cap"><span class="lbl idx">28</span><span class="lbl">Cat&aacute;logo completo</span></div>
+      <p class="bd">Del estudio del sitio a la operaci&oacute;n. Cada ficha dice qu&eacute; incluye, bajo qu&eacute; norma se ejecuta y qu&eacute; queda documentado al cerrarla.</p>
+    </div>
+    <div class="tri sv-grid">
+      <figure class="c" data-tilt id="sv-01">
+        <img src="assets/img/svc/sitio.jpg" alt="Edificio de data center al atardecer con sus unidades exteriores" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">01</span><h3 class="d4">Evaluaci&oacute;n y selecci&oacute;n de sitio</h3></div>
+          <div><p>Antes de dise&ntilde;ar hay que saber d&oacute;nde. Se eval&uacute;a el predio o el piso: acometidas, carga estructural, accesos, riesgos del entorno y ruta de crecimiento.</p><div class="tg"><span>Due diligence</span><span>TIA-942</span><span>Riesgo</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-02">
+        <img src="assets/img/svc/diseno.jpg" alt="Tableta con planos de data center sobre una mesa de trabajo" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">02</span><h3 class="d4">Dise&ntilde;o de data center</h3></div>
+          <div><p>Dise&ntilde;o integral desde cero: layout, capacidad, redundancia y escalabilidad para instalaciones TIER I a IV.</p><div class="tg"><span>TIER I&ndash;IV</span><span>TIA-942</span><span>Uptime</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-03">
+        <img src="assets/img/svc/confinado.jpg" alt="Pasillo de data center confinado, con su techo y las puertas de cierre" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">03</span><h3 class="d4">Data center en confinamiento</h3></div>
+          <div><p>Pasillo cerrado: el aire fr&iacute;o llega al equipo y no se mezcla con el caliente. Es la diferencia entre enfriar la sala y enfriar los servidores.</p><div class="tg"><span>Pasillo fr&iacute;o</span><span>Pasillo caliente</span><span>ASHRAE TC 9.9</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-04">
+        <img src="assets/img/svc/shelter.jpg" alt="Shelter de data center abierto, con sus racks y las unidades de clima" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">04</span><h3 class="d4">Data center en shelter</h3></div>
+          <div><p>Un m&oacute;dulo que llega montado y probado de f&aacute;brica: la sala t&eacute;cnica completa dentro del mismo casco, lista para conectar.</p><div class="tg"><span>SH-002-2</span><span>Llave en mano</span><span>Probado en f&aacute;brica</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-05">
+        <img src="assets/img/svc/civil.jpg" alt="Piso t&eacute;cnico levantado, con la parrilla de pedestales y las bandejas por debajo" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">05</span><h3 class="d4">Ingenier&iacute;a civil y obra</h3></div>
+          <div><p>El edificio tiene que aguantar lo que se le va a meter dentro. Se calcula antes, no se descubre con el primer gabinete puesto.</p><div class="tg"><span>Carga de losa</span><span>Piso t&eacute;cnico</span><span>Cortafuego</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-06">
+        <img src="assets/img/svc/energia.jpg" alt="Gabinete UPS modular con la puerta abierta mostrando los m&oacute;dulos de potencia" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">06</span><h3 class="d4">Infraestructura el&eacute;ctrica</h3></div>
+          <div><p>Sistemas de potencia cr&iacute;tica con acometidas redundantes y respaldo de generaci&oacute;n con transferencia autom&aacute;tica.</p><div class="tg"><span>UPS / PDU</span><span>ATS</span><span>RETIE</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-07">
+        <img src="assets/img/svc/tableros.jpg" alt="Kit de organizaci&oacute;n de cableado de fuerza y control" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">07</span><h3 class="d4">Tableros el&eacute;ctricos</h3></div>
+          <div><p>Fabricaci&oacute;n, montaje y puesta en servicio de los tableros de la sala, con el ensayo documentado antes de energizar.</p><div class="tg"><span>RETIE</span><span>Selectividad</span><span>Termograf&iacute;a</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-08">
+        <img src="assets/img/svc/estudios.jpg" alt="Detalle de una conexi&oacute;n el&eacute;ctrica atornillada en tablero" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">08</span><h3 class="d4">Estudios el&eacute;ctricos</h3></div>
+          <div><p>Los n&uacute;meros que sostienen el dise&ntilde;o el&eacute;ctrico: cortocircuito, coordinaci&oacute;n, arco el&eacute;ctrico y calidad de energ&iacute;a, cada uno con su informe.</p><div class="tg"><span>Arco el&eacute;ctrico</span><span>Selectividad</span><span>IEEE 1584</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-09">
+        <img src="assets/img/svc/clima.jpg" alt="Unidad de climatizaci&oacute;n de precisi&oacute;n in-row" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">09</span><h3 class="d4">Sistemas de enfriamiento</h3></div>
+          <div><p>Climatizaci&oacute;n de precisi&oacute;n y gesti&oacute;n t&eacute;rmica integral, dimensionada sobre la densidad real de la sala.</p><div class="tg"><span>ASHRAE 90.4</span><span>CFD</span><span>PUE</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-10">
+        <img src="assets/img/svc/datos.jpg" alt="Panel de parcheo de fibra &oacute;ptica con conectores LC" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">10</span><h3 class="d4">Cableado estructurado</h3></div>
+          <div><p>Infraestructura de conectividad en cobre y fibra, organizada para crecer sin rehacer la troncal.</p><div class="tg"><span>Cat6A / Cat8</span><span>TIA-568</span><span>EN 50173</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-11">
+        <img src="assets/img/svc/riesgo.jpg" alt="Cilindro de agente limpio montado en su soporte con manguera de descarga" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">11</span><h3 class="d4">Detecci&oacute;n y extinci&oacute;n de incendios</h3></div>
+          <div><p>Detecci&oacute;n temprana por aspiraci&oacute;n y supresi&oacute;n con agente limpio, sin da&ntilde;ar el equipo activo ni dejar residuo.</p><div class="tg"><span>VESDA</span><span>Novec 1230</span><span>NFPA 75/76</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-12">
+        <img src="assets/img/svc/sensores.jpg" alt="Mapa t&eacute;rmico de una sala en V&Oacute;RTICE&middot;CFD, con paleta de termograf&iacute;a y estelas de flujo de aire" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">12</span><h3 class="d4">Sensores y monitoreo t&eacute;rmico</h3></div>
+          <div><p>La temperatura no se estima: se mide, punto por punto, y se ve en un mapa. Y esto no es solo para data centers &mdash; cualquier recinto cuyo contenido dependa de una temperatura estable se instrumenta igual.</p><div class="tg"><span>Cualquier recinto</span><span>Mapa t&eacute;rmico</span><span>ASHRAE TC 9.9</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-13">
+        <img src="assets/img/svc/control.jpg" alt="Puesto de monitoreo con tableros de operaci&oacute;n en pantalla" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">13</span><h3 class="d4">Monitoreo DCIM</h3></div>
+          <div><p>Visibilidad en tiempo real de energ&iacute;a, clima y capacidad, con alarmas antes de que el umbral se cruce.</p><div class="tg"><span>DCIM</span><span>BMS</span><span>SNMP / Modbus</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-14">
+        <img src="assets/img/svc/sw-ing.jpg" alt="Tableta mostrando el an&aacute;lisis de una sala en operaci&oacute;n" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">14</span><h3 class="d4">Ingenier&iacute;a de software</h3></div>
+          <div><p>Herramientas propias cuando la que se necesita no existe. V&Oacute;RTICE&middot;CFD naci&oacute; as&iacute;: simular la sala antes de construirla.</p><div class="tg"><span>V&Oacute;RTICE&middot;CFD</span><span>Integraciones</span><span>A medida</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-15">
+        <img src="assets/img/svc/software.jpg" alt="Plano de instalaci&oacute;n con el avance marcado punto por punto en verde y rojo" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">15</span><h3 class="d4">Seguimiento de obra en tiempo real</h3></div>
+          <div><p>Cada t&eacute;cnico marca su avance sobre el plano real, en sitio. El cliente ve el estado punto por punto sin esperar al informe del viernes.</p><div class="tg"><span>Tiempo real</span><span>Informes autom&aacute;ticos</span><span>Trazabilidad</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-16">
+        <img src="assets/img/svc/acceso.jpg" alt="C&aacute;mara de seguridad y lector biom&eacute;trico de control de acceso" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">16</span><h3 class="d4">Seguridad f&iacute;sica</h3></div>
+          <div><p>Arquitectura de seguridad escalonada por anillos, del per&iacute;metro al gabinete.</p><div class="tg"><span>Multifactor</span><span>CCTV</span><span>Mantrap</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-17">
+        <img src="assets/img/svc/auditoria.jpg" alt="Analizador de calidad de energ&iacute;a con pinzas amperim&eacute;tricas" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">17</span><h3 class="d4">Consultor&iacute;a e ingenier&iacute;a</h3></div>
+          <div><p>Evaluaci&oacute;n t&eacute;cnica de instalaciones existentes, con hallazgos priorizados por riesgo y costo.</p><div class="tg"><span>Gap analysis</span><span>SPOF</span><span>TIER rating</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-18">
+        <img src="assets/img/svc/certificacion.jpg" alt="Vista a&eacute;rea de una sala de data center en operaci&oacute;n" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">18</span><h3 class="d4">Certificaci&oacute;n TIER &middot; Uptime Institute</h3></div>
+          <div><p>Acompa&ntilde;amos el proceso completo ante Uptime Institute: la brecha, la documentaci&oacute;n y la auditor&iacute;a, hasta el dictamen.</p><div class="tg"><span>Uptime Institute</span><span>TIER I&ndash;IV</span><span>TCDD / TCCF</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-19">
+        <img src="assets/img/svc/escala.jpg" alt="Gabinete de servidores con indicadores de estado encendidos" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">19</span><h3 class="d4">Sala de servidores</h3></div>
+          <div><p>Salas compactas para medianas empresas, con las mismas pr&aacute;cticas de un data center grande.</p><div class="tg"><span>Mini-DC</span><span>N+1</span><span>Compacto</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-20">
+        <img src="assets/img/svc/borde.jpg" alt="Micro data center autocontenido en gabinete sellado" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">20</span><h3 class="d4">Edge computing</h3></div>
+          <div><p>Nodos distribuidos y aut&oacute;nomos que acercan el procesamiento al punto de uso.</p><div class="tg"><span>Edge DC</span><span>Micro-modular</span><span>5G ready</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-21">
+        <img src="assets/img/svc/retrofit.jpg" alt="Racks poblados junto a bastidores vac&iacute;os listos para crecer" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">21</span><h3 class="d4">Modernizaci&oacute;n de salas existentes</h3></div>
+          <div><p>La sala sigue operando mientras se renueva: por etapas, con ventanas acordadas y plan de retorno si algo no responde.</p><div class="tg"><span>Sin parada</span><span>Por etapas</span><span>As-built</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-22">
+        <img src="assets/img/svc/migracion.jpg" alt="Racks de servidores instalados en una sala t&eacute;cnica" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">22</span><h3 class="d4">Migraci&oacute;n y traslado de sala</h3></div>
+          <div><p>Mover una sala sin perder el servicio: inventario, dependencias, orden de apagado y encendido, y una ventana acordada con el negocio.</p><div class="tg"><span>Ventana</span><span>Inventario</span><span>Plan de retorno</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-23">
+        <img src="assets/img/svc/interventoria.jpg" alt="T&eacute;cnica revisando el cableado de un rack en obra" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">23</span><h3 class="d4">Interventor&iacute;a y supervisi&oacute;n de obra</h3></div>
+          <div><p>Verificamos que lo que se construye es lo que se dise&ntilde;&oacute;: materiales, montaje y pruebas, con acta de cada visita.</p><div class="tg"><span>Acta de visita</span><span>No conformidades</span><span>Control de obra</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-24">
+        <img src="assets/img/svc/pruebas.jpg" alt="Instrumentos de prueba y c&aacute;mara termogr&aacute;fica" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">24</span><h3 class="d4">Comisionamiento</h3></div>
+          <div><p>Verificaci&oacute;n formal de que la instalaci&oacute;n hace lo que el dise&ntilde;o prometi&oacute;, documentada nivel por nivel.</p><div class="tg"><span>Cx / IMTP</span><span>Failover</span><span>As-built</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-25">
+        <img src="assets/img/svc/marcha.jpg" alt="T&eacute;cnicos poniendo en servicio los equipos de una sala t&eacute;cnica" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">25</span><h3 class="d4">Puesta en marcha y entrega</h3></div>
+          <div><p>Energizar en orden y dejar la sala operando: secuencia de arranque, par&aacute;metros cargados y el equipo del cliente sabiendo qu&eacute; hacer.</p><div class="tg"><span>Energizaci&oacute;n</span><span>Parametrizaci&oacute;n</span><span>Entrega</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-26">
+        <img src="assets/img/svc/carga.jpg" alt="Banco de carga resistivo con su rejilla de ventilaci&oacute;n" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">26</span><h3 class="d4">Bancos de carga</h3></div>
+          <div><p>Prueba de capacidad real sobre generadores, UPS y tableros, bajo condiciones controladas.</p><div class="tg"><span>Load banks</span><span>FAT / SAT</span><span>IEEE 450</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-27">
+        <img src="assets/img/svc/eficiencia.jpg" alt="Tablero de monitoreo con las m&eacute;tricas de la sala" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">27</span><h3 class="d4">Eficiencia energ&eacute;tica y PUE</h3></div>
+          <div><p>Medir antes de prometer: d&oacute;nde se va la energ&iacute;a que no llega al equipo de TI, y qu&eacute; se recupera sin tocar la disponibilidad.</p><div class="tg"><span>PUE</span><span>L&iacute;nea base</span><span>ASHRAE 90.4</span></div></div>
+        </div>
+      </figure>
+      <figure class="c" data-tilt id="sv-28">
+        <img src="assets/img/svc/mantenimiento.jpg" alt="Maleta de instrumentos de campo: c&aacute;mara termogr&aacute;fica, medidor &oacute;ptico y herramienta de fibra" loading="lazy">
+        <span class="scrim"></span><span class="edg"></span>
+        <div class="tx">
+          <div><span class="lbl idx">28</span><h3 class="d4">Mantenimiento preventivo y correctivo</h3></div>
+          <div><p>Una sala bien dise&ntilde;ada se degrada igual si nadie la mantiene. Rutinas con periodicidad, registro y repuestos definidos.</p><div class="tg"><span>Preventivo</span><span>SLA</span><span>Bit&aacute;cora</span></div></div>
+        </div>
+      </figure>
+      <article class="c sv-abierto">
+        <div>
+          <span class="lbl idx">+</span>
+          <h3 class="d3">&iquest;Lo suyo no est&aacute; en esta lista?</h3>
+          <p>Cu&eacute;ntenos qu&eacute; necesita. Por algo somos ingenieros: si el problema es de infraestructura cr&iacute;tica, lo estudiamos y le proponemos c&oacute;mo resolverlo &mdash; aunque no tenga nombre de cat&aacute;logo.</p>
+        </div>
+        <a class="btn fill" href="index.html#contact"><span class="t">Cu&eacute;ntenos su caso</span><span class="a"></span></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- CIERRE -->
+<section class="sec" id="sv-cta" data-ch="02" data-nm="Contacto">
+  <div class="pad">
+    <div class="two" style="align-items:end">
+      <h2 class="d2" data-split="line" style="max-width:12ch">&iquest;Cu&aacute;les de los veintiocho necesita?</h2>
+      <div>
+        <p class="bd" data-anim="up" style="margin-bottom:28px">Casi ning&uacute;n proyecto necesita uno solo. Cu&eacute;ntenos d&oacute;nde est&aacute; y le devolvemos el alcance, el orden y qu&eacute; se puede dejar para una segunda fase.</p>
+        <div class="cta" data-anim="up">
+          <a class="btn fill" href="index.html#contact"><span class="t">Solicitar propuesta</span><span class="a"></span></a>
+          <a class="btn" href="shelters.html"><span class="t">Ver shelters</span><span class="a"></span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fgd">
+    <div class="br">
+      <img src="assets/logo-dark.png" alt="DATCER">
+      <p>Especialistas en dise&ntilde;o de data centers e infraestructura cr&iacute;tica.</p>
+    </div>
+    <div><h5 class="lbl">Servicios</h5><ul>
+      <li><a href="#walk">M&oacute;dulo SH-002-2</a></li><li><a href="#sh-why">Por qu&eacute; en shelter</a></li>
+      <li><a href="#sh-spec">Ficha t&eacute;cnica</a></li></ul></div>
+    <div><h5 class="lbl">Empresa</h5><ul>
+      <li><a href="index.html#about">Qui&eacute;nes somos</a></li><li><a href="servicios.html">Servicios</a></li>
+      <li><a href="index.html#sectors">Sectores</a></li><li><a href="index.html#contact">Contacto</a></li></ul></div>
+    <div><h5 class="lbl">Est&aacute;ndares</h5><ul>
+      <li><a href="index.html#why">TIA-942</a></li><li><a href="index.html#why">Uptime Institute</a></li>
+      <li><a href="index.html#why">ASHRAE 90.4</a></li><li><a href="index.html#why">NFPA 75 / 76</a></li></ul></div>
+  </div>
+  <div class="fbt">
+    <span class="lbl">&copy; 2026 DATCER</span>
+    <a class="lbl" href="https://www.datcer.com/politica-de-privacidad.html" target="_blank" rel="noopener">Pol&iacute;tica de privacidad</a>
+  </div>
+</footer>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.1.14/lenis.min.js"></script>
+<script src="js/servicios.js"></script>
+<script src="js/wa.js"></script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+/* ============================================================
+   DATCER · servicios
+   ------------------------------------------------------------
+   Doce filas alternas. La foto a un lado, el texto al otro, y detrás un número
+   enorme que apenas se mueve. Toda la sección va en claro porque las fotos son
+   de estudio sobre fondo claro: sobre navy tendrían un halo blanco recortado
+   alrededor del producto, y aquí el fondo de la foto y el de la página son el
+   mismo — el objeto parece estar puesto sobre la página, no pegado encima.
+   ============================================================ */
+
+/* ---------- hero ----------
+   Sin imagen a propósito. La página tiene doce fotos justo debajo; poner una
+   más arriba sería competir consigo misma. Aquí manda el titular. */
+#sv-hero{
+  position:relative;min-height:82svh;display:flex;align-items:flex-end;
+  padding-block:clamp(140px,17vh,220px) clamp(40px,6vh,80px);
+  --bg:var(--dark);--fg:var(--light);background:var(--bg);color:var(--fg);
+  overflow:hidden;
+}
+/* el vídeo de fondo: 112 % de alto y -6 % arriba, que es el recorrido del
+   parallax (±5 %); el velo sostiene el texto sin apagar las chispas */
+#sv-hero .sv-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
+#sv-hero .sv-bg video{position:absolute;left:0;top:-6%;width:100%;height:112%;
+  object-fit:cover;object-position:50% 45%;will-change:transform}
+/* Sin tinte: el vídeo se ve con su color. El velo cae solo en la franja baja,
+   que es donde va el titular; de ahí para arriba la imagen queda intacta. */
+#sv-hero .sv-dim{position:absolute;inset:0;
+  /* El apagado hacia abajo es largo a propósito: con la transición corta se veía
+     el filo donde termina el vídeo, como una raya. Llega a navy opaco —el mismo
+     de la sección siguiente— bastante antes del borde, así que el final de la
+     imagen ya no cae en ningún sitio concreto. */
+  background:linear-gradient(to top,#020D1F 0%,#020D1F 12%,rgba(2,13,31,.93) 20%,
+    rgba(2,13,31,.72) 32%,rgba(2,13,31,.4) 46%,rgba(2,13,31,.14) 60%,rgba(2,13,31,0) 74%)}
+/* Las guías del hero del inicio, aquí también: dos verticales y una horizontal,
+   punteadas y muy tenues. Dan sistema de referencia al encuadre y hacen que el
+   titular se lea colocado y no flotando sobre el vídeo. */
+#sv-hero .sv-rt{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background-image:
+    repeating-linear-gradient(to bottom,rgba(227,230,235,.20) 0 2px,transparent 2px 9px),
+    repeating-linear-gradient(to bottom,rgba(227,230,235,.20) 0 2px,transparent 2px 9px),
+    repeating-linear-gradient(to right,rgba(227,230,235,.16) 0 2px,transparent 2px 9px);
+  background-size:1px 100%,1px 100%,100% 1px;
+  background-position:33.33% 0,66.66% 0,0 72%;
+  background-repeat:no-repeat}
+@media (max-width:860px){ #sv-hero .sv-rt{background-position:50% 0,-100% 0,0 76%} }
+#sv-hero .in{position:relative;z-index:2;width:100%}
+#sv-hero .tag{display:inline-block;margin-bottom:clamp(18px,2.6vw,34px);color:rgba(227,230,235,.72)}
+#sv-hero h1{max-width:16ch;margin-bottom:clamp(34px,5vw,66px)}
+#sv-hero .ft{display:grid;grid-template-columns:1fr auto;gap:clamp(24px,4vw,70px);align-items:end}
+#sv-hero .ft p{max-width:46ch;color:var(--fg-60);font-size:clamp(.98rem,1.08vw,1.16rem);line-height:1.62}
+#sv-hero .cta{display:flex;gap:14px;flex-wrap:wrap}
+/* un halo bajo el titular, hermano del de la costura del inicio */
+#sv-hero::after{
+  content:'';position:absolute;left:50%;bottom:-42%;transform:translateX(-50%);
+  width:min(2200px,170vw);height:70%;pointer-events:none;z-index:1;
+  background:radial-gradient(50% 50% at 50% 50%,rgba(120,158,232,.20) 0%,rgba(2,13,31,0) 70%);
+  filter:blur(24px);
+}
+
+/* ---------- la sección de los doce ---------- */
+/* El fondo de esta sección es el azul de la página, sin más: se probó con una
+   retícula de plano, halos y degradado y el cliente lo descartó. */
+.sv-wrap{position:relative;padding-block:clamp(52px,6vw,96px) clamp(80px,9vw,150px)}
+/* la entradilla, que ocupa la franja que antes quedaba vacía */
+.sv-hd{display:grid;grid-template-columns:1fr minmax(0,52ch);gap:clamp(20px,4vw,72px);
+  align-items:end;margin-bottom:clamp(34px,4.4vw,64px)}
+.sv-hd .bd{color:var(--fg-60)}
+@media (max-width:860px){ .sv-hd{grid-template-columns:1fr} }
+/* Aquí hubo agua: primero una simulación de superficie en todo el fondo y
+   después unas olitas en el canto de la ficha. Las dos se descartaron —la
+   primera se leía como un manchón hipnótico, la segunda apenas se veía porque
+   la ficha la tapaba—. El fondo se queda liso. */
+
+/* ---------- la rejilla de servicios ----------
+   Eran filas alternas —foto a un lado, texto al otro—: con veintiún servicios
+   eso eran veintiuna pantallas de scroll. Ahora es el mismo componente que las
+   tarjetas del inicio (.tri .c, en style.css): la foto ocupa la tarjeta y el
+   texto va encima. Las viñetas de cada servicio siguen enteras en el
+   portafolio, que es la pieza de detalle. */
+.sv-grid .c{aspect-ratio:5/4}
+/* 114 % de alto y -7 % arriba: el sobrante del parallax. En el alto y no en una
+   escala, porque el tilt escribe su propia escala sobre la imagen. */
+.sv-grid .c > img{position:absolute;left:0;top:-7%;height:114%}
+/* Velo flojo a propósito: las fotos ya vienen graduadas —fondo a negro y sujeto
+   iluminado, como las tarjetas del inicio—, así que el velo solo tiene que
+   sostener el texto. Con el velo denso de antes la foto se apagaba entera. */
+.sv-grid .scrim{
+  background:linear-gradient(180deg,rgba(1,8,21,.72) 0%,rgba(1,8,21,.26) 26%,rgba(1,8,21,0) 46%),
+             linear-gradient(to top,rgba(1,8,21,.84) 0%,rgba(1,8,21,.34) 24%,rgba(1,8,21,0) 46%)}
+.sv-grid .tx{justify-content:space-between}
+.sv-grid .tx .lbl{display:block;color:rgba(227,230,235,.55);margin-bottom:clamp(8px,1vw,13px)}
+.sv-grid .tx h3{max-width:15ch}
+.sv-grid .tx p{color:rgba(227,230,235,.82);max-width:38ch;margin-bottom:clamp(10px,1.2vw,16px)}
+/* Las píldoras de norma. Vivían en el bloque de las filas y se fueron con él;
+   sin esto las etiquetas salen pegadas una detrás de otra. */
+.tg{display:flex;flex-wrap:wrap;gap:6px}
+.tg span{font-size:9.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  padding:6px 11px;border:1px solid var(--fg-18);border-radius:100px;color:var(--fg-60);
+  transition:border-color .5s var(--e),color .5s var(--e)}
+.sv-grid .tg span{border-color:rgba(227,230,235,.26);color:rgba(227,230,235,.72)}
+.sv-grid .c:hover .tg span{border-color:rgba(227,230,235,.5);color:#F2F4F8}
+/* La tarjeta de cierre: no es un servicio, así que no lleva foto ni número.
+   Ocupa las dos columnas que quedan libres en la última fila (28 servicios son
+   nueve filas de tres y una suelta), de modo que la rejilla cierra completa. */
+.sv-grid .sv-abierto{grid-column:span 2;aspect-ratio:auto;
+  display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;
+  gap:clamp(22px,2.6vw,38px);padding:clamp(26px,3vw,44px);
+  background:rgba(227,230,235,.055);border:1px solid rgba(227,230,235,.13);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.sv-grid .sv-abierto .lbl{display:block;color:rgba(227,230,235,.5);margin-bottom:clamp(12px,1.4vw,18px)}
+.sv-grid .sv-abierto h3{max-width:18ch;margin-bottom:clamp(12px,1.4vw,18px)}
+.sv-grid .sv-abierto p{color:rgba(227,230,235,.72);max-width:54ch}
+
+@media (max-width:1080px){ .sv-grid{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:700px){ .sv-grid{grid-template-columns:1fr} .sv-grid .c{aspect-ratio:4/3}
+  .sv-grid .sv-abierto{grid-column:span 1;aspect-ratio:auto} }
+
+/* ---------- cierre ---------- */
+#sv-cta{--bg:var(--dark);--fg:var(--light)}
+
+/* ============================================================
+   ADAPTATIVO
+   ============================================================ */
+@media (max-width:1000px){
+  #sv-hero .ft{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  .sv-grid .c,.sv-grid .c > img{transform:none!important}
+}
