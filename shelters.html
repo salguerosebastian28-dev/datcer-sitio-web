@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Shelters · Data center en contenedor — DATCER</title>
+<meta name="description" content="SH-002-2: data center completo en shelter de 5,96 × 10,20 m. 20 gabinetes, 100 kW TI, ocho unidades de clima de precisión, detección VESDA y supresión Novec 1230. Ficha leída del DWG.">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<meta name="theme-color" content="#020D1F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/wa.css">
+<link rel="stylesheet" href="css/shelters.css">
+</head>
+<body>
+
+<div id="pre">
+  <div class="top"><span class="lbl">DATCER · SH-002-2</span><span class="lbl">Shelters</span></div>
+  <div class="mid"><div class="word">SHELTER</div><div class="pc">0</div></div>
+  <div class="bar"><i></i></div>
+</div>
+
+<div id="grain"></div>
+<div id="cr"></div><div id="cx"></div>
+<div id="ch"><span class="c"><i>00</i></span><small id="chn">El m&oacute;dulo</small></div>
+
+<header id="hd">
+  <!-- La barra que se recompone al subir el scroll. Cada tira lleva su
+       trozo del mismo degradado, así que montadas no se ve la costura. -->
+  <div class="hd-bg" aria-hidden="true"></div>
+  <a class="lg" href="index.html">
+    <span class="lgi">
+      <img src="assets/logo-dark.png" alt="DATCER">
+      <img class="lt" src="assets/logo-barra.png" alt="" aria-hidden="true">
+    </span>
+    <span class="lgt">Data Center<br>Design &amp; Consulting</span>
+  </a>
+  <nav>
+    <a class="hs" href="index.html">Inicio</a>
+    <a class="hs" href="servicios.html">Servicios</a>
+    <a class="hs" href="brochure.html">Brochure</a>
+    <a class="hs" href="index.html#contact">Contactar</a>
+    <button class="bg" id="bg" aria-label="Men&uacute;" aria-expanded="false"><i></i><i></i></button>
+  </nav>
+</header>
+
+<div id="mn" aria-hidden="true">
+  <div class="grid">
+    <ol>
+      <li><a href="index.html#about"><em>01</em>Nosotros</a></li>
+      <li><a href="index.html#hall"><em>02</em>La sala</a></li>
+      <li><a href="index.html#design"><em>03</em>Ingenier&iacute;a de dise&ntilde;o</a></li>
+      <li><a href="servicios.html"><em>04</em>Servicios</a></li>
+      <li><a href="index.html#cfg"><em>05</em>Configurador</a></li>
+      <li><a href="shelters.html"><em>06</em>Shelters</a></li>
+      <li><a href="index.html#load"><em>07</em>Bancos de carga</a></li>
+      <li><a href="index.html#sectors"><em>08</em>Sectores</a></li>
+      <li><a href="index.html#contact"><em>09</em>Contacto</a></li>
+    </ol>
+    <div class="side">
+      <div><span class="lbl">Correo</span><a href="mailto:proyectos@datcer.com">proyectos@datcer.com</a></div>
+      <div><span class="lbl">Gerencia</span><a href="https://wa.me/573024845350" target="_blank" rel="noopener">+57 302 484 5350</a></div>
+      <div><span class="lbl">Proyectos</span><a href="https://wa.me/573154788369" target="_blank" rel="noopener">+57 315 478 8369</a></div>
+      <div><span class="lbl">Red</span><a href="https://www.linkedin.com/company/datcer-design-consulting-for-data-center" target="_blank" rel="noopener">LinkedIn</a></div>
+    </div>
+  </div>
+</div>
+
+<main id="top">
+
+<!-- ══ PORTADA ══ -->
+<!-- El marco perla, igual que en el inicio: se ve alrededor del hero recortado
+     y se cierra al bajar. -->
+<div class="perla-bg" aria-hidden="true"></div>
+
+<section id="sh-hero" data-ch="00" data-nm="Shelters">
+  <!-- El módulo abierto de fondo: se ve de una vez de qué habla la página, sin
+       esperar a que cargue el modelo 3D. El velo cae sobre la esquina del
+       titular, que es donde la foto es más clara. -->
+  <div class="sh-bg" aria-hidden="true">
+    <img src="assets/img/shelter-hero.jpg" alt="">
+    <span class="sh-dim"></span>
+  </div>
+  <div class="pad in">
+    <span class="lbl tag" data-anim="up">SH-002-2 &middot; Data center en contenedor</span>
+    <h1 class="d1" data-split="line">El data center llega montado</h1>
+    <div class="ft">
+      <p data-anim="up">Un shelter de 5,96 &times; 10,20 metros con veinte racks, clima de precisi&oacute;n, detecci&oacute;n y supresi&oacute;n dentro. Se fabrica, se prueba en f&aacute;brica y se instala. Y cuando hace falta m&aacute;s, se replica.</p>
+      <div class="cta" data-anim="up">
+        <a class="btn fill" href="#walk"><span class="t">Recorrer el m&oacute;dulo</span><span class="a"></span></a>
+        <a class="btn" href="index.html#contact"><span class="t">Solicitar ficha</span><span class="a"></span></a>
+      </div>
+    </div>
+  </div>
+  <div id="sc"><span>Scroll</span><i class="l"></i></div>
+</section>
+
+<!-- ══ PASARELA 3D ══
+     El lienzo se queda pegado mientras los pasos van pasando por encima. Cada
+     paso lleva su estado de camara y de capas en data-*; el JS no sabe nada del
+     texto, solo lee esos atributos. -->
+<div id="walk" class="walk">
+  <div class="walk-st">
+    <!-- Capas técnicas detrás del modelo: retícula de plano, halo y la
+         referencia del proyecto en grande. Llenan el navy vacío sin tapar el
+         3D, que se dibuja encima. -->
+    <div class="walk-bg" aria-hidden="true">
+      <div class="rej"></div>
+      <div class="halo"></div>
+    </div>
+    <canvas id="shv"></canvas>
+    <div class="walk-cr" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <!-- La marca sobre el lienzo: es el DWG del proyecto, así que va firmado.
+         El brillo metalizado lo mueve el scroll (--hs). -->
+    <div class="walk-firma" aria-hidden="true">
+      <span class="sello"><img src="assets/logo-dark.png" alt=""><i></i></span>
+      <span class="lbl">DWG de ingenier&iacute;a &middot; SH-002-2</span>
+    </div>
+    <div class="walk-sw" aria-hidden="true"></div>
+    <div class="walk-gr"></div>
+
+    <div id="shload" class="walk-load">
+      <span class="lbl">Cargando el m&oacute;dulo</span>
+      <div class="bar"><i id="shbar"></i></div>
+      <span class="lbl pc" id="shpc">0 %</span>
+    </div>
+
+    <!-- lecturas que cambian con el paso -->
+    <div class="hud">
+      <div class="hud-l">
+        <span class="lbl" id="hudK">Origen</span>
+        <b id="hudV">DWG SH-002-2</b>
+      </div>
+      <div class="hud-r" id="hudFig"></div>
+    </div>
+  </div>
+
+  <div class="steps">
+
+    <article class="step" data-ch="01" data-nm="El m&oacute;dulo"
+             data-cam="0,0,300|0.62|-42|22" data-layers="all"
+             data-k="Cotas del DWG" data-v="5,96 &times; 10,20 &times; 3,10 m"
+             data-fig="20|gabinetes;3|pasillos;100|kW TI">
+      <span class="lbl idx">01</span>
+      <h2 class="d3" data-split="line">Un data center completo en <em>60,8 m&sup2;</em></h2>
+      <p class="bd">El SH-002-2 no es un contenedor adaptado: es un shelter dise&ntilde;ado como sala t&eacute;cnica. Tres pasillos, veinte gabinetes, piso t&eacute;cnico registrable y toda la infraestructura de soporte dentro del mismo casco.</p>
+      <p class="bd-s">Lo que ve es el DWG de ingenier&iacute;a, no una recreaci&oacute;n: las 1390 piezas del proyecto, en sus 24 capas, cada una donde va a quedar construida.</p>
+    </article>
+
+    <article class="step" data-ch="02" data-nm="La sala"
+             data-cam="0,0,0|0.42|-70|40" data-layers="all"
+             data-k="Planta" data-v="60,8 m&sup2; en tres pasillos"
+             data-fig="60,8|m&sup2; de planta;3|pasillos;4|accesos">
+      <span class="lbl idx">02</span>
+      <h2 class="d3" data-split="line"><em>Tres pasillos</em> sobre piso t&eacute;cnico registrable</h2>
+      <p class="bd">Sesenta coma ocho metros cuadrados de planta organizados en tres pasillos, con piso t&eacute;cnico registrable en toda la superficie. La tuber&iacute;a de clima y la canalizaci&oacute;n el&eacute;ctrica bajan hasta 0,31 m por debajo del nivel de piso y corren ah&iacute;: la sala queda despejada por arriba.</p>
+      <p class="bd-s">Cuatro accesos correderos de 1200 &times; 2200 mm, dos cortinas de seguridad, techo falso y malla Unistrut de soporte para el equipamiento colgado.</p>
+      <ul class="sh-tbl">
+        <li><b>60,8</b><span>m&sup2; de planta en tres pasillos</span></li>
+        <li><b>4</b><span>accesos correderos de 1200 &times; 2200 mm</span></li>
+        <li><b>0,31</b><span>m de plenum bajo el piso t&eacute;cnico</span></li>
+      </ul>
+    </article>
+
+    <article class="step" data-ch="03" data-nm="Los gabinetes"
+             data-cam="0,200,-350|0.30|-100|16" data-layers="racks"
+             data-k="Gabinetes" data-v="20 en tres pasillos"
+             data-fig="20|gabinetes;5|kW por gabinete;100|kW TI">
+      <span class="lbl idx">03</span>
+      <h2 class="d3" data-split="line"><em>Veinte gabinetes</em> en tres pasillos</h2>
+      <p class="bd">Catorce Panduit Net-Access S-Type y seis Chatsworth Seismic Frame Z4 de 43 RU, repartidos en tres pasillos. La densidad de dise&ntilde;o es de 5 kW por gabinete: 100 kW de carga TI en un m&oacute;dulo que cabe en una plataforma de transporte.</p>
+      <p class="bd-s">El piso t&eacute;cnico registrable deja el cableado accesible sin tocar la operaci&oacute;n.</p>
+      <ul class="sh-tbl">
+        <li><b>14</b><span>Panduit Net-Access S-Type</span></li>
+        <li><b>6</b><span>Chatsworth Seismic Frame Z4 &middot; 43 RU</span></li>
+      </ul>
+    </article>
+
+    <article class="step" data-ch="04" data-nm="Clima"
+             data-cam="0,500,-100|0.58|172|18" data-layers="clima"
+             data-k="Climatizaci&oacute;n" data-v="8 unidades interiores"
+             data-fig="8|interiores CW40;8|exteriores AVWT-76;2|patios">
+      <span class="lbl idx">04</span>
+      <h2 class="d3" data-split="line"><em>Ocho unidades</em> intercaladas en las filas</h2>
+      <p class="bd">Climatizaci&oacute;n de precisi&oacute;n con ocho unidades interiores Minkels CW40 de 42U montadas entre los gabinetes, y ocho unidades exteriores Hisense AVWT-76FESRA en los patios de los costados.</p>
+      <p class="bd-s">Cada circuito sale por su muro en tuber&iacute;a industrial SCH80 y corre por debajo del piso t&eacute;cnico: nada cruza la sala por arriba.</p>
+      <ul class="sh-tbl">
+        <li><b>8</b><span>Minkels CW40 &middot; 42U, entre filas</span></li>
+        <li><b>8</b><span>Hisense AVWT-76FESRA &middot; exteriores</span></li>
+        <li><b>2</b><span>patios de condensadoras</span></li>
+      </ul>
+    </article>
+
+    <article class="step" data-ch="05" data-nm="El&eacute;ctrica"
+             data-cam="0,1000,-400|0.33|-24|26" data-layers="elec"
+             data-k="Distribuci&oacute;n" data-v="2 &times; ABB RPP-500A"
+             data-fig="500|A por tablero;98|tomas L6-30R;166|tramos de bandeja">
+      <span class="lbl idx">05</span>
+      <h2 class="d3" data-split="line">Dos tableros y todo lo que sale de ellos</h2>
+      <p class="bd">Dos ABB RPP-500A reparten la potencia a los gabinetes, con dos cuadros de control de accesorios e iluminaci&oacute;n a 220 V. La distribuci&oacute;n baja en canalizaci&oacute;n IMC &mdash;89 codos y 38 conduletas&mdash; sobre 166 tramos de bandeja Rawelt 5800.</p>
+      <p class="bd-s">En los gabinetes, 98 tomas NEMA L6-30R de 250 V con bloqueo por giro y tierra aislada, m&aacute;s ocho 5-15R de servicio.</p>
+      <ul class="sh-tbl">
+        <li><b>2</b><span>ABB RPP-500A &middot; tableros de potencia</span></li>
+        <li><b>98</b><span>tomas NEMA L6-30R &middot; 250 V</span></li>
+        <li><b>166</b><span>tramos de bandeja Rawelt 5800</span></li>
+      </ul>
+    </article>
+
+    <article class="step" data-ch="06" data-nm="Datos"
+             data-cam="0,0,850|0.31|-146|44" data-layers="datos"
+             data-k="Rutas de cableado" data-v="Rejiband C8 + FiberGuide"
+             data-fig="2|rutas separadas;1,95|m altura m&iacute;nima;18|luminarias">
+      <span class="lbl idx">06</span>
+      <h2 class="d3" data-split="line">El cobre y la fibra <em>no comparten ruta</em></h2>
+      <p class="bd">Bandeja de malla Rejiband C8 para el cableado de cobre y canaleta TE FiberGuide, en amarillo, para la fibra: dos recorridos independientes, cada uno con sus codos, t&eacute;s y tapas. La troncal entera corre entre 1,95 y 2,97 m, por encima de los gabinetes.</p>
+      <p class="bd-s">Dieciocho luminarias lineales de 1200 mm colgadas sobre los pasillos, alineadas con la bandeja.</p>
+      <ul class="sh-tbl">
+        <li><b>2</b><span>rutas separadas &middot; cobre y fibra</span></li>
+        <li><b>18</b><span>luminarias lineales de 1200 mm</span></li>
+      </ul>
+    </article>
+
+    <article class="step" data-ch="07" data-nm="Detecci&oacute;n"
+             data-cam="0,0,500|0.38|-72|38" data-layers="deteccion"
+             data-k="Detecci&oacute;n" data-v="VESDA VLF-250"
+             data-fig="23|m&oacute;dulos VESDA;6|detectores;1|central direccionable">
+      <span class="lbl idx">07</span>
+      <h2 class="d3" data-split="line">Detecta por aspiraci&oacute;n, antes de que haya humo visible</h2>
+      <p class="bd">Un VESDA VLF-250 muestrea el aire de la sala de forma continua a trav&eacute;s de veintitr&eacute;s m&oacute;dulos repartidos por el techo. Lo respaldan seis detectores Tecnofire TFDA-STR1 de humo y temperatura, dos sirenas interiores, cuatro Edwards Genesis G1 de sirena y estroboscopio, y dos pulsadores manuales.</p>
+      <p class="bd-s">Todo llega a una central direccionable Comelit Atena, integrada al paro de clima y al control de acceso.</p>
+      <ul class="sh-tbl">
+        <li><b>23</b><span>m&oacute;dulos VESDA &middot; muestreo continuo</span></li>
+        <li><b>6</b><span>detectores de humo y temperatura</span></li>
+        <li><b>4</b><span>sirenas con estroboscopio</span></li>
+      </ul>
+    </article>
+
+    <article class="step" data-ch="08" data-nm="Supresi&oacute;n"
+             data-cam="-2400,-4200,-520|0.17|-124|18" data-layers="supresion"
+             data-k="Supresi&oacute;n" data-v="Novec 1230 &middot; 70 bar"
+             data-fig="120|L de agente;70|bar;4|rociadores">
+      <span class="lbl idx">08</span>
+      <h2 class="d3" data-split="line">Extingue <em>sin residuo</em> y sin da&ntilde;ar el equipo</h2>
+      <p class="bd">Un cilindro JCI Sapphire Plus de 120 litros a 70 bar descarga Novec 1230 por manguera flexible de 50 mm, con actuador neum&aacute;tico y actuador el&eacute;ctrico redundantes, v&aacute;lvula de retenci&oacute;n y adaptador ajustable.</p>
+      <p class="bd-s">El agente no conduce electricidad y no deja residuo: el equipo sigue en pie despu&eacute;s de la descarga. Cuatro rociadores secos de 20 mm quedan como respaldo, bajo NFPA 75.</p>
+      <ul class="sh-tbl">
+        <li><b>120</b><span>litros a 70 bar &middot; Novec 1230</span></li>
+        <li><b>2</b><span>actuadores &middot; neum&aacute;tico y el&eacute;ctrico</span></li>
+        <li><b>4</b><span>rociadores secos de 20 mm</span></li>
+      </ul>
+    </article>
+
+  </div>
+
+</div>
+
+<!-- ══ POR QUÉ ══ -->
+<section class="sec" id="sh-why" data-ch="09" data-nm="Por qu&eacute;">
+  <div class="pad">
+    <div class="cap" style="margin-bottom:clamp(26px,3.4vw,48px)"><span class="lbl idx">09</span><span class="lbl">Por qu&eacute; en shelter</span></div>
+    <div class="two" style="align-items:end;margin-bottom:clamp(40px,5vw,74px)">
+      <h2 class="d2" data-split="line" style="max-width:13ch">Lo que se gana montando <em>en f&aacute;brica</em></h2>
+      <p class="bd" data-anim="up">El shelter no es una versi&oacute;n peque&ntilde;a de un data center. Es el mismo dise&ntilde;o, construido donde se puede controlar la calidad y probado antes de salir.</p>
+    </div>
+    <div class="std">
+      <div class="i" data-anim="up"><b>Plazo</b><span>Obra civil y fabricaci&oacute;n avanzan en paralelo. Lo que en obra son meses, aqu&iacute; son semanas de montaje en sitio.</span></div>
+      <div class="i" data-anim="up"><b>Prueba en f&aacute;brica</b><span>Se energiza, se climatiza y se prueba con carga antes de embarcar. Llega verificado, no por verificar.</span></div>
+      <div class="i" data-anim="up"><b>Predecible</b><span>El mismo m&oacute;dulo, el mismo despiece, la misma documentaci&oacute;n. La segunda unidad no vuelve a dise&ntilde;arse.</span></div>
+      <div class="i" data-anim="up"><b>Reubicable</b><span>Si la operaci&oacute;n se mueve, el data center se mueve con ella. La inversi&oacute;n no se queda anclada al terreno.</span></div>
+      <div class="i" data-anim="up"><b>Sitios dif&iacute;ciles</b><span>Mina, planta, campo, frontera. Donde no hay sala t&eacute;cnica que adecuar, el shelter la trae puesta.</span></div>
+      <div class="i" data-anim="up"><b>Escalable</b><span>Se empieza por uno y se crece adosando, alineando o apilando, sin rehacer la acometida ni la troncal.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FICHA ══ -->
+<section class="on-light sec" id="sh-spec" data-ch="10" data-nm="Ficha t&eacute;cnica">
+  <div class="pad">
+    <div class="cap" style="margin-bottom:clamp(26px,3.4vw,48px)"><span class="lbl idx">10</span><span class="lbl">M&oacute;dulo SH-002-2</span></div>
+    <div class="two" style="align-items:end;margin-bottom:clamp(36px,4.4vw,64px)">
+      <h2 class="d2" data-split="line" style="max-width:11ch">Ficha del m&oacute;dulo base</h2>
+      <p class="bd" data-anim="up">Cantidades y referencias le&iacute;das del DWG de ingenier&iacute;a, pieza por pieza. La potencia se estima a 5 kW por gabinete.</p>
+    </div>
+    <div class="sh-spec">
+      <div class="r"><span class="k">Dimensiones exteriores</span><span class="v">5,96 &times; 10,20 &times; 3,10<em>m</em></span></div>
+      <div class="r"><span class="k">&Aacute;rea de planta</span><span class="v">60,8<em>m&sup2;</em></span></div>
+      <div class="r"><span class="k">Pasillos</span><span class="v">3</span></div>
+      <div class="r"><span class="k">Gabinetes</span><span class="v">20</span></div>
+      <div class="r"><span class="k">Gabinete de red</span><span class="v">14<em>&times; Panduit Net-Access S</em></span></div>
+      <div class="r"><span class="k">Gabinete de servidor</span><span class="v">6<em>&times; Chatsworth Z4 43 RU</em></span></div>
+      <div class="r"><span class="k">Densidad por gabinete</span><span class="v">5<em>kW</em></span></div>
+      <div class="r"><span class="k">Carga TI de dise&ntilde;o</span><span class="v">100<em>kW</em></span></div>
+      <div class="r"><span class="k">Unidades interiores</span><span class="v">8<em>&times; Minkels CW40 42U</em></span></div>
+      <div class="r"><span class="k">Unidades exteriores</span><span class="v">8<em>&times; Hisense AVWT-76FESRA</em></span></div>
+      <div class="r"><span class="k">Tuber&iacute;a de clima</span><span class="v">SCH80<em>bajo piso t&eacute;cnico</em></span></div>
+      <div class="r"><span class="k">Tableros de potencia</span><span class="v">2<em>&times; ABB RPP-500A</em></span></div>
+      <div class="r"><span class="k">Tomas en gabinete</span><span class="v">98<em>&times; NEMA L6-30R 250 V</em></span></div>
+      <div class="r"><span class="k">Canalizaci&oacute;n</span><span class="v">IMC<em>89 codos &middot; 38 conduletas</em></span></div>
+      <div class="r"><span class="k">Bandeja el&eacute;ctrica</span><span class="v">166<em>tramos Rawelt 5800</em></span></div>
+      <div class="r"><span class="k">Bandeja de datos</span><span class="v">Rejiband C8<em>+ TE FiberGuide</em></span></div>
+      <div class="r"><span class="k">Iluminaci&oacute;n</span><span class="v">18<em>&times; lineal 1200 mm</em></span></div>
+      <div class="r"><span class="k">Detecci&oacute;n</span><span class="v">VESDA<em>VLF-250 &middot; 23 m&oacute;dulos</em></span></div>
+      <div class="r"><span class="k">Supresi&oacute;n</span><span class="v">Novec 1230<em>120 L a 70 bar</em></span></div>
+      <div class="r"><span class="k">Rociadores</span><span class="v">4<em>secos de 20 mm</em></span></div>
+      <div class="r"><span class="k">Accesos</span><span class="v">4<em>correderas 1200 &times; 2200</em></span></div>
+      <div class="r"><span class="k">Piso</span><span class="v">T&eacute;cnico registrable</span></div>
+    </div>
+
+    <div class="sh-lay">
+      <span class="lbl">Capas del modelo entregadas</span>
+      <div class="tg">
+        <span>Muros del shelter</span><span>Puertas y marcos</span><span>Paneles de fachada</span>
+        <span>Piso t&eacute;cnico</span><span>Racks y cableado de datos</span><span>Bandeja portacables</span>
+        <span>Equipos el&eacute;ctricos</span><span>Canalizaci&oacute;n el&eacute;ctrica</span><span>Iluminaci&oacute;n</span>
+        <span>Climatizaci&oacute;n de precisi&oacute;n</span><span>Tuber&iacute;a hidr&aacute;ulica</span>
+        <span>Detecci&oacute;n de incendios</span><span>Rociadores</span><span>Supresi&oacute;n Novec 1230</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CIERRE ══ -->
+<section class="sec" id="sh-cta" data-ch="11" data-nm="Contacto">
+  <div class="pad">
+    <div class="two" style="align-items:end">
+      <h2 class="d2" data-split="line" style="max-width:12ch">&iquest;Cu&aacute;ntos m&oacute;dulos necesita?</h2>
+      <div>
+        <p class="bd" data-anim="up" style="margin-bottom:28px">Le devolvemos el dimensionamiento con el n&uacute;mero de m&oacute;dulos, la disposici&oacute;n en su predio y la ficha de cada uno. Sin compromiso.</p>
+        <div class="cta" data-anim="up">
+          <a class="btn fill" href="index.html#contact"><span class="t">Hablar con un ingeniero</span><span class="a"></span></a>
+          <a class="btn" href="index.html#cfg"><span class="t">Dimensionar una sala</span><span class="a"></span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fgd">
+    <div class="br">
+      <img src="assets/logo-dark.png" alt="DATCER">
+      <p>Especialistas en dise&ntilde;o de data centers e infraestructura cr&iacute;tica.</p>
+    </div>
+    <div><h5 class="lbl">Shelters</h5><ul>
+      <li><a href="#walk">M&oacute;dulo SH-002-2</a></li><li><a href="#sh-why">Por qu&eacute; en shelter</a></li>
+      <li><a href="#sh-spec">Ficha t&eacute;cnica</a></li></ul></div>
+    <div><h5 class="lbl">Empresa</h5><ul>
+      <li><a href="index.html#about">Qui&eacute;nes somos</a></li><li><a href="servicios.html">Servicios</a></li>
+      <li><a href="index.html#sectors">Sectores</a></li><li><a href="index.html#contact">Contacto</a></li></ul></div>
+    <div><h5 class="lbl">Est&aacute;ndares</h5><ul>
+      <li><a href="index.html#why">TIA-942</a></li><li><a href="index.html#why">Uptime Institute</a></li>
+      <li><a href="index.html#why">ASHRAE 90.4</a></li><li><a href="index.html#why">NFPA 75 / 76</a></li></ul></div>
+  </div>
+  <div class="fbt">
+    <span class="lbl">&copy; 2026 DATCER</span>
+    <a class="lbl" href="https://www.datcer.com/politica-de-privacidad.html" target="_blank" rel="noopener">Pol&iacute;tica de privacidad</a>
+  </div>
+</footer>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.1.14/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/shelters.js"></script>
+<script src="js/wa.js"></script>
+</body>
+</html>

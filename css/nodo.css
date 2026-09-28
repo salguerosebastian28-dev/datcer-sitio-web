@@ -1,0 +1,168 @@
+/* ============================================================
+   DEL UNIFILAR AL EDIFICIO — recorrido del diseño de un data center
+   ------------------------------------------------------------
+   Viene de `assets/NODO-data-center.html`, una página autónoma. Aquí está
+   integrado en la home, no pegado:
+
+   - TODO cuelga de `#nodo` y las clases llevan prefijo `nd-`. El original traía
+     reglas globales (`header`, `h1`, `body`, `.grid`, `.copy`…) que habrían
+     desarmado la cabecera y los titulares del resto del sitio.
+   - Sin su cabecera ni la marca «NODO»: la cabecera es la de DATCER.
+   - Sin sus fuentes embebidas (~600 kB en base64): usa Onest, la del sitio.
+   - La paleta pasa del verde/lima a la de DATCER. Los cuatro sistemas conservan
+     colores distintos entre sí porque ahí el color es información:
+       energía A  #7FB0FF   energía B  #C9A0FF   clima #6FD6C6
+       datos      #E6BD7C   seguridad  #E59B8D
+   ============================================================ */
+#nodo{
+  --nd-bg:#020D1F; --nd-ink:#E3E6EB; --nd-muted:#8593A8; --nd-accent:#7FB0FF;
+  --nd-line:#ffffff1f; --nd-blue:#6FD6C6; --nd-amber:#E6BD7C; --nd-red:#E59B8D;
+  --nd-mono:ui-monospace,'SF Mono',Consolas,'Courier New',monospace;
+  position:relative;background:var(--nd-bg);color:var(--nd-ink);font-family:var(--font)}
+#nodo *{box-sizing:border-box}
+#nodo button{font:inherit}
+#nodo button:focus-visible,#nodo a:focus-visible{outline:2px solid var(--nd-accent);outline-offset:7px}
+#nodo .nd-mono{font:11px/1.5 var(--nd-mono);letter-spacing:1.3px;text-transform:uppercase}
+
+#nodo .nd-vp{height:100svh;min-height:690px;position:relative;overflow:hidden;
+  background:radial-gradient(ellipse at 75% 48%,#1f3a6655,transparent 60%)}
+#nodo .nd-grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(#9fb3d010 1px,transparent 1px),linear-gradient(90deg,#9fb3d010 1px,transparent 1px);
+  background-size:52px 52px;
+  -webkit-mask-image:linear-gradient(90deg,transparent 25%,black 70%);mask-image:linear-gradient(90deg,transparent 25%,black 70%)}
+
+/* capa de interfaz: mismo tamaño que el lienzo, así los hijos conservan sus
+   posiciones; no captura el puntero, sus hijos sí */
+#nodo .nd-ui{position:absolute;inset:0;z-index:3;pointer-events:none}
+#nodo .nd-ui > *{pointer-events:auto}
+#nodo .nd-copy{position:absolute;z-index:3;top:20%;left:4.5%;width:32%;max-width:490px}
+#nodo .nd-eyebrow{display:flex;gap:18px;align-items:center;color:var(--nd-accent);margin:0 0 29px}
+#nodo .nd-eyebrow::before{content:'';width:30px;height:1px;background:var(--nd-accent)}
+#nodo .nd-title{font-family:var(--font);font-size:clamp(42px,4.4vw,72px);font-weight:300;letter-spacing:-.045em;line-height:1.02;margin:0 0 25px}
+#nodo .nd-title em{font-style:normal;color:var(--nd-accent)}
+#nodo .nd-intro{font-size:15px;line-height:1.75;color:#AAB6C8;max-width:300px;margin:0 0 30px}
+#nodo .nd-stat{display:flex;gap:40px;padding-top:23px;border-top:1px solid var(--nd-line);max-width:310px}
+#nodo .nd-stat strong{display:block;font-weight:300;font-size:28px;letter-spacing:-.02em;margin-bottom:5px}
+#nodo .nd-stat small{color:var(--nd-muted);font-size:10px;letter-spacing:1px}
+#nodo .nd-open{margin-top:19px;background:none;color:var(--nd-accent);border:0;border-bottom:1px solid #7fb0ff65;padding:6px 0;cursor:pointer;font-size:12px}
+
+#nodo .nd-drawing{position:absolute;left:38%;right:2.5%;top:17%;bottom:20%}
+#nodo .nd-drawing canvas{width:100%;height:100%;display:block}
+#nodo .nd-sheet{position:absolute;left:40%;right:4.5%;top:18%;display:flex;justify-content:space-between;color:var(--nd-muted);z-index:2;font-size:10px}
+#nodo .nd-view{position:absolute;bottom:20%;right:4.5%;color:var(--nd-muted);display:flex;gap:16px;align-items:center}
+#nodo .nd-view::before{content:'+';font-size:23px;color:var(--nd-accent)}
+#nodo .nd-coord{position:absolute;left:40%;bottom:20%;color:var(--nd-muted);font-size:10px}
+
+#nodo .nd-rail{position:absolute;bottom:57px;left:4.5%;right:4.5%;display:grid;grid-template-columns:repeat(4,1fr);gap:25px;z-index:5}
+#nodo .nd-phase{position:relative;text-align:left;border:0;border-top:1px solid #ffffff25;color:#8593A8;background:none;padding:18px 0 8px;cursor:pointer}
+#nodo .nd-phase::before{content:'';position:absolute;left:0;top:-1px;height:2px;width:0;background:var(--nd-accent);transition:width .3s}
+#nodo .nd-phase.active{color:var(--nd-ink)}
+#nodo .nd-phase.active::before{width:100%}
+#nodo .nd-phase .nd-num{font:11px var(--nd-mono);color:var(--nd-muted);margin-right:15px}
+#nodo .nd-phase.active .nd-num{color:var(--nd-accent)}
+#nodo .nd-phase .nd-name{font-size:13px}
+#nodo .nd-phase .nd-sub{display:block;margin:9px 0 0 31px;font-size:10px;letter-spacing:.7px;color:var(--nd-muted)}
+
+#nodo .nd-bar{position:absolute;bottom:0;left:0;right:0;height:36px;border-top:1px solid var(--nd-line);padding:0 4.5%;display:flex;align-items:center;justify-content:space-between;font-size:9px;color:var(--nd-muted)}
+#nodo .nd-hint{display:flex;align-items:center;gap:12px}
+#nodo .nd-hint span{color:var(--nd-accent);font-size:14px}
+#nodo .nd-progress{height:2px;position:absolute;bottom:0;left:0;width:100%;transform-origin:left;transform:scaleX(0);background:var(--nd-accent);z-index:20}
+
+#nodo .nd-systems{position:absolute;right:4.5%;top:23%;z-index:7;display:none;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:410px}
+#nodo .nd-systems.visible{display:flex}
+#nodo .nd-system{border:1px solid var(--nd-line);background:#020d1fd9;border-radius:3px;padding:7px 10px;color:var(--nd-muted);font-size:10px;cursor:pointer}
+#nodo .nd-system[aria-pressed=true]{border-color:var(--c);color:var(--c)}
+#nodo .nd-system::before{content:'';display:inline-block;width:5px;height:5px;background:currentColor;margin-right:6px}
+#nodo .nd-final{position:absolute;right:4.5%;bottom:26%;max-width:210px;color:#AAB6C8;font-size:11px;line-height:1.65;display:none;margin:0}
+#nodo .nd-final.visible{display:block}
+
+@media(min-width:1600px){#nodo .nd-drawing{left:37%;right:5%}#nodo .nd-copy{top:23%}}
+/* pantallas bajas: las cifras de debajo del texto tocaban la barra de fases */
+@media(max-height:960px) and (min-width:621px){#nodo .nd-copy{top:17%}#nodo .nd-eyebrow{margin-bottom:20px}#nodo .nd-title{margin-bottom:18px}#nodo .nd-intro{margin-bottom:22px}#nodo .nd-stat{padding-top:16px}}
+@media(max-width:900px){
+  #nodo .nd-title{font-size:50px}#nodo .nd-copy{width:35%}#nodo .nd-drawing{left:35%;right:0}#nodo .nd-sheet{left:38%}
+  #nodo .nd-intro{font-size:13px}#nodo .nd-rail{gap:13px}#nodo .nd-phase .nd-name{font-size:11px}
+  #nodo .nd-phase .nd-num{margin-right:5px}#nodo .nd-phase .nd-sub{margin-left:19px;font-size:9px}
+  #nodo .nd-final{display:none!important}#nodo .nd-systems{max-width:300px}}
+@media(max-width:620px){
+  #nodo .nd-vp{min-height:740px}
+  #nodo .nd-copy{top:92px;left:6%;width:88%;max-width:none}
+  #nodo .nd-eyebrow{margin-bottom:16px;font-size:10px}
+  #nodo .nd-title{font-size:36px;line-height:1.04;max-width:350px;margin-bottom:15px}
+  #nodo .nd-title br{display:none}
+  #nodo .nd-intro{font-size:12px;max-width:290px;line-height:1.6;margin:0}
+  #nodo .nd-stat{display:none}
+  /* en el flujo del texto: absoluto se montaba sobre descripciones de tres lineas */
+  #nodo .nd-open{margin-top:10px;font-size:10px}
+  #nodo .nd-drawing{top:356px;bottom:165px;left:0;right:0}
+  #nodo .nd-sheet{top:336px;left:6%;right:6%;font-size:8px}
+  #nodo .nd-sheet span:last-child{display:none}
+  #nodo .nd-coord{display:none}
+  #nodo .nd-view{right:6%;bottom:152px;font-size:8px}
+  #nodo .nd-systems{top:auto;bottom:181px;right:6%;max-width:88%;gap:5px}
+  #nodo .nd-system{font-size:8px;padding:6px}
+  #nodo .nd-rail{bottom:53px;left:6%;right:6%;gap:12px}
+  #nodo .nd-phase{padding-top:12px}
+  #nodo .nd-phase .nd-num{display:block;margin-bottom:9px}
+  #nodo .nd-phase .nd-name{font-size:10px}
+  #nodo .nd-phase .nd-sub{display:none}
+  #nodo .nd-bar{font-size:8px;padding:0 6%}
+  #nodo .nd-bar .nd-label{display:none}}
+@media(prefers-reduced-motion:reduce){#nodo .nd-phase::before{transition:none}}
+
+/* ---------- entrada desde el hero ----------
+   El cruce original estaba pensado para una foto: una banda vacía de hasta
+   270 px para que se abriera el halo, y una línea de horizonte dura. Con el
+   modelo delante, esa banda más la parte alta del lienzo sumaban casi media
+   pantalla de azul muerto bajo una raya.
+   Ahora no hay banda ni línea: la sección que sube trae por encima un fundido
+   largo, del transparente al azul, y el hero (que ya se oscurece al taparse) se
+   disuelve en él en vez de cortarse. */
+#intro.con-modelo{padding-top:0}
+#intro.con-modelo > .seam{display:none}
+#intro.con-modelo::before{content:'';position:absolute;left:0;right:0;bottom:100%;height:44svh;
+  pointer-events:none;z-index:5;
+  background:linear-gradient(to bottom,rgba(2,13,31,0),rgba(2,13,31,.5) 45%,rgba(2,13,31,.88) 78%,#020D1F)}
+/* la retícula también se funde por arriba: sin esto arrancaba en seco en el borde */
+#nodo .nd-grid{-webkit-mask-image:linear-gradient(90deg,transparent 25%,black 70%),linear-gradient(to bottom,transparent,black 30%);
+  -webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent 25%,black 70%),linear-gradient(to bottom,transparent,black 30%);
+  mask-composite:intersect}
+
+/* ---------- entrega hacia la foto de la sala ----------
+   La foto sube ENCIMA del modelo en el último tramo del pin, mientras el
+   edificio se disuelve. Sin este solape, al soltarse el pin quedaba casi una
+   pantalla entera de azul vacío antes de que asomara la imagen.
+   Funciona porque el lienzo fijo del pin no lleva z-index y la foto, que va
+   después en el DOM, sí. Solo con movimiento: sin pin, el solape taparía la
+   barra de fases. */
+#intro .tras-modelo{position:relative}
+/* Sube sobre el final del modelo mientras el edificio se disuelve. Sin este
+   solape, al soltarse el pin queda casi una pantalla de azul vacío. */
+@media (prefers-reduced-motion:no-preference){
+  #intro .tras-modelo{z-index:4;margin-top:-34svh;padding-top:clamp(20px,4vw,60px)}
+}
+@media (prefers-reduced-motion:no-preference) and (max-width:860px){
+  #intro .tras-modelo{margin-top:-22svh}
+}
+
+/* El indicador de capítulo («00 Inicio», fijo abajo a la izquierda) se montaba
+   sobre la barra inferior del modelo. Se apagan sus hijos y no #ch, porque la
+   opacidad de #ch la pone el GSAP de la entrada de la página. */
+#ch > *{transition:opacity .45s ease}
+#ch.nd-oculto > *{opacity:0}
+
+/* el unifilar ampliado, en un <dialog> */
+.nd-report{width:min(1400px,96vw);max-width:96vw;max-height:94svh;border:1px solid #3b4d68;border-radius:6px;background:#061329;color:#E3E6EB;padding:22px;font-family:var(--font)}
+.nd-report::backdrop{background:#01060fdb}
+.nd-report .nd-report-top{display:flex;justify-content:space-between;align-items:center;gap:20px;position:sticky;top:-22px;background:#061329;padding:10px 0;z-index:3}
+.nd-report .nd-report-top h2{font:400 22px var(--font);margin:0}
+.nd-report .nd-report-top button{background:#13243c;border:1px solid #3b4d68;color:#fff;padding:10px 16px;cursor:pointer;font:inherit}
+.nd-report .nd-scroll{overflow:auto}
+.nd-report .nd-scroll canvas{display:block;width:100%;min-width:860px;aspect-ratio:1290/930}
+.nd-report li{margin:10px 0;font-size:14px;line-height:1.6;color:#B7C3D4}
+.nd-report table{border-collapse:collapse;width:100%;font:12px ui-monospace,Consolas,monospace}
+.nd-report td,.nd-report th{text-align:left;border-bottom:1px solid #2a3a52;padding:10px}
+.nd-report .nd-links{font-size:12px;color:#B7C3D4;line-height:1.7}
+.nd-report .nd-links a{color:inherit;text-decoration:underline}
+.nd-report .nd-summary{font-size:12px;color:#AAB6C8}
+@media(max-width:620px){.nd-report{padding:14px}.nd-report .nd-report-top h2{font-size:17px}}

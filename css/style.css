@@ -1,0 +1,1328 @@
+/* ============================================================
+   DATCER · sistema de dos colores, una tipografía
+   ============================================================ */
+:root{
+  --dark:#020D1F;
+  --light:#E3E6EB;
+
+  /* estas dos se invierten por sección */
+  --bg:#020D1F;
+  --fg:#E3E6EB;
+
+  --fg-60:rgba(227,230,235,.60);
+  --fg-38:rgba(227,230,235,.38);
+  --fg-18:rgba(227,230,235,.18);
+  --fg-10:rgba(227,230,235,.10);
+
+  --font:'Onest',-apple-system,BlinkMacSystemFont,sans-serif;
+  --pad:clamp(18px,4.2vw,80px);
+  --e:cubic-bezier(.22,1,.36,1);
+  --e2:cubic-bezier(.62,.05,.01,.99);
+}
+.on-light{
+  --bg:#E3E6EB;
+  --fg:#020D1F;
+  --fg-60:rgba(2,13,31,.62);
+  --fg-38:rgba(2,13,31,.40);
+  --fg-18:rgba(2,13,31,.20);
+  --fg-10:rgba(2,13,31,.11);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+/* `clip` y no `hidden`. Los dos recortan, pero `hidden` crea un contenedor de
+   scroll: el documento sigue pudiendo desplazarse por codigo o por un
+   scrollIntoView, y la pagina acababa corrida hacia la izquierda con la mitad
+   del contenido fuera. `clip` recorta y no deja nada por donde correrse.
+   Hace falta porque hay piezas decorativas mas anchas que la ventana a
+   proposito — `.seam` mide min(2400px,190vw) y centrada se sale 408 px por cada
+   lado en una ventana de 1585.
+   En navegadores sin `clip`, la declaracion cae y queda el `hidden` de body,
+   que es como estaba antes. */
+html{-webkit-text-size-adjust:100%;overflow-x:clip}
+body{
+  background:var(--dark);color:var(--light);
+  font-family:var(--font);font-weight:300;line-height:1.58;
+  overflow-x:hidden;overflow-x:clip;-webkit-font-smoothing:antialiased;
+  font-feature-settings:"ss01" 1;
+}
+body.lock{overflow:hidden;height:100svh}
+img,video,canvas{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit;background:none;border:0}
+button{cursor:pointer}
+::selection{background:var(--light);color:var(--dark)}
+:focus-visible{outline:1.5px solid currentColor;outline-offset:5px}
+
+/* ---------- escala tipográfica ---------- */
+/* .d1 bajo de 9.4vw a 6.4vw: a tamano completo el titular cruzaba el rack del
+   video y competia con el en vez de asentarse sobre el. Interlinea algo mas
+   abierta porque ahora son tres lineas, no dos. */
+.d1{font-size:clamp(2.5rem,6.4vw,7.4rem);font-weight:200;line-height:.94;letter-spacing:-.045em}
+.d2{font-size:clamp(2.1rem,5.6vw,6rem);font-weight:200;line-height:.95;letter-spacing:-.045em}
+.d3{font-size:clamp(1.5rem,3vw,3rem);font-weight:200;line-height:1.04;letter-spacing:-.035em}
+.d4{font-size:clamp(1.15rem,1.7vw,1.7rem);font-weight:300;line-height:1.2;letter-spacing:-.02em}
+.lbl{font-size:11px;font-weight:500;letter-spacing:.17em;text-transform:uppercase;line-height:1.4}
+.bd{font-size:clamp(.98rem,1.08vw,1.16rem);font-weight:300;line-height:1.62;color:var(--fg-60)}
+.bd-s{font-size:.9rem;font-weight:300;line-height:1.6;color:var(--fg-60)}
+.num{font-size:clamp(3.4rem,10vw,10rem);font-weight:200;line-height:.82;letter-spacing:-.055em;font-variant-numeric:tabular-nums}
+
+/* ---------- máscaras de texto ----------
+   La caja de línea de los display va por debajo de 1 (.94 en .d1, .95 en .d2)
+   para cerrar el tracking, así que es más baja que los glifos: `overflow:hidden`
+   se comía las colas de la g, la p y la y, y las tildes por arriba.
+
+   El aire va DENTRO, en la pieza que se mueve, no en la máscara. Así la máscara
+   mide exactamente lo que mide esa pieza, y desplazarla el 112 % de su propia
+   altura la sigue ocultando entera — con el relleno en la máscara, en cambio,
+   asomaba una tira de los glifos por el borde de abajo.
+
+   El margen negativo lo descuenta por fuera para que el interlineado no cambie,
+   y el contenedor pasa a columna flex al partirse (`.sp`, lo pone splitLines):
+   entre ítems flex los márgenes no se colapsan. Si se colapsaran —que es lo que
+   pasa entre bloques normales— se descontaría la mitad y las líneas se irían
+   separando .2em cada una. */
+.sp{display:flex;flex-direction:column}
+.ln{display:block;overflow:hidden;margin-block:-.2em}
+.ln>i{display:block;font-style:inherit;will-change:transform;padding-block:.2em}
+.wd{display:inline-block;overflow:hidden;vertical-align:top}
+.wd>i{display:inline-block;font-style:inherit;will-change:transform}
+
+/* ---------- secciones ---------- */
+section{background:var(--bg);color:var(--fg);position:relative}
+.pad{padding-inline:var(--pad)}
+.sec{padding-block:clamp(84px,11vw,180px)}
+.hair{height:1px;background:var(--fg-18);width:100%;transform:scaleX(0);transform-origin:left}
+.cap{display:flex;align-items:baseline;gap:18px;color:var(--fg-38)}
+.cap .idx{font-variant-numeric:tabular-nums}
+
+/* ---------- botón ---------- */
+.btn{
+  display:inline-flex;align-items:center;gap:34px;position:relative;
+  border:1px solid var(--fg-18);border-radius:100px;
+  padding:19px 30px;overflow:hidden;isolation:isolate;
+  transition:border-color .6s var(--e),color .6s var(--e);
+}
+.btn .t{font-size:11px;font-weight:500;letter-spacing:.17em;text-transform:uppercase;position:relative;z-index:2}
+.btn .a{position:relative;z-index:2;width:16px;height:1px;background:currentColor;transition:width .6s var(--e)}
+.btn .a::after{content:'';position:absolute;right:0;top:-3px;width:7px;height:7px;border-right:1px solid currentColor;border-top:1px solid currentColor;transform:rotate(45deg)}
+.btn::before{content:'';position:absolute;inset:0;background:var(--fg);border-radius:100px;transform:scaleY(0);transform-origin:bottom;transition:transform .6s var(--e);z-index:1}
+.btn:hover{color:var(--bg);border-color:var(--fg)}
+.btn:hover::before{transform:scaleY(1)}
+.btn:hover .a{width:26px}
+.btn.fill{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.btn.fill::before{background:var(--bg)}
+.btn.fill:hover{color:var(--fg)}
+
+/* ---------- media ---------- */
+.med{position:relative;overflow:hidden;background:var(--fg-10)}
+.med>img,.med>video{width:100%;height:118%;object-fit:cover;position:absolute;top:-9%;left:0;will-change:transform}
+.med.st>img,.med.st>video{height:100%;top:0}
+
+/* ============================================================
+   PRELOADER
+   ============================================================ */
+#pre{position:fixed;inset:0;z-index:900;background:var(--dark);color:var(--light);display:flex;flex-direction:column;justify-content:space-between;padding:var(--pad)}
+#pre .top{display:flex;justify-content:space-between;align-items:flex-start}
+#pre .mid{display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex:1;align-self:stretch;padding-block:8vh}
+#pre .word{font-size:clamp(3rem,13vw,13rem);font-weight:200;letter-spacing:-.06em;line-height:1;align-self:flex-end}
+#pre .pc{font-size:clamp(1.4rem,4vw,3.4rem);font-weight:200;letter-spacing:-.03em;align-self:flex-end;font-variant-numeric:tabular-nums}
+#pre .bar{height:1px;background:rgba(227,230,235,.16);position:relative}
+#pre .bar>i{position:absolute;inset:0;background:var(--light);transform:scaleX(0);transform-origin:left}
+
+/* ============================================================
+   HEADER / MENU
+   ============================================================ */
+/* La cabecera llevaba `mix-blend-mode:difference`: se invertia contra lo que
+   tuviera detras y asi se leia sobre cualquier fondo sin decirle nada. El truco
+   es bueno para texto pero imposible para una marca — invierte tambien el logo,
+   y no hay color de marca que sobreviva. Tampoco se puede dejar el blend en la
+   cabecera y quitarselo al logo: `#hd` es fija y con z-index, forma contexto de
+   apilamiento, y el blend de un hijo se quedaria encerrado dentro sin ver el
+   fondo de la pagina.
+   Asi que el color pasa a ser explicito y lo conmuta `.lite`, que pone el JS
+   cuando la cabecera esta sobre fondo claro. Todo lo de dentro tira de
+   `currentColor`, incluidas las barras del boton. */
+#hd{
+  position:fixed;top:0;left:0;right:0;z-index:400;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:24px var(--pad);color:var(--light);
+  transition:transform .6s var(--e),padding .6s var(--e),color .45s var(--e);
+}
+/* .lite: sobre fondo claro. .perla: sobre el marco perla del hero (ver .cover) */
+#hd.lite,#hd.perla,#hd.barra{color:var(--dark)}
+
+/* ---------- la barra que se recompone ----------
+   Cada tira enseña su trozo del mismo degradado —`background-size` de 1400 % y
+   la posición corrida por índice—, así que al terminar de montarse forman una
+   superficie continua y no catorce rectángulos pegados. El destello cruza una
+   vez, cuando ya están todas. */
+.hd-bg{position:absolute;inset:0;z-index:-1;display:flex;overflow:hidden;opacity:0;
+  pointer-events:none;box-shadow:0 12px 30px -24px rgba(2,13,31,.5)}
+/* La base: el mismo degradado entero, en su propia capa y APAGADA al principio.
+   Entra cuando las tiras ya aterrizaron, y a partir de ahí cualquier holgura de
+   subpíxel entre ellas queda del mismo color. Si estuviera encendida desde el
+   primer cuadro, el montaje no se vería: las tiras caerían sobre una superficie
+   que ya está completa. */
+.hd-bg::before{content:'';position:absolute;inset:0;opacity:0;
+  background:
+    radial-gradient(60% 55% at 14% 6%,rgba(255,236,242,.2),rgba(255,236,242,0) 62%),
+    radial-gradient(55% 60% at 88% 96%,rgba(210,228,255,.62),rgba(210,228,255,0) 64%),
+    linear-gradient(115deg,#E7E8EB 0%,#F8F8F6 20%,#DFE3E9 42%,#F4F3F0 60%,#E2E6EC 80%,#F1F1EF 100%)}
+.hd-bg.lleno::before{opacity:1;transition:opacity .3s ease}
+/* La malla. Cada celda enseña SU trozo del mismo degradado —tamaño y posición
+   se los pone el JS, que es quien sabe cuántas filas y columnas hay—, así que
+   una vez montadas forman una superficie continua y no un mosaico. */
+.hd-bg{display:block}
+.hd-bg i{position:absolute;display:block;will-change:transform,opacity;
+  background:
+    radial-gradient(60% 55% at 14% 6%,rgba(255,236,242,.2),rgba(255,236,242,0) 62%),
+    radial-gradient(55% 60% at 88% 96%,rgba(210,228,255,.62),rgba(210,228,255,0) 64%),
+    linear-gradient(115deg,#E7E8EB 0%,#F8F8F6 20%,#DFE3E9 42%,#F4F3F0 60%,#E2E6EC 80%,#F1F1EF 100%)}
+/* el filo que enciende cada celda justo al posarse */
+.hd-bg i::after{content:'';position:absolute;inset:0;opacity:0;
+  background:linear-gradient(180deg,rgba(150,195,255,.55),rgba(150,195,255,0) 60%)}
+/* el cabezal: la línea que va por delante, dejando material detrás */
+.hd-bg .cab{position:absolute;top:0;bottom:0;width:2px;opacity:0;
+  background:linear-gradient(to bottom,rgba(120,170,255,0),rgba(150,195,255,.95),rgba(120,170,255,0));
+  box-shadow:0 0 14px 3px rgba(130,180,255,.55)}
+.hd-bg .br{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(100deg,rgba(255,255,255,0) 42%,rgba(255,255,255,.9) 50%,rgba(255,255,255,0) 58%);
+  mix-blend-mode:soft-light;opacity:.9}
+/* el filo de abajo, que aparece con la barra */
+.hd-bg::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;z-index:2;
+  background:rgba(2,13,31,.10)}
+@media (prefers-reduced-motion:reduce){ .hd-bg i{transform:none!important;filter:none!important} }
+#hd.up{transform:translateY(-102%)}
+#hd .lg{display:flex;align-items:flex-end;gap:15px}
+
+/* Dos versiones cruzadas. La de fondo oscuro conserva el naranja de marca y
+   sube el gris al claro de la casa: el gris original sobre el navy se queda en
+   2,5:1 de contraste y se hunde. Sobre claro —y sobre el marco perla— entra el
+   archivo original. */
+#hd .lgi{position:relative;display:block;height:38px}
+#hd .lgi img{height:38px;width:auto;display:block;transition:opacity .45s var(--e)}
+#hd .lgi .lt{position:absolute;left:0;top:0;opacity:0}
+/* `.barra` faltaba aquí: sobre la barra perla seguía saliendo la versión para
+   fondo oscuro, cuyo gris claro desaparece contra el blanco — el «CER» del
+   logo se perdía. */
+#hd.lite .lgi img,#hd.perla .lgi img,#hd.barra .lgi img{opacity:0}
+#hd.lite .lgi .lt,#hd.perla .lgi .lt,#hd.barra .lgi .lt{opacity:1}
+#hd .lgt{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;opacity:.55;line-height:1.35;padding-bottom:2px}
+#hd nav{display:flex;align-items:center;gap:clamp(14px,2.2vw,34px)}
+#hd nav a{font-size:11px;font-weight:500;letter-spacing:.17em;text-transform:uppercase;position:relative}
+#hd nav a::after{content:'';position:absolute;left:0;bottom:-5px;height:1px;width:100%;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .5s var(--e)}
+#hd nav a:hover::after{transform:scaleX(1);transform-origin:left}
+.bg{display:flex;flex-direction:column;gap:6px;width:30px;padding:9px 0}
+.bg i{height:1px;background:currentColor;width:100%;transition:transform .55s var(--e),width .55s var(--e)}
+.bg i:last-child{width:55%;margin-left:auto}
+body.mo .bg i:first-child{transform:translateY(3.5px) rotate(45deg)}
+body.mo .bg i:last-child{transform:translateY(-3.5px) rotate(-45deg);width:100%}
+
+#mn{position:fixed;inset:0;z-index:380;background:var(--dark);color:var(--light);clip-path:inset(0 0 100% 0);visibility:hidden;display:flex;flex-direction:column;justify-content:center;padding:120px var(--pad) var(--pad)}
+#mn .grid{display:grid;grid-template-columns:1.35fr .65fr;gap:clamp(30px,6vw,90px);align-items:end}
+#mn ol{list-style:none}
+#mn ol li{overflow:hidden;border-top:1px solid rgba(227,230,235,.11)}
+#mn ol li:last-child{border-bottom:1px solid rgba(227,230,235,.11)}
+#mn ol a{display:flex;align-items:baseline;gap:clamp(14px,2vw,30px);padding:clamp(9px,1.3vw,17px) 0;font-size:clamp(1.6rem,4.4vw,3.9rem);font-weight:200;letter-spacing:-.04em;line-height:1.08;transform:translateY(105%);transition:opacity .45s var(--e),padding-left .55s var(--e)}
+#mn ol a em{font-size:11px;font-style:normal;letter-spacing:.16em;color:rgba(227,230,235,.35);font-weight:500}
+#mn ol:hover a{opacity:.34}
+#mn ol a:hover{opacity:1;padding-left:14px}
+#mn .side{display:grid;gap:22px;opacity:0}
+#mn .side .lbl{color:rgba(227,230,235,.35);margin-bottom:7px}
+#mn .side a,#mn .side p{font-size:1.02rem;font-weight:300}
+
+/* el contador de capítulo */
+#ch{position:fixed;left:var(--pad);bottom:26px;z-index:390;display:flex;align-items:baseline;gap:9px;color:var(--light);mix-blend-mode:difference;font-variant-numeric:tabular-nums;opacity:0}
+#ch .c{font-size:1.5rem;font-weight:200;letter-spacing:-.03em;overflow:hidden;height:1.5rem}
+#ch .c i{display:block;font-style:normal}
+#ch small{font-size:10px;letter-spacing:.16em;text-transform:uppercase;opacity:.45}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+/* El hero es sticky dentro de .cover: se queda quieto y la seccion 00B sube por
+   encima. El sticky muere con .cover, un par de pantallas mas abajo. */
+.cover{position:relative}
+/* El marco del hero en blanco perla metalizado. Lo que se ve alrededor del hero
+   recortado (y que se va cerrando al bajar) es lo que hay DETRAS de él: esta
+   capa. Va pegada (sticky) con alto de una pantalla y margen negativo, así no
+   ocupa sitio y el degradado no se estira a lo largo de toda .cover; queda
+   debajo del hero porque va antes en el DOM, y #intro la tapa al subir.
+   Base de grises cálidos y fríos alternados (el metal) y dos radiales tenues,
+   rosado y azulado (el tornasol de la perla). El reflejo que cruza lo mueve
+   --hs, que escribe el JS de la cabecera con el scroll. */
+.cover::before,.perla-bg{content:'';display:block;position:sticky;top:0;height:100svh;margin-bottom:-100svh;
+  pointer-events:none;z-index:0;
+  background:
+    linear-gradient(105deg,rgba(255,255,255,0) 40%,rgba(255,255,255,.75) 50%,rgba(255,255,255,0) 60%) var(--hs,120%) 0/260% 100% no-repeat,
+    radial-gradient(60% 55% at 14% 6%,rgba(255,236,242,.2),rgba(255,236,242,0) 62%),
+    radial-gradient(55% 60% at 88% 96%,rgba(210,228,255,.62),rgba(210,228,255,0) 64%),
+    linear-gradient(115deg,#E7E8EB 0%,#F8F8F6 20%,#DFE3E9 42%,#F4F3F0 60%,#E2E6EC 80%,#F1F1EF 100%)}
+/* El recorrido del hero. Es alto vacio dentro de `.cover`, asi que el hero
+   sigue pegado arriba mientras se pasa por el: ese es el tiempo que tiene el
+   barrido para ocurrir antes de que la seccion siguiente empiece a taparlo. */
+.cover .hold{height:150svh;pointer-events:none}
+@media (max-width:860px){ .cover .hold{height:110svh} }
+/* El hero arranca DENTRO de un marco redondeado, con el logo respirando encima
+   sobre el navy, y al bajar el marco se abre: los margenes van a cero y las
+   esquinas se enderezan hasta que el plano queda a sangre, justo antes de que la
+   seccion siguiente lo tape. La pagina se abre en vez de solo desplazarse.
+
+   Todo el marco cuelga de UNA variable, `--hx`, que va de 1 a 0. Con `clip-path`
+   y no con margenes: recortar no recalcula maquetacion, y animar `padding` o
+   `inset` obligaria al navegador a rehacer el layout del hero en cada fotograma
+   del scroll. Ademas `inset()` acepta el radio en la misma funcion, asi que las
+   esquinas se enderezan solas con el mismo numero.
+
+   Aqui se probo tambien una RANURA — el video reducido a una rendija horizontal
+   entre el titular y el pie, abriendose con el scroll — y se descarto. */
+#hero{
+  position:sticky;top:0;height:100svh;min-height:600px;overflow:hidden;
+  display:flex;align-items:stretch;
+  --bg:var(--dark);--fg:var(--light);background:var(--dark);
+  --hx:1;
+  clip-path:inset(
+    calc(var(--hx) * clamp(84px,10.5vh,124px))
+    calc(var(--hx) * clamp(12px,1.6vw,30px))
+    calc(var(--hx) * clamp(12px,1.6vw,30px))
+    round calc(var(--hx) * clamp(12px,1.5vw,26px)));
+}
+#hero .bgm{position:absolute;inset:0;overflow:hidden;z-index:0}
+/* .mv es solo para la entrada (zoom del preloader). El parallax de scroll va
+   sobre el <video>, asi los dos no pelean por el mismo transform. */
+#hero .mv{position:absolute;inset:0;will-change:transform}
+#hero .bgm video,#hero .bgm img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;will-change:transform}
+
+/* ---------- el barrido de rayos X ----------
+   Las dos fotos comparten camara y encuadre, asi que el paralaje va sobre el
+   contenedor (`.mv`) y nunca sobre una sola: si se movieran por separado el
+   barrido dejaria de casar y se veria doble edificio.
+
+   El corte va con `clip-path` sobre la de arriba y lo gobierna `--wp`, de 0 a
+   100. Recortar no recalcula maquetacion, asi que el barrido puede ir atado al
+   scroll sin coste. */
+#hero .ph{will-change:transform}
+#hero .ph.rx{clip-path:inset(0 calc(100% - var(--wp,0) * 1%) 0 0)}
+/* el filo del barrido: una linea de luz que va delante del corte y le da
+   direccion, para que se lea como algo que avanza y no como una disolvencia */
+#hero .wp{position:absolute;top:0;bottom:0;left:calc(var(--wp,0) * 1%);width:2px;z-index:1;
+  pointer-events:none;transform:translateX(-1px);
+  background:linear-gradient(to bottom,transparent,rgba(255,255,255,.85) 22%,
+    rgba(255,255,255,.95) 50%,rgba(255,255,255,.85) 78%,transparent);
+  box-shadow:0 0 22px 3px rgba(190,215,255,.45);
+  opacity:calc(min(var(--wp,0)/6, 1) * (1 - max((var(--wp,0) - 88)/12, 0)))}
+/* El rack del video se desplaza a la derecha durante la animacion y aterriza
+   detras del titular. Este velo horizontal le da al texto una cama limpia en la
+   mitad izquierda y deja el rack legible en la derecha, sin depender de donde
+   quede el sujeto en cada fotograma. El titular ocupa ahora ~55 % del ancho, asi
+   que la parte opaca del velo llega mas lejos que antes. */
+/* Tres velos, y cada uno tapa SOLO lo suyo. El vertical de antes cruzaba el
+   encuadre de lado a lado — .60 arriba, y ni a media altura bajaba de .24 — asi
+   que sumado al horizontal dejaba los racks del centro-derecha bajo un 46 % de
+   navy, planos. De ese 46 solo seis puntos venían del velo del titular: el resto
+   era peaje que pagaba la sala por dar cama a la cabecera y al pie.
+   Ahora la cabecera y el pie llevan su franja corta, y el centro-derecha —que es
+   donde vive la profundidad del plano— queda por debajo del 10 %. */
+#hero .vg{position:absolute;inset:0;z-index:1;
+  background:
+    /* el titular: fuerte a la izquierda, limpio desde el 74 % */
+    linear-gradient(to right,rgba(2,13,31,.95) 0,rgba(2,13,31,.86) 30%,rgba(2,13,31,.44) 56%,rgba(2,13,31,.10) 74%,transparent 88%),
+    /* el pie: parrafo y botones, muerto antes de la mitad */
+    linear-gradient(to top,rgba(2,13,31,.90) 0,rgba(2,13,31,.55) 14%,rgba(2,13,31,.12) 30%,transparent 44%),
+    /* la cabecera: una franja corta, no medio encuadre */
+    linear-gradient(to bottom,rgba(2,13,31,.62) 0,rgba(2,13,31,.20) 9%,transparent 18%)}
+/* se oscurece mientras la seccion siguiente lo tapa: el hero retrocede en
+   profundidad en vez de solo desaparecer debajo del borde */
+#hero .dim{position:absolute;inset:0;z-index:2;background:var(--dark);opacity:0;pointer-events:none}
+/* Columna con el titular arriba y el pie abajo, no todo apelotonado en el pie.
+   El relleno superior es fijo y no sigue a `--hx`: tiene que despejar el recorte
+   del marco cuando esta cerrado Y la cabecera cuando esta abierto, y el mayor de
+   los dos vale para los dos. */
+/* Tres filas: titular, hueco, pie. La del medio es la que crece y la que mide
+   el JS para colocar la ranura. */
+/* Titular y botones arriba a la izquierda; abajo una tira de tres: el aval a la
+   izquierda, la entradilla en el centro y una tarjeta a la derecha. El peso se
+   reparte por las esquinas en vez de amontonarse en el pie, que es lo que deja
+   respirar el plano en el centro. */
+#hero .in{position:relative;z-index:3;width:100%;
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:clamp(152px,19vh,208px) var(--pad) clamp(26px,3.4vw,46px)}
+/* Sin ancho maximo aqui: `ch` se mide sobre la fuente del PROPIO elemento, y
+   `.up` hereda el cuerpo a 16 px — 52ch daban 416 px y el titular, que va a
+   100 px, quedaba cortado por la mascara de linea. El ancho lo gobierna el h1
+   con su propio 12ch, que si esta en unidades del titular. */
+#hero .up{will-change:transform}
+
+/* ---------- botones del hero ----------
+   Rectangulares y no en pildora: el rectangulo con su cuadro de flecha pegado
+   se lee como un control, no como una etiqueta. El primario lleva el azul de
+   accion en el cuadro; el secundario es un cristal sobre el video. */
+/* `flex-wrap:nowrap` explicito: hay una regla generica `.cta{flex-wrap:wrap}`
+   mas abajo en la hoja, y aunque `#hero .cta` gana en especificidad para lo que
+   declara, el `wrap` se colaba — y en una columna flex eso estiraba el segundo
+   boton hasta 401 px y empujaba la tira de abajo fuera del recorte. */
+/* Rejilla con `justify-items` y `align-items` en `start`: tamano por contenido
+   en los dos ejes, sin que nada pueda estirar un boton.
+
+   Y el secundario NO puede llamarse `.sec`. Se llamaba asi y media 401 px de
+   alto: `.sec` es la clase de seccion del sitio y trae `padding-block` de hasta
+   180 px. En una hoja con nombres de dos y tres letras hay que mirar antes de
+   inventar uno. */
+#hero .cta{display:grid;justify-items:start;align-items:start;
+  gap:9px;margin-top:clamp(26px,3.6vw,44px)}
+/* `flex:0 0 auto` y `align-self` explicitos: dentro de una columna flex el
+   boton se estiraba a lo alto y empujaba la tira de abajo fuera del recorte. */
+.bt2{display:inline-flex;align-items:stretch;overflow:hidden;
+  flex:0 0 auto;align-self:flex-start;
+  font-size:11px;font-weight:500;letter-spacing:.17em;text-transform:uppercase;
+  transition:background .45s var(--e),color .45s var(--e),border-color .45s var(--e)}
+.bt2 > span{padding:15px 22px;display:flex;align-items:center}
+.bt2 .ar{position:relative;width:46px;flex:0 0 46px;background:var(--acc)}
+.bt2 .ar::after{content:'';position:absolute;left:50%;top:50%;width:9px;height:9px;
+  margin:-5px 0 0 -6px;border-right:1.5px solid #fff;border-top:1.5px solid #fff;
+  transform:rotate(45deg);transition:transform .45s var(--e)}
+.bt2:hover .ar::after{transform:rotate(45deg) translate(3px,-3px)}
+.bt2.pri{background:var(--light);color:var(--dark)}
+.bt2.pri:hover{background:#fff}
+.bt2.gls{background:rgba(227,230,235,.10);color:var(--light);
+  border:1px solid rgba(227,230,235,.20);backdrop-filter:blur(6px)}
+.bt2.gls:hover{background:rgba(227,230,235,.18);border-color:rgba(227,230,235,.42)}
+
+/* ---------- la tira de abajo ---------- */
+#hero .lo{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr) minmax(0,26rem);
+  align-items:end;gap:clamp(20px,3.4vw,64px)}
+#hero .cred{display:flex;flex-direction:column;gap:7px;white-space:nowrap}
+#hero .cred .lbl{color:rgba(227,230,235,.42)}
+#hero .cred b{font-size:.82rem;font-weight:400;letter-spacing:.01em;color:rgba(227,230,235,.86)}
+#hero .lead{max-width:44ch;justify-self:center;
+  color:rgba(227,230,235,.72);font-size:clamp(.9rem,1vw,1.02rem);line-height:1.6}
+
+/* la tarjeta: mismo cristal que el boton secundario, para que se lean como
+   piezas del mismo juego y no como dos estilos distintos */
+#hero .card{position:relative;display:block;padding:16px 58px 17px 18px;
+  background:rgba(227,230,235,.10);border:1px solid rgba(227,230,235,.18);
+  backdrop-filter:blur(6px);
+  transition:background .45s var(--e),border-color .45s var(--e)}
+#hero .card:hover{background:rgba(227,230,235,.17);border-color:rgba(227,230,235,.40)}
+#hero .card .hd{display:flex;justify-content:space-between;gap:16px;margin-bottom:9px}
+#hero .card .hd .lbl{color:rgba(227,230,235,.45)}
+#hero .card .hd .d{color:rgba(227,230,235,.30)}
+#hero .card b{display:block;font-size:.92rem;font-weight:300;line-height:1.42;
+  color:var(--light);letter-spacing:-.01em}
+#hero .card .ar{position:absolute;right:18px;top:50%;width:26px;height:26px;
+  margin-top:-13px;border:1px solid rgba(227,230,235,.30);border-radius:50%}
+#hero .card .ar::after{content:'';position:absolute;left:50%;top:50%;width:7px;height:7px;
+  margin:-4px 0 0 -5px;border-right:1.2px solid currentColor;border-top:1.2px solid currentColor;
+  transform:rotate(45deg);transition:transform .45s var(--e)}
+#hero .card:hover .ar::after{transform:rotate(45deg) translate(2px,-2px)}
+
+/* ---------- la reticula ----------
+   Dos verticales y una horizontal, punteadas y muy tenues. No decora: da al
+   encuadre un sistema de referencia, como las guias de un plano, y hace que el
+   texto se lea colocado en vez de flotando. */
+#hero .rt{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background-image:
+    repeating-linear-gradient(to bottom,rgba(227,230,235,.20) 0 2px,transparent 2px 9px),
+    repeating-linear-gradient(to bottom,rgba(227,230,235,.20) 0 2px,transparent 2px 9px),
+    repeating-linear-gradient(to right,rgba(227,230,235,.16) 0 2px,transparent 2px 9px);
+  background-size:1px 100%,1px 100%,100% 1px;
+  background-position:33.33% 0,66.66% 0,0 72%;
+  background-repeat:no-repeat}
+#hero .tag{display:inline-block;margin-bottom:clamp(18px,2.6vw,34px);color:rgba(227,230,235,.72)}
+/* 12ch deja que "Infraestructura" gobierne el ancho de linea (es mas larga que
+   la caja y no parte), y obliga a las otras dos a bajar: el titular queda en un
+   bloque compacto a la izquierda en vez de cruzar el rack del video. */
+#hero h1{max-width:12ch}
+/* `.ft` ya no existe en el hero: lo sustituyo la tira de tres (`.lo`). */
+.cta{display:flex;gap:10px;flex-wrap:wrap}
+/* dentro del marco: se aparta lo mismo que el recorte para no quedar cortado */
+#sc{position:absolute;right:calc(var(--pad) + var(--hx,0) * clamp(12px,1.6vw,30px));
+  bottom:calc(clamp(28px,4.6vw,58px) + var(--hx,0) * clamp(12px,1.6vw,30px));z-index:4;display:flex;flex-direction:column;align-items:center;gap:14px;color:rgba(227,230,235,.5)}
+#sc span{writing-mode:vertical-rl;font-size:10px;letter-spacing:.28em;text-transform:uppercase}
+#sc .l{width:1px;height:70px;background:rgba(227,230,235,.22);overflow:hidden;position:relative}
+#sc .l::after{content:'';position:absolute;inset:0;background:var(--light);animation:cue 2.6s infinite cubic-bezier(.62,.05,.01,.99)}
+@keyframes cue{0%{transform:translateY(-100%)}55%,100%{transform:translateY(100%)}}
+
+/* ---------- costura hero → 00B: linea de horizonte ----------
+   Va montada a caballo del borde superior de #intro (la mitad de arriba queda
+   sobre el hero). Es el borde iluminado de la seccion que sube: primero asoma
+   el halo, luego la linea, luego la imagen. */
+/* El hueco entre el hero y la sala. Aqui se probo una trama de circuito y luego
+   una cinta con las normas: las dos sobraban. Lo unico que vive en esa banda es
+   la luz de la costura, y por eso el hueco es mas alto que antes — el halo
+   necesita sitio para abrirse. */
+#intro{padding-top:clamp(150px,19vh,270px)}
+
+/* La luz de la costura. Se enciende al bajar y es lo unico que ocupa la banda
+   entre el hero y la sala.
+
+   El halo y la linea van en pseudoelementos separados y no en el mismo fondo,
+   porque el desenfoque tiene que caer SOLO sobre el halo: aplicado al conjunto
+   se llevaba por delante el filo de la linea, que es lo que da el horizonte.
+   El halo son dos radiales — uno estrecho e intenso para el nucleo y otro
+   ancho y tenue para que el borde no se vea recortado. */
+.seam{position:absolute;left:50%;top:0;transform:translate(-50%,-50%);
+  width:min(2600px,200vw);height:clamp(320px,38vw,660px);
+  z-index:6;pointer-events:none}
+.seam>i{position:absolute;inset:0;opacity:0;will-change:opacity,transform}
+.seam>i::before{content:'';position:absolute;inset:-12%;
+  background:
+    radial-gradient(42% 38% at 50% 50%,rgba(186,212,255,.52) 0%,
+      rgba(104,146,238,.24) 32%,rgba(2,13,31,0) 70%),
+    radial-gradient(72% 64% at 50% 50%,rgba(88,128,214,.22) 0%,rgba(2,13,31,0) 78%);
+  filter:blur(30px)}
+.seam>i::after{content:'';position:absolute;left:0;right:0;top:50%;height:2px;
+  transform:translateY(-50%);
+  background:linear-gradient(to right,transparent 0,rgba(227,230,235,.28) 12%,
+    rgba(255,255,255,.92) 50%,rgba(227,230,235,.28) 88%,transparent 100%)}
+
+/* ============================================================
+   BLOQUES
+   ============================================================ */
+/* declaración grande */
+.stmt{display:grid;grid-template-columns:1fr;gap:clamp(30px,5vw,70px)}
+.stmt .row{display:grid;grid-template-columns:.32fr 1fr;gap:clamp(20px,4vw,70px);align-items:start}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,54px)}
+
+/* ── 01 Nosotros: paneles a sangre sobre navy ── */
+/* El azul de fondo se separa en canales G-R = 11 (antes 4): con el rojo tan
+   cerca del verde el ojo leia violeta. Tono 217 en vez de 230, misma luminancia.
+   Los dos degradados funden los extremos de la seccion navy contra --dark para
+   que no quede el corte duro entre tonos. */
+.navy{--bg:#000A1D;
+  background:
+    linear-gradient(to bottom,#020D1F 0,transparent clamp(160px,22vh,320px)),
+    linear-gradient(to top,#020D1F 0,transparent clamp(160px,22vh,320px)),
+    #000A1D}
+.lead2{font-size:clamp(1.1rem,1.6vw,1.6rem);font-weight:300;line-height:1.36;letter-spacing:-.018em}
+.mini{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,30px);
+  border-top:1px solid var(--fg-18);padding-top:26px}
+.mini li b{display:block;font-size:clamp(1.6rem,2.7vw,2.5rem);font-weight:200;letter-spacing:-.042em;line-height:1}
+.mini li span{color:var(--fg-38);margin-top:9px;display:block}
+
+.pnl{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,1.8vw,30px);
+  margin-top:clamp(48px,7vw,120px);perspective:1800px}
+.pnl .p{position:relative;overflow:hidden;border-radius:clamp(10px,1vw,18px);
+  background:#010815;transform-style:preserve-3d;will-change:transform}
+.pnl .p img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;will-change:transform}
+.pnl .p1{aspect-ratio:1500/1483}
+.pnl .p2{aspect-ratio:1500/1395;margin-top:clamp(44px,9vw,170px)}
+/* velo para que el texto se lea siempre */
+.pnl .scrim{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(165deg,rgba(1,8,21,.86) 0%,rgba(1,8,21,.55) 26%,rgba(1,8,21,.10) 52%),
+             linear-gradient(to top,rgba(1,8,21,.88) 0%,rgba(1,8,21,.30) 26%,transparent 46%)}
+/* textos sobrepuestos */
+.pnl .tx{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:space-between;
+  padding:clamp(22px,2.6vw,44px);pointer-events:none}
+.pnl .pt{font-size:clamp(1.05rem,2.05vw,2.2rem);font-weight:400;line-height:1.16;letter-spacing:-.022em;max-width:15ch}
+.pnl .pt span{display:block;overflow:hidden}
+.pnl .pt span > i{display:block;font-style:normal}
+.pnl .pt .a{color:#F2F4F8}
+.pnl .pt .b{color:rgba(227,230,235,.44)}
+.pnl .pd{font-size:clamp(.78rem,.94vw,.95rem);line-height:1.62;color:rgba(227,230,235,.72);max-width:42ch}
+.pnl .pd b{display:block;font-weight:400;color:#F2F4F8;margin-bottom:7px;letter-spacing:.01em}
+/* barrido de luz sobre el vidrio del panel — tambien en los marcos de video */
+.pnl .swp,.vfr .swp{position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(103deg,transparent 30%,rgba(227,230,235,.05) 46%,rgba(227,230,235,.10) 50%,rgba(227,230,235,.04) 54%,transparent 70%);
+  transform:translateX(-40%)}
+.pnl .edg{position:absolute;inset:0;z-index:4;pointer-events:none;border-radius:inherit;
+  box-shadow:inset 0 0 0 1px rgba(227,230,235,.10)}
+
+/* ── video de bancos de carga con texto sobrepuesto ── */
+.vfr{border-radius:clamp(10px,1vw,18px);box-shadow:inset 0 0 0 1px var(--fg-18);
+  transform-style:preserve-3d;will-change:transform}
+/* Igual que las imagenes: el video mide mas que el marco para tener por donde
+   viajar con el scroll. 110 % / -5 % en vez del 118 % / -9 % de .med porque uno
+   de los dos es una captura de pantalla y recortarle un 9 % arriba y abajo se
+   comeria parte de la interfaz. El recorrido de +/-4 % cabe en esa holgura. */
+.vfr video{width:100%;height:110%;top:-5%;left:0;object-fit:cover;z-index:1;background:var(--dark);will-change:transform}
+/* el tilt 3D necesita el punto de fuga en el contenedor, como .pnl */
+.vtool{perspective:1800px}
+.vgr{position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(165deg,rgba(1,8,21,.80) 0%,rgba(1,8,21,.42) 28%,transparent 54%),
+             linear-gradient(to top,rgba(1,8,21,.86) 0%,rgba(1,8,21,.24) 24%,transparent 44%)}
+.vtx{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:space-between;
+  padding:clamp(22px,2.8vw,50px);pointer-events:none}
+.vtx .pt{font-size:clamp(1.05rem,2.2vw,2.4rem);font-weight:400;line-height:1.16;letter-spacing:-.022em;max-width:16ch}
+.vtx .pt span{display:block;overflow:hidden}
+.vtx .pt span > i{display:block;font-style:normal}
+.vtx .pt .a{color:#F2F4F8}
+.vtx .pt .b{color:rgba(227,230,235,.44)}
+.vtx .pd{font-size:clamp(.78rem,.94vw,.95rem);line-height:1.62;color:rgba(227,230,235,.72);max-width:44ch}
+.vtx .pd b{display:block;font-weight:400;color:#F2F4F8;margin-bottom:7px}
+
+.quo{margin-top:clamp(64px,9vw,150px);font-size:clamp(1.35rem,3.4vw,3.1rem);font-weight:200;
+  letter-spacing:-.038em;line-height:1.14;max-width:21ch}
+.wq{display:inline-block;opacity:.14;will-change:opacity}
+
+@media(max-width:860px){
+  .pnl{grid-template-columns:1fr;gap:clamp(16px,4vw,28px);perspective:none}
+  .pnl .p2{margin-top:0}
+}
+
+/* cifras */
+.figs{display:grid;grid-template-columns:repeat(4,1fr)}
+.figs .f{padding:clamp(34px,4vw,64px) 26px clamp(34px,4vw,64px) 0;border-right:1px solid var(--fg-10)}
+.figs .f:last-child{border-right:0}
+/* .num nace en clamp(...,10rem) para titulares sueltos. Dentro de la grilla
+   de 4 columnas ese tamano desborda la columna ("±0,5%" no cabe), asi que aqui
+   se reescala al ancho real de la celda. */
+.figs .f .num{display:block;margin-bottom:18px;font-size:clamp(2.2rem,5.6vw,6rem)}
+.figs .f .lbl{color:var(--fg-38)}
+
+/* cifras compactas — bajo una imagen a sangre */
+.figs.sm .f{padding-block:clamp(22px,2.6vw,40px)}
+.figs.sm .f .num{font-size:clamp(1.5rem,3.2vw,2.9rem);line-height:1;margin-bottom:12px}
+
+/* ── imagen ancha a sangre, con parallax propio ── */
+/* width:100% es obligatorio: con el ancho en auto, el max-height topa la altura
+   y aspect-ratio deriva el ancho desde ella, dejando la banda estrecha y pegada
+   a la izquierda. Con el ancho fijo, la que cede es la altura. */
+.med.wide{width:100%;max-height:78svh}
+.med.wide > img{position:absolute;left:0;top:-13%;width:100%;height:126%;
+  object-fit:cover;will-change:transform}
+/* La imagen es simetrica (fuga centrada, filas espejadas): el texto pegado a un
+   costado y el scrim diagonal de .vgr peleaban contra su eje. Aqui ambos se
+   centran y el velo pasa a ser simetrico arriba/abajo. */
+.med.wide .vgr{background:
+  /* Arriba pasaba lo mismo que abajo: cerraba en .80 y sobre un color que
+     ademas no era el de la seccion, asi que el canto superior de la foto se
+     leia como una linea recta contra la banda de la costura. Ahora tambien
+     cierra OPACO y en el navy exacto, y el fundido cubre el tercio de arriba —
+     la misma proporcion que tenia el degradado de referencia, medido: iba de
+     rgb(7,17,35) a rgb(3,11,17) y se aplanaba al 55 % de un cuadro 16:9, que
+     sobre esta banda de 21:9 son unos 38 puntos. */
+  linear-gradient(to bottom,var(--dark) 0,rgba(2,13,31,.62) 11%,
+    rgba(2,13,31,.22) 24%,transparent 38%),
+  /* y el de abajo, que ya estaba: sin el, el canto se leia justo encima de las
+     cifras */
+  linear-gradient(to top,var(--dark) 0,rgba(2,13,31,.40) 20%,transparent 46%)}
+.med.wide .vtx{align-items:center;text-align:center;padding:clamp(26px,3.4vw,58px)}
+.med.wide .vtx .pt{max-width:26ch}
+.med.wide .vtx .pd{max-width:54ch}
+
+/* ── VÓRTICE: texto y pantalla lado a lado, la pantalla con parallax data-par ── */
+.vtool{display:grid;grid-template-columns:.82fr 1.18fr;gap:clamp(28px,4.2vw,72px);align-items:center}
+.vtool-tx{display:grid;gap:clamp(16px,1.8vw,26px);align-content:center}
+/* El marco tiene que leerse como una pantalla dentro de un bisel, no como una
+   captura pegada sobre el fondo. Tres cosas lo hacen: un filo claro ARRIBA, que
+   es de donde viene la luz en toda la pagina; una sombra de contacto corta, que
+   es la que dice que hay un objeto y no un dibujo; y la larga y difusa que ya
+   estaba, que lo separa del navy. */
+.vtool-md{box-shadow:
+  inset 0 1px 0 rgba(227,230,235,.20),
+  inset 0 0 0 1px var(--fg-18),
+  0 2px 7px rgba(0,0,0,.45),
+  0 34px 90px -34px rgba(0,0,0,.92)}
+/* el texto sobrepuesto se dimensiona en vw, asi que no se entera de que el
+   marco ahora ocupa la mitad: se reescala a la caja mas pequena */
+.vtool-md .vtx{padding:clamp(16px,1.7vw,28px)}
+.vtool-md .vtx .pt{font-size:clamp(.95rem,1.35vw,1.6rem);max-width:15ch}
+.vtool-md .vtx .pd{font-size:clamp(.72rem,.8vw,.86rem);max-width:34ch}
+
+/* ── titular a dos tonos ── */
+.dual b,.dual i{display:block;font-weight:inherit;font-style:normal}
+.dual i{color:var(--fg-38)}
+
+/* ── tríptico de tarjetas cuadradas ── */
+.tri{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,1.8vw,30px);perspective:1800px}
+.tri .c{position:relative;overflow:hidden;border-radius:clamp(10px,1vw,18px);
+  aspect-ratio:1/1;background:var(--fg-10)}
+.tri .c > img{width:100%;height:100%;object-fit:cover;display:block;will-change:transform}
+.tri .scrim{position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(180deg,rgba(1,8,21,.74) 0%,rgba(1,8,21,.22) 30%,transparent 50%),
+             linear-gradient(to top,rgba(1,8,21,.90) 0%,rgba(1,8,21,.32) 26%,transparent 48%)}
+.tri .edg{position:absolute;inset:0;z-index:4;pointer-events:none;border-radius:inherit;
+  box-shadow:inset 0 0 0 1px rgba(227,230,235,.10)}
+.tri .tx{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;
+  justify-content:space-between;padding:clamp(20px,2.2vw,34px);pointer-events:none}
+.tri .tx h3{color:#F2F4F8}
+.tri .tx p{font-size:clamp(.76rem,.9vw,.9rem);line-height:1.6;
+  color:rgba(227,230,235,.72);max-width:34ch}
+
+/* webgl */
+#hall{height:100svh;overflow:hidden;position:relative;--bg:var(--dark);--fg:var(--light)}
+#hall canvas{position:absolute;inset:0;width:100%;height:100%}
+#hall .ov{position:absolute;inset:0;z-index:2;pointer-events:none;padding:var(--pad);display:flex;flex-direction:column;justify-content:space-between}
+#hall .ov .top{max-width:34ch}
+#hall .ov .bot{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap}
+#hall .rd{display:flex;gap:clamp(20px,3vw,56px)}
+#hall .rd div .v{font-size:clamp(1.3rem,2.4vw,2.4rem);font-weight:200;letter-spacing:-.035em;font-variant-numeric:tabular-nums;display:block}
+#hall .rd div .lbl{color:rgba(227,230,235,.4);margin-top:6px}
+#hall .fade{position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(2,13,31,.8),transparent 26%,transparent 62%,rgba(2,13,31,.92))}
+
+/* ── carrusel 3D de pantallas ── */
+.tvw{position:relative;perspective:2000px;perspective-origin:50% 46%}
+.tvs{position:relative;height:clamp(280px,42vw,580px);transform-style:preserve-3d;cursor:grab;touch-action:pan-y}
+.tvs.dg{cursor:grabbing}
+.tv{
+  position:absolute;top:0;left:50%;height:100%;
+  width:clamp(250px,38vw,620px);margin-left:calc(clamp(250px,38vw,620px) / -2);
+  transform-style:preserve-3d;will-change:transform,opacity;
+}
+.tv .cs{
+  position:relative;width:100%;height:100%;padding:9px 9px 17px;
+  background:var(--bg);border:1px solid var(--fg-18);
+  box-shadow:0 30px 70px -30px rgba(2,13,31,.6);
+  transition:border-color .6s var(--e),box-shadow .6s var(--e);
+}
+.tv.act .cs{border-color:var(--fg-38);box-shadow:0 46px 100px -34px rgba(2,13,31,.85)}
+.tv .scr{position:relative;width:100%;height:100%;overflow:hidden;background:var(--fg-10)}
+.tv .scr img{width:100%;height:100%;object-fit:cover;transform:scale(1.07);will-change:transform}
+.tv .glr{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(112deg,rgba(227,230,235,.20) 0%,rgba(227,230,235,.03) 26%,transparent 48%,transparent 70%,rgba(227,230,235,.09) 100%)}
+.tv .scan{position:absolute;inset:0;pointer-events:none;opacity:.22;
+  background:repeating-linear-gradient(to bottom,rgba(2,13,31,.55) 0 1px,transparent 1px 3px)}
+.tv .dim{position:absolute;inset:0;background:var(--bg);opacity:.55;pointer-events:none;transition:opacity .7s var(--e)}
+.tv.act .dim{opacity:0}
+.tv .led{position:absolute;left:50%;bottom:5px;width:26px;height:3px;margin-left:-13px;background:var(--fg-18);transition:background .6s var(--e)}
+.tv.act .led{background:var(--fg)}
+.tv .stk{position:absolute;top:14px;left:14px;z-index:3;font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--light);mix-blend-mode:difference;opacity:0;transition:opacity .6s var(--e)}
+.tv.act .stk{opacity:1}
+.tv .rfl{position:absolute;top:100%;left:0;width:100%;height:32%;overflow:hidden;pointer-events:none;opacity:.13;
+  -webkit-mask-image:linear-gradient(to bottom,#000,transparent);mask-image:linear-gradient(to bottom,#000,transparent)}
+.tv .rfl img{width:100%;height:auto;transform:scaleY(-1);transform-origin:top}
+/* pie de texto del carrusel */
+.tvc{margin-top:clamp(26px,3.4vw,50px);display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,54px);align-items:start;min-height:118px}
+.tvc .ln2{display:block;will-change:transform,opacity}
+.tvc .lbl{color:var(--fg-38);margin-bottom:12px}
+.sl-nav{display:flex;align-items:center;gap:22px;margin-top:clamp(24px,3vw,40px)}
+.sl-nav button{width:52px;height:52px;border:1px solid var(--fg-18);border-radius:50%;display:grid;place-items:center;transition:.5s var(--e)}
+.sl-nav button:hover{background:var(--fg);color:var(--bg)}
+.sl-nav .tk{flex:1;height:1px;background:var(--fg-18);position:relative}
+.sl-nav .tk>i{position:absolute;top:0;height:1px;background:var(--fg);width:25%;left:0;transition:left .8s var(--e)}
+.sl-nav .ct{font-variant-numeric:tabular-nums;color:var(--fg-38);font-size:11px;letter-spacing:.16em}
+.sl-nav .ct b{color:var(--fg);font-weight:400}
+#dl{position:fixed;z-index:801;pointer-events:none;transform:translate(-50%,-50%) scale(.5);opacity:0;
+  font-size:10px;font-weight:500;letter-spacing:.17em;text-transform:uppercase;color:var(--dark);
+  background:var(--light);border-radius:100px;padding:9px 15px;white-space:nowrap}
+
+/* scroll horizontal servicios */
+#svc{overflow:hidden;--bg:var(--dark);--fg:var(--light)}
+.hz{height:100svh;display:flex;flex-direction:column;justify-content:center;gap:clamp(26px,3.4vw,48px)}
+/* Los dos primeros paneles de la pista: la herramienta VÓRTICE y la portada de
+   servicios. Viajan con las fichas en vez de quedarse fijos arriba, que es lo
+   que hacía antes la cabecera (.hz-hd, ya retirada). */
+.sv-int{flex:0 0 min(88vw,1240px);display:grid;grid-template-columns:.86fr 1.14fr;
+  gap:clamp(24px,3.2vw,60px);align-items:center;perspective:1800px;
+  margin-right:clamp(26px,3.4vw,60px)}
+.sv-int-tx{display:grid;gap:clamp(14px,1.7vw,24px);align-content:center}
+.sv-int-tx h2{max-width:16ch}
+.sv-int-tx p{max-width:46ch}
+.sv-tit{flex:0 0 min(46vw,540px);display:flex;flex-direction:column;justify-content:center;
+  align-items:flex-start;margin-right:clamp(26px,3.4vw,60px)}
+.sv-tit h2{max-width:13ch;margin-bottom:clamp(16px,1.8vw,26px)}
+.sv-tit p{max-width:30ch;margin-bottom:22px;color:var(--fg-60)}
+.hz-tr{display:flex;gap:1px;padding-inline:var(--pad);align-items:stretch;will-change:transform}
+/* Estas fichas se probaron con el vidrio de las fichas de norma —separadas y
+   redondeadas— y el cliente prefirió la tira continua de siempre: filo de 1 px,
+   bordes colapsados entre fichas y esquinas vivas. */
+.sv{
+  flex:0 0 clamp(255px,26.5vw,378px);
+  border:1px solid rgba(227,230,235,.11);margin-right:-1px;padding:26px 26px 28px;
+  display:flex;flex-direction:column;position:relative;overflow:hidden;
+}
+/* Foto arriba, a sangre hasta los bordes de la tarjeta. Antes el hover subía
+   un relleno claro desde abajo; con foto lo taparía, así que ahora el hover
+   enciende el borde y acerca la imagen.
+   La imagen mide 128% de ancho y arranca en -14%: ese sobrante es el recorrido
+   del parallax horizontal (xPercent ±9), que va contra el avance de la pista. */
+.sv{transition:border-color .6s var(--e),background .6s var(--e)}
+.sv:hover{border-color:rgba(227,230,235,.34);background:rgba(227,230,235,.035);z-index:2}
+.sv>*{position:relative;z-index:1}
+.sv-im{position:relative;margin:-26px -26px 22px;aspect-ratio:16/10;overflow:hidden;background:#D9DCE0}
+/* max-width:none: el reset global limita las img al 100% y se comia el 28% de sobrante */
+.sv-im img{position:absolute;top:0;left:-14%;width:128%;max-width:none;height:100%;object-fit:cover;will-change:transform;
+  transition:filter .8s var(--e)}
+.sv-im::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(2,13,31,.55),rgba(2,13,31,0) 34%,rgba(2,13,31,0) 70%,rgba(2,13,31,.35))}
+.sv .hdr{position:absolute;z-index:2;left:18px;right:18px;top:15px;display:flex;justify-content:space-between;align-items:baseline}
+.sv .n,.sv .cn{color:rgba(255,255,255,.86)}
+.sv h3{margin-bottom:11px}
+.sv p{font-size:.855rem;line-height:1.58;color:rgba(227,230,235,.6);transition:color .5s}
+.sv ul{list-style:none;margin-top:14px;display:grid;gap:7px}
+.sv ul li{font-size:.79rem;line-height:1.45;padding-left:15px;position:relative;color:rgba(227,230,235,.46);transition:color .5s}
+.sv ul li::before{content:'';position:absolute;left:0;top:.62em;width:6px;height:1px;background:currentColor;opacity:.7}
+.sv .tg{display:flex;flex-wrap:wrap;gap:5px;margin-top:auto;padding-top:18px}
+.sv .tg span{font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;border:1px solid rgba(227,230,235,.16);padding:5px 9px;border-radius:100px;transition:border-color .5s,color .5s;color:rgba(227,230,235,.55)}
+.hz-bar{margin-inline:var(--pad);height:1px;background:rgba(227,230,235,.14);position:relative}
+.hz-bar>i{position:absolute;inset:0;background:var(--light);transform:scaleX(0);transform-origin:left}
+
+/* configurador */
+#cfg{--bg:var(--dark);--fg:var(--light)}
+/* controles · planta · resultados. La planta se lleva la columna ancha: es la
+   pieza que necesita sitio, y asi el configurador entero cabe de una vez en vez
+   de continuar dos pantallas mas abajo. */
+.cf{display:grid;grid-template-columns:minmax(230px,.72fr) minmax(0,1.5fr) minmax(272px,.92fr);
+  gap:clamp(24px,2.6vw,50px);align-items:start;margin-top:clamp(36px,4.6vw,64px)}
+.ctrl{display:grid;gap:clamp(24px,3vw,38px)}
+.ctrl .g label{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px}
+.ctrl .g label .v{font-size:1.5rem;font-weight:200;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:1px;background:rgba(227,230,235,.2);cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--light);transition:transform .3s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.5)}
+input[type=range]::-moz-range-thumb{width:13px;height:13px;border:0;border-radius:50%;background:var(--light)}
+.seg{display:flex;gap:1px}
+.seg button{flex:1;padding:14px 6px;border:1px solid rgba(227,230,235,.16);margin-right:-1px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;transition:.4s var(--e)}
+.seg button.on{background:var(--light);color:var(--dark);border-color:var(--light);position:relative;z-index:1}
+/* mismo vidrio que las fichas de norma: el resultado se lee como un
+   instrumento y no como una tabla dentro de un recuadro */
+.out{border:1px solid rgba(227,230,235,.13);padding:clamp(24px,3vw,40px);
+  background:rgba(227,230,235,.055);border-radius:clamp(10px,1vw,16px);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.out .r{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:19px 0;border-bottom:1px solid rgba(227,230,235,.1)}
+.out .r:last-of-type{border-bottom:0}
+.out .r .k{color:rgba(227,230,235,.5);font-size:.9rem}
+.out .r .v{font-size:clamp(1.25rem,2vw,1.9rem);font-weight:200;letter-spacing:-.03em;font-variant-numeric:tabular-nums;text-align:right}
+.out .r .v em{font-style:normal;font-size:.55em;opacity:.5;margin-left:5px}
+.out .note{margin-top:24px;font-size:.78rem;line-height:1.6;color:rgba(227,230,235,.38)}
+
+/* ---------- planta 2D del configurador ----------
+   Unico sitio del sitio con color fuera del par de dos. No es decoracion: frio
+   y caliente son la variable que el dibujo codifica, y en escala de grises no
+   se distinguen. El naranja es el del logo, no un tono nuevo. */
+:root{--cold:#5E9BE0;--hot:#E4622A}
+.plan{border:1px solid rgba(227,230,235,.14)}
+/* por debajo de 1360 no caben tres columnas legibles: controles y resultados se
+   reparten el ancho y la planta pasa a ocuparlo entero */
+@media (max-width:1360px){
+  .cf{grid-template-columns:1fr 1fr}
+  .plan{grid-column:1/-1;order:3}
+}
+.plan-hd{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:14px clamp(14px,1.6vw,20px);border-bottom:1px solid rgba(227,230,235,.1);color:var(--fg-38)}
+.lg2{display:flex;gap:clamp(12px,1.6vw,24px);flex-wrap:wrap}
+.lg2 .i{display:flex;align-items:center;gap:7px;font-size:10px;letter-spacing:.13em;text-transform:uppercase;font-weight:500;color:rgba(227,230,235,.5)}
+.lg2 .i::before{content:'';width:11px;height:11px;flex:0 0 11px}
+.lg2 .cold::before{background:var(--cold);opacity:.55}
+.lg2 .hot::before{background:var(--hot);opacity:.55}
+.lg2 .unit::before{background:rgba(227,230,235,.72)}
+.lg2 .cnt::before{border:1px dashed rgba(227,230,235,.72)}
+.plan-cv{padding:clamp(8px,1.1vw,16px);background:rgba(227,230,235,.02)}
+/* el viewBox se ajusta a la proporcion real de la sala en cada redibujado, asi
+   que el alto sigue al ancho y no queda banda muerta arriba ni abajo */
+.plan-st{position:relative}
+/* el lienzo es diminuto (una celda de la malla por pixel) y se estira por
+   CSS: el suavizado lo pone el compositor, no la CPU */
+#plc{position:absolute;display:block;image-rendering:auto}
+.plan-cv svg{position:relative;width:100%;height:auto;display:block}
+.plan-ft{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));border-top:1px solid rgba(227,230,235,.1)}
+.plan-ft .f{padding:14px clamp(12px,1.4vw,18px);border-right:1px solid rgba(227,230,235,.1)}
+.plan-ft .f:last-child{border-right:0}
+.plan-ft .f .lbl{display:block;color:var(--fg-38);margin-bottom:8px;font-size:10px}
+.plan-ft .f b{font-size:clamp(.98rem,1.35vw,1.3rem);font-weight:200;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.plan-nt{padding:14px clamp(14px,1.6vw,20px) 16px;font-size:.76rem;line-height:1.58;
+  color:rgba(227,230,235,.38);border-top:1px solid rgba(227,230,235,.1)}
+.plan-nt.warn{color:var(--hot);opacity:.9}
+/* el aire en movimiento: la linea discontinua corre a lo largo del pasillo */
+/* el aire solo corre mientras la seccion esta a la vista: si no, la pagina
+   entera repinta trazos a 60 fps para nadie */
+.plan .pf,.plan .pf2{stroke-dasharray:30 9}
+.plan.run .pf{animation:flow 1.9s linear infinite}
+.plan.run .pf2{stroke-dasharray:24 8;animation:flow2 2.6s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-39}}
+@keyframes flow2{to{stroke-dashoffset:-32}}
+
+/* por qué: cuatro tarjetas con foto.
+   Sustituyen a cuatro paneles pegados de una pantalla cada uno, casi vacíos.
+   La imagen mide 118% del marco y arranca en -9%: ese sobrante es el recorrido
+   del parallax interno (±7%) y además deja margen para la escala del tilt, así
+   que nunca asoma el fondo por arriba ni por abajo. El relleno inferior de la
+   fila es para el desfase de las columnas, que viajan a distinta velocidad. */
+.wy-hd{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(24px,5vw,90px);align-items:end}
+.wy-hd .bd{max-width:40ch;justify-self:end}
+.wy{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,1.6vw,26px);
+  margin-top:clamp(52px,6vw,100px);padding-bottom:clamp(30px,6vw,120px)}
+.wy-c{perspective:1200px}
+.wy-im{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:clamp(8px,.8vw,14px);
+  background:#0B1A30;transform-style:preserve-3d;will-change:transform}
+.wy-im img{position:absolute;left:0;top:-9%;width:100%;height:118%;object-fit:cover;will-change:transform}
+.wy-im::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to top,rgba(2,13,31,.5),rgba(2,13,31,0) 42%)}
+.wy-tx{padding-top:clamp(18px,1.8vw,26px)}
+.wy-n{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;color:var(--fg-38);
+  margin-bottom:12px;font-variant-numeric:tabular-nums}
+.wy-tx h3{margin-bottom:10px;max-width:18ch}
+.wy-tx p{max-width:36ch;color:var(--fg-60)}
+
+/* estándares */
+.std{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--fg-10);border:1px solid var(--fg-10)}
+.std .i{background:var(--bg);padding:30px 26px;transition:background .55s var(--e),color .55s var(--e)}
+.std .i:hover{background:var(--fg);color:var(--bg)}
+.std .i b{display:block;font-size:1.15rem;font-weight:300;letter-spacing:-.02em;margin-bottom:9px}
+.std .i span{font-size:.85rem;line-height:1.55;opacity:.6}
+
+/* banner a sangre: certificación a la izquierda, normas a la derecha.
+   El alto ya no es fijo — lo pone el contenido, con un mínimo — porque ahora
+   lleva dos columnas. La foto sigue absoluta sobre toda la sección. */
+.bnr{position:relative;min-height:clamp(560px,92svh,900px);overflow:hidden;--bg:var(--dark);--fg:var(--light)}
+.bnr>img{width:100%;height:120%;object-fit:cover;position:absolute;top:-10%}
+/* El velo tapaba casi toda la foto y la dejaba apagada. Ahora cae con fuerza
+   solo sobre la columna del titular; a la derecha las fichas de normas llevan
+   su propio vidrio, así que ahí basta con un velo suave. */
+.bnr .vg{position:absolute;inset:0;
+  background:
+    linear-gradient(100deg,rgba(2,13,31,.96) 6%,rgba(2,13,31,.82) 26%,rgba(2,13,31,.36) 52%,rgba(2,13,31,.22) 78%,rgba(2,13,31,.4)),
+    radial-gradient(120% 90% at 50% 50%,rgba(2,13,31,0) 42%,rgba(2,13,31,.55))}
+.bnr .in{position:relative;z-index:1;min-height:inherit;display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,560px);gap:clamp(30px,5vw,96px);align-items:center;
+  padding-inline:var(--pad);padding-block:clamp(70px,9vw,130px)}
+.bnr .bx{max-width:620px}
+.nrm > .lbl{display:block;color:rgba(227,230,235,.55);margin-bottom:16px}
+.bnr .std{grid-template-columns:repeat(2,1fr);background:rgba(227,230,235,.14);
+  border-color:rgba(227,230,235,.14);border-radius:12px;overflow:hidden;
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.bnr .std .i{background:rgba(2,13,31,.6);padding:clamp(18px,1.8vw,26px)}
+.bnr .std .i:hover{background:rgba(227,230,235,.94);color:#020D1F}
+.bnr ul{list-style:none;display:flex;flex-wrap:wrap;gap:7px;margin:26px 0 30px}
+.bnr ul li{font-size:10.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;border:1px solid rgba(227,230,235,.2);border-radius:100px;padding:9px 15px;color:rgba(227,230,235,.7)}
+
+/* acordeón */
+.acc{border-top:1px solid var(--fg-18)}
+.acc .it{border-bottom:1px solid var(--fg-10)}
+.acc .hd{display:flex;align-items:center;gap:clamp(16px,2.4vw,34px);padding:clamp(20px,2.3vw,30px) 0;cursor:pointer;transition:padding-left .6s var(--e)}
+.acc .hd:hover{padding-left:12px}
+.acc .hd .k{color:var(--fg-38);width:30px;flex:none;font-variant-numeric:tabular-nums;font-size:11px;letter-spacing:.14em}
+.acc .hd h4{flex:1}
+.acc .pm{width:15px;height:15px;position:relative;flex:none}
+.acc .pm::before,.acc .pm::after{content:'';position:absolute;background:currentColor;transition:transform .55s var(--e)}
+.acc .pm::before{top:50%;left:0;width:100%;height:1px}
+.acc .pm::after{left:50%;top:0;height:100%;width:1px}
+.acc .it.op .pm::after{transform:scaleY(0)}
+.acc .bo{max-height:0;overflow:hidden;transition:max-height .7s var(--e)}
+.acc .bo p{padding:0 0 28px clamp(46px,5vw,64px);max-width:66ch}
+
+/* ---------- segunda pista horizontal: sectores + proceso ----------
+   Mismo lenguaje que la de servicios: paneles de portada y tarjetas que viajan
+   de lado dentro del pin. Los sectores ya no llevan foto (las que había no eran
+   de los sectores) y las fases conservan su punto, que se enciende al pasar. */
+.pz-tit{flex:0 0 min(44vw,520px);display:flex;flex-direction:column;justify-content:center;
+  align-items:flex-start;margin-right:clamp(26px,3.4vw,60px)}
+.pz-tit h2{max-width:14ch;margin-bottom:clamp(16px,1.8vw,26px)}
+.pz-tit p{max-width:34ch;color:var(--fg-60)}
+.pz-tit2{border-left:1px solid var(--fg-10);padding-left:clamp(26px,3.4vw,60px);
+  margin-left:clamp(20px,2.6vw,44px)}
+
+.pz-c,.pz-f{position:relative;overflow:hidden;
+  flex:0 0 clamp(226px,20vw,296px);display:flex;flex-direction:column;
+  min-height:clamp(290px,40vh,400px);padding:clamp(22px,2.2vw,32px);
+  /* vidrio, como las fichas de norma del banner TIER */
+  border:1px solid rgba(227,230,235,.13);border-radius:clamp(10px,1vw,16px);
+  background:rgba(227,230,235,.055);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+  margin-right:clamp(10px,1.1vw,18px);
+  transition:background .55s var(--e),color .55s var(--e),border-color .55s var(--e)}
+.pz-c > *,.pz-f > *{position:relative;z-index:1}
+/* el icono de línea y el número gigante al fondo: sin ellos la tarjeta era un
+   bloque de texto en medio de mucho vacío */
+.pz-ico{display:block;width:clamp(30px,2.6vw,38px);height:clamp(30px,2.6vw,38px);
+  color:var(--fg-38);margin-bottom:clamp(20px,2.4vw,34px);transition:color .55s var(--e)}
+.pz-ico svg{width:100%;height:100%;display:block}
+.pz-c:hover .pz-ico{color:inherit}
+.pz-g{position:absolute;right:.02em;bottom:-.16em;z-index:0;pointer-events:none;user-select:none;
+  font-size:clamp(4rem,5.6vw,6.4rem);font-weight:200;line-height:.8;letter-spacing:-.06em;
+  color:var(--fg);opacity:.038;font-variant-numeric:tabular-nums}
+/* la regla se dibuja cuando la tarjeta cruza */
+.pz-rl{position:absolute;left:0;right:0;top:-1px;height:2px;background:var(--fg);
+  transform:scaleX(0);transform-origin:left;transition:transform .7s var(--e);z-index:2}
+.pz-c.on .pz-rl,.pz-f.on .pz-rl,.pz-c:hover .pz-rl,.pz-f:hover .pz-rl{transform:scaleX(1)}
+.pz-c:hover,.pz-f:hover{background:var(--fg);color:var(--bg);border-color:transparent;z-index:2}
+.pz-n,.pz-k{font-size:11px;font-weight:500;letter-spacing:.15em;color:var(--fg-38);
+  text-transform:uppercase;font-variant-numeric:tabular-nums;transition:color .55s var(--e)}
+.pz-c h3,.pz-f h3{margin:0 0 9px}
+.pz-c .pz-n{margin-bottom:12px;display:block}
+.pz-c p,.pz-f p{color:var(--fg-60);transition:color .55s var(--e)}
+.pz-c:hover .pz-n,.pz-c:hover p,.pz-f:hover .pz-k,.pz-f:hover p{color:inherit}
+/* el punto de cada fase se enciende cuando la tarjeta cruza el centro */
+/* el punto va tras la etiqueta, no empujado al fondo: abajo estaba el número
+   gigante y el texto de la fase acababa encima de él */
+.pz-f .pz-dt{width:7px;height:7px;border-radius:50%;background:var(--fg-18);
+  margin:clamp(20px,2.3vw,30px) 0 clamp(22px,2.6vw,36px);transition:background .5s,transform .5s}
+.pz-f.on .pz-dt,.pz-f:hover .pz-dt{background:currentColor;transform:scale(1.5)}
+.pz-f h3{margin-top:0}
+@media (max-width:860px){
+  .pz-tit{flex:0 0 78vw}
+  .pz-tit2{border-left:0;padding-left:0;margin-left:0}
+  .pz-c,.pz-f{flex:0 0 66vw;min-height:0}
+}
+
+/* ---------- clientes ----------
+   Dos filas que viajan en sentidos opuestos. La segunda va más pequeña y con
+   menos opacidad: es el fondo, y esa diferencia de tamaño y velocidad es la que
+   da la profundidad. El logo entra desaturado y recupera su color al pasar el
+   puntero — nunca en negro plano: los que traen fondo propio se convertían en
+   una caja gris. */
+.cli{padding-block:clamp(60px,7.5vw,116px);overflow:hidden}
+.cli-hd{display:grid;grid-template-columns:1.12fr .88fr;gap:clamp(20px,4vw,70px);
+  align-items:end;margin-bottom:clamp(34px,4.6vw,66px)}
+.cli-hd h2{max-width:20ch}
+.cli-hd .bd-s{max-width:40ch;justify-self:end;color:var(--fg-60)}
+/* las tarjetas entran y salen difuminadas por los bordes */
+.cli-vp{display:grid;gap:clamp(12px,1.4vw,22px);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.cli-fila{display:flex;width:max-content;will-change:transform}
+.cli-pista{display:flex;gap:clamp(12px,1.4vw,22px);padding-right:clamp(12px,1.4vw,22px);will-change:transform}
+.cli-c{flex:0 0 clamp(208px,19vw,282px);display:flex;flex-direction:column;gap:12px;
+  background:#fff;border:1px solid var(--fg-10);border-radius:clamp(10px,1vw,16px);
+  padding:clamp(18px,1.8vw,26px);
+  transition:border-color .6s var(--e),box-shadow .6s var(--e)}
+.cli-c:hover{border-color:var(--fg-18);box-shadow:0 24px 44px -30px rgba(2,13,31,.45)}
+.cli-lg{height:clamp(54px,5.2vw,76px);display:flex;align-items:center;justify-content:center}
+.cli-lg img{max-height:100%;max-width:100%;width:auto;object-fit:contain;
+  filter:saturate(.48) opacity(.86);transition:filter .7s var(--e)}
+.cli-c:hover .cli-lg img{filter:none}
+.cli-n{font-size:.92rem;letter-spacing:-.012em;margin-top:auto}
+.cli-s{font-size:9.5px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--fg-38)}
+/* la fila del fondo: sin texto, más chica y más apagada */
+.cli-fila2{opacity:.6}
+.cli-fila2 .cli-c{flex-basis:clamp(148px,13.5vw,196px);padding:clamp(12px,1.2vw,18px)}
+.cli-fila2 .cli-lg{height:clamp(38px,3.4vw,52px)}
+.cli-fila2 .cli-n,.cli-fila2 .cli-s{display:none}
+@media (max-width:860px){
+  .cli-hd{grid-template-columns:1fr}
+  .cli-hd .bd-s{justify-self:start}
+  .cli-fila2{display:none}
+  .cli-c{flex-basis:clamp(168px,52vw,220px)}
+}
+
+/* contacto */
+.cg{display:grid;grid-template-columns:.82fr 1fr;gap:clamp(30px,5vw,90px);align-items:start}
+.ci{padding:20px 0;border-bottom:1px solid var(--fg-10)}
+.ci .lbl{color:var(--fg-38);display:block;margin-bottom:8px}
+.wa{display:grid;gap:1px;margin-top:30px;background:var(--fg-10);border:1px solid var(--fg-10)}
+.wa a{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 22px;background:var(--bg);transition:.5s var(--e)}
+.wa a:hover{background:var(--fg);color:var(--bg)}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:0 clamp(18px,2.4vw,34px)}
+.fd{position:relative;padding-top:24px;margin-bottom:6px}
+.fd input,.fd select,.fd textarea{width:100%;border-bottom:1px solid var(--fg-18);padding:13px 0;font-size:1rem;font-weight:300;transition:border-color .4s}
+.fd textarea{resize:vertical;min-height:92px}
+.fd select{cursor:pointer;appearance:none}
+.fd select option{background:var(--dark);color:var(--light)}
+.on-light .fd select option{background:var(--light);color:var(--dark)}
+.fd input:focus,.fd select:focus,.fd textarea:focus{outline:none;border-color:var(--fg)}
+.fd label{position:absolute;top:24px;left:0;font-size:11px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--fg-38);pointer-events:none;transition:.45s var(--e)}
+.fd input:focus+label,.fd input:not(:placeholder-shown)+label,
+.fd textarea:focus+label,.fd textarea:not(:placeholder-shown)+label,.fd.sl2 label{top:0;font-size:9.5px;color:var(--fg-60)}
+.fd.full{grid-column:1/-1}
+.fend{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-top:32px;flex-wrap:wrap}
+#ok{display:none;border:1px solid var(--fg-18);padding:19px 22px;margin-top:20px;font-size:.92rem}
+#ok.s{display:block}
+
+/* footer */
+.fw{font-size:clamp(3.4rem,17.5vw,16rem);font-weight:200;letter-spacing:-.065em;line-height:.78;color:transparent;-webkit-text-stroke:1px var(--fg-18);padding-inline:var(--pad);user-select:none;white-space:nowrap}
+footer{--bg:var(--dark);--fg:var(--light);background:var(--bg);color:var(--fg);padding:clamp(50px,6vw,90px) var(--pad) 30px;border-top:1px solid rgba(227,230,235,.1)}
+.fgd{display:grid;grid-template-columns:1.5fr repeat(3,1fr);gap:clamp(22px,4vw,60px);padding-bottom:clamp(38px,5vw,68px)}
+.fgd h5{color:rgba(227,230,235,.35);margin-bottom:19px}
+.fgd ul{list-style:none;display:grid;gap:10px}
+.fgd ul a{font-size:.88rem;color:rgba(227,230,235,.62);transition:color .35s}
+.fgd ul a:hover{color:var(--light)}
+/* el pie siempre va sobre oscuro: la version de marca, sin filtro */
+.fgd .br img{height:40px;margin-bottom:18px}
+.fgd .br p{font-size:.88rem;color:rgba(227,230,235,.55);max-width:36ch}
+.fbt{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;padding-top:24px;border-top:1px solid rgba(227,230,235,.1);color:rgba(227,230,235,.35)}
+.fbt .lbl{font-weight:400}
+
+/* cookie */
+#ck{position:fixed;left:var(--pad);bottom:24px;z-index:370;max-width:330px;background:var(--light);color:var(--dark);padding:22px;transform:translateY(160%)}
+#ck p{font-size:.82rem;line-height:1.55;margin-bottom:15px}
+#ck a{text-decoration:underline;text-underline-offset:3px}
+#ck button{border:1px solid rgba(2,13,31,.25);border-radius:100px;padding:11px 20px;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;transition:.4s}
+#ck button:hover{background:var(--dark);color:var(--light)}
+
+/* cursor */
+#cr{position:fixed;width:6px;height:6px;border-radius:50%;background:var(--light);z-index:800;pointer-events:none;transform:translate(-50%,-50%);mix-blend-mode:difference}
+#cx{position:fixed;width:34px;height:34px;border:1px solid rgba(227,230,235,.42);border-radius:50%;z-index:799;pointer-events:none;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:width .4s var(--e),height .4s var(--e)}
+body.big #cx{width:74px;height:74px}
+body.hidec #cx,body.hidec #cr{opacity:0}
+@media (hover:none),(pointer:coarse){#cr,#cx{display:none}}
+
+/* rotar */
+#rt{position:fixed;inset:0;z-index:850;background:var(--dark);display:none;place-items:center;text-align:center;padding:40px}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:1180px){
+  /* la tira de tres no cabe: la entradilla baja y las otras dos se reparten */
+  #hero .lo{grid-template-columns:1fr;gap:22px}
+  #hero .lead{justify-self:start;max-width:52ch}
+  #hero .card{max-width:26rem}
+  #hero .rt{background-position:50% 0,-100% 0,0 76%}
+}
+@media (max-width:1080px){
+  .figs,.std{grid-template-columns:repeat(2,1fr)}
+  .figs .f:nth-child(2n){border-right:0}
+  #mn .grid{grid-template-columns:1fr}
+  #mn .side{display:none}
+  .cf{grid-template-columns:1fr}
+}
+@media (max-width:860px){
+  .stmt .row,.two,.cg,.tri,.vtool,.wy-hd{grid-template-columns:1fr}
+  .wy-hd .bd{justify-self:start}
+  .wy{grid-template-columns:repeat(2,1fr)}
+  .tri{perspective:none}
+  .fg2{grid-template-columns:1fr}
+  .fgd{grid-template-columns:1fr 1fr}
+  .fgd .br{grid-column:1/-1}
+  .hz{height:auto;padding-block:78px}
+  .hz-tr{overflow-x:auto;scrollbar-width:none;padding-bottom:12px}
+  .hz-tr::-webkit-scrollbar{display:none}
+  .sv{flex:0 0 76vw}
+  .sv-int{flex:0 0 86vw;grid-template-columns:1fr;gap:20px}
+  .sv-tit{flex:0 0 76vw}
+  .hz-bar{display:none}
+  .bnr{min-height:0}
+  .bnr .in{grid-template-columns:1fr;padding-block:70px}
+  .bnr .vg{background:linear-gradient(to top,rgba(2,13,31,.96),rgba(2,13,31,.6))}
+  #hall{height:78svh}
+  #ck{left:14px;right:14px;max-width:none}
+  #hd nav a.hs{display:none}
+  /* el pie del hero se apila; el indicador de scroll sobraba encima del boton */
+  #hero .ft{grid-template-columns:1fr;padding-right:0}
+
+  #sc{display:none}
+  .seam{height:clamp(150px,40vw,260px)}
+  .plan-ft{grid-template-columns:1fr 1fr}
+  .plan-ft .f:nth-child(2n){border-right:0}
+  .plan-ft .f:nth-child(-n+2){border-bottom:1px solid rgba(227,230,235,.1)}
+}
+@media (max-width:560px){
+  .figs,.std,.fgd,.wy{grid-template-columns:1fr}
+  .bnr .std{grid-template-columns:1fr}
+  .figs .f{border-right:0;border-bottom:1px solid var(--fg-10)}
+}
+@media (max-width:900px) and (orientation:landscape) and (max-height:470px){#rt{display:grid}}
+@media (prefers-reduced-motion:reduce){
+  /* el marco no llega a abrirse porque su tween vive dentro del `if (!RM)`:
+     se deja abierto de salida en vez de enmarcado para siempre */
+  #hero{--hx:0}
+  *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
+  .ln>i,.wd>i{transform:none!important}
+}
+
+
+/* ============================================================
+   BRILLO
+   ------------------------------------------------------------
+   No es un color: es luz. La palabra que carga el titular y las cifras se
+   rellenan con un degradado metalico —acero, especular, acero— recortado sobre
+   el propio texto, y la banda especular se mueve con el scroll. El destello cae
+   cuando la pieza cruza la pantalla, que es cuando el ojo ya esta ahi; atado a
+   un temporizador se leeria como un GIF parpadeando solo.
+
+   Y sigue sin haber color nuevo. Los tres tonos son el mismo --fg subido y
+   bajado de luminancia: sobre oscuro el especular es blanco, sobre claro es un
+   azul de acero, porque un especular blanco sobre fondo claro no se ve.
+   ============================================================ */
+/* El azul de accion. Es el unico color saturado del sitio y solo aparece en un
+   sitio: el cuadro de flecha del boton principal. Un color que solo significa
+   «pulsa aqui» no compite con nada. */
+:root{ --acc:#2B6BF0 }
+:root{ --gl1:#8FA3BE; --gl2:#DDE5EF; --gl3:#FFFFFF }
+.on-light{ --gl1:#020D1F; --gl2:#2C3D57; --gl3:#5D7292 }
+
+/* respaldo solido, y lo que ven los navegadores sin recorte sobre texto */
+.ln>i em,.d4 em,.bd em{font-style:normal;color:var(--gl2)}
+
+@supports ((-webkit-background-clip:text) or (background-clip:text)){
+  .ln>i em,.figs .f .num,.sh-tbl li b{
+    background:linear-gradient(96deg,
+      var(--gl1) 30%, var(--gl2) 43%, var(--gl3) 48%, var(--gl2) 53%, var(--gl1) 66%);
+    background-size:340% 100%;
+    background-position:var(--sheen,145%) 0;
+    -webkit-background-clip:text;background-clip:text;
+    color:transparent;
+  }
+}
+
+/* ---------- grano ----------
+   Ruido fijo sobre todo el documento, al 3,5 %. No se ve: se nota. Rompe el
+   bandeado de los degradados del hero y le quita a las superficies grandes de
+   color liso el aspecto de plastico. El desplazamiento va en `transform` para
+   que lo componga la GPU sin repintar el ruido en cada fotograma. */
+#grain{
+  position:fixed;inset:-70px;z-index:9;pointer-events:none;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 1s steps(4) infinite;
+}
+@keyframes grain{
+  0%{transform:translate(0,0)}         25%{transform:translate(-24px,14px)}
+  50%{transform:translate(18px,-20px)} 75%{transform:translate(-12px,-8px)}
+  100%{transform:translate(0,0)}
+}
+
+/* El blanco del final de la puerta es neutro (237,237,237) —el mismo del vídeo
+   de la sala confinada— y la sección siguiente va en el claro de la casa
+   (#E3E6EB). Sin este puente se ve un escalón al soltarse el lienzo. */
+#design{background:linear-gradient(to bottom,#F7F7F7 0,var(--light) clamp(180px,24vh,340px))}
+/* La banda azul es lo último de la sección: sin esto quedaba una franja clara
+   de casi 200 px entre ella y la pista oscura que sigue, y se leía como un
+   hueco. El aire lo pone la propia banda con su relleno. */
+#design{padding-bottom:0}
+
+/* ---------- degradado vertical, de los entregables hacia abajo ----------
+   Se probó en diagonal, con una línea cruzando, y quedó demasiado literal. Aquí
+   es el navy de siempre con un degradado vertical: aclara hacia el centro y
+   vuelve a cerrar abajo, lo justo para que la sección no se lea como un bloque
+   plano. Las de arriba se quedan como estaban. */
+/* ---------- vidrio ----------
+   El tratamiento de las fichas de norma del banner TIER: un panel translúcido
+   con desenfoque detrás y filo claro de 1 px. Funciona sobre foto y sobre fondo
+   plano, y es lo que da el aire de instrumento en vez de caja dibujada.
+   Se aplica con la clase o extendiendo estas tres propiedades. */
+.vidrio{background:rgba(227,230,235,.055);border:1px solid rgba(227,230,235,.13);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+  border-radius:clamp(10px,1vw,16px)}
+
+/* ---------- la banda azul de los entregables ----------
+   Va dentro de una sección clara, así que hay que devolverle los tokens
+   oscuros a mano —incluidos los del metalizado (--gl*)— o el titular sale en
+   navy sobre navy. Los márgenes negativos la sacan del padding de .pad. */
+.ent-band{margin-inline:calc(var(--pad) * -1);
+  padding:clamp(40px,5vw,78px) var(--pad) clamp(46px,5.6vw,88px);
+  background:var(--dark);color:var(--light);
+  --bg:#020D1F;--fg:#E3E6EB;
+  --fg-60:rgba(227,230,235,.60);--fg-38:rgba(227,230,235,.38);
+  --fg-18:rgba(227,230,235,.18);--fg-10:rgba(227,230,235,.10);
+  --gl1:#8FA3BE;--gl2:#DDE5EF;--gl3:#FFFFFF}
+.ent-band .hair{background:var(--fg-18)}
+
+/* ---------- entregables del diseño ----------
+   Usan la tarjeta del inicio (.tri .c). Dos diferencias, y las dos por las
+   fotos: estas son de estudio sobre fondo claro, así que el velo tiene que ser
+   bastante más denso que el del inicio —allí las fotos ya son oscuras— y la
+   imagen se rebaja un punto para que el texto blanco aguante encima. */
+.ent-tri{margin-top:clamp(8px,1.4vw,20px)}
+.ent-tri .c{aspect-ratio:5/4}
+/* 114 % de alto y -7 % arriba: ese sobrante es el recorrido del parallax
+   (±6 %). Va en el alto y no en una escala porque el tilt del puntero escribe
+   su propia escala sobre la imagen y se la comería. */
+.ent-tri .c > img{position:absolute;left:0;top:-7%;height:114%}
+/* mismas fotos que servicios, ya graduadas: el velo solo sostiene el texto */
+.ent-tri .scrim{
+  background:linear-gradient(180deg,rgba(1,8,21,.72) 0%,rgba(1,8,21,.26) 26%,rgba(1,8,21,0) 46%),
+             linear-gradient(to top,rgba(1,8,21,.84) 0%,rgba(1,8,21,.34) 24%,rgba(1,8,21,0) 46%)}
+.ent-tri .tx .lbl{display:block;color:rgba(227,230,235,.55);margin-bottom:clamp(8px,1vw,13px)}
+.ent-tri .tx h3{max-width:16ch}
+.ent-tri .tx p{color:rgba(227,230,235,.8)}
+@media (max-width:1080px){ .ent-tri{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:700px){ .ent-tri{grid-template-columns:1fr} .ent-tri .c{aspect-ratio:4/3} }
+
+/* ---------- tarjetas ----------
+   La inversion de fondo ya estaba; el filo le da el punto de entrada al puntero
+   y marca cual esta activa. Se desvanece por los dos extremos para que no
+   parezca un subrayado pegado. */
+.std .i{position:relative}
+.std .i::after{
+  content:'';position:absolute;left:0;top:-1px;height:2px;width:100%;
+  background:linear-gradient(90deg,transparent,var(--fg),transparent);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .55s var(--e);
+}
+.std .i:hover::after{transform:scaleX(1)}
+
+@media (prefers-reduced-motion:reduce){ #grain{animation:none} }
+
+
+/* ============================================================
+   PUERTA · el scroll mueve la camara
+   ------------------------------------------------------------
+   La seccion mide varias pantallas de alto y su interior se queda pegado: ese
+   alto sobrante es el recorrido de la camara. El video no se reproduce solo,
+   se le mueve el `currentTime` — el scroll es el mando.
+
+   El plano termina en el blanco exacto de la seccion de abajo (#E3E6EB), asi
+   que cuando el pin se suelta no hay corte: la ultima imagen ya es el fondo.
+   Por eso el fondo del contenedor tambien es ese blanco y no el navy: si el
+   video tarda un fotograma en pintar, lo que asoma es el color correcto.
+   ============================================================ */
+/* Alto: el primer tercio es el viaje de la camara y el resto son los paneles de
+   texto, que entran y salen sobre la misma hoja blanca sin que se suelte el pin.
+   Cada panel necesita algo mas de una pantalla de scroll para leerse sin prisa. */
+#door{height:640svh;position:relative;--bg:var(--dark);--fg:var(--light)}
+.door-st{position:sticky;top:0;height:100svh;overflow:hidden;background:var(--light)}
+.door-st video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  background:var(--dark)}
+
+/* El canto de arriba. La puerta entra desde el navy de la sala y sin fundido el
+   borde del video se lee como una linea recta. Cierra OPACO en ese mismo navy y
+   se abre en el tercio superior.
+
+   Va con su propio elemento y no en el fondo del lienzo por una razon que un
+   degradado fijo no puede resolver: este plano TERMINA EN BLANCO. Un velo navy
+   quieto dejaria una banda oscura sobre la hoja clara al final del recorrido,
+   asi que se apaga con el scroll en cuanto la camara arranca — cuando ya no hay
+   ninguna seccion encima con la que empatar. */
+.door-top{position:absolute;left:0;right:0;top:0;height:34%;z-index:1;
+  pointer-events:none;
+  background:linear-gradient(to bottom,var(--dark) 0,rgba(2,13,31,.58) 26%,
+    rgba(2,13,31,.18) 58%,transparent 100%)}
+
+.door-tx{position:absolute;inset:0;z-index:2;pointer-events:none;
+  display:flex;flex-direction:column;justify-content:center;gap:18px;
+  padding-inline:var(--pad);max-width:min(52ch,86vw)}
+.door-tx .lbl{color:var(--fg-38)}
+.door-tx .bd{color:var(--fg-60)}
+/* El titular se apoya sobre el lado oscuro del encuadre; una sombra larga y
+   suave lo separa sin dibujar una caja. */
+.door-tx h2,.door-tx .bd,.door-tx .lbl{text-shadow:0 2px 40px rgba(1,8,21,.85)}
+
+/* La capa que entra sobre la luz. Va con los colores de seccion clara porque
+   para cuando aparece el fondo ya es blanco: hereda el mismo par invertido que
+   usa `.on-light`, no unos colores sueltos. */
+.door-in{position:absolute;inset:0;z-index:2;pointer-events:none;
+  display:flex;flex-direction:column;justify-content:center;gap:clamp(14px,1.6vw,24px);
+  padding-inline:var(--pad);max-width:min(60ch,90vw);
+  --fg:#020D1F;--fg-60:rgba(2,13,31,.62);--fg-38:rgba(2,13,31,.40);
+  --gl1:#020D1F;--gl2:#2C3D57;--gl3:#5D7292;
+  color:var(--fg)}
+.door-in .lbl{color:var(--fg-38)}
+.door-in .bd{color:var(--fg-60);max-width:44ch}
+.door-in em{font-style:normal;color:var(--gl2)}
+.door-in>*{opacity:0;will-change:transform,opacity}
+/* #F7F7F7 es el blanco DOMINANTE del clip —el vacío luminoso del fondo, que es
+   lo que lee el ojo—, no el de sus bordes (237): medir el borde dejaba la
+   página un punto más gris y se notaba. */
+.door-blanco{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;background:#F7F7F7}
+
+/* el panel del vídeo: sin el límite de 60ch del texto, y pegado a la derecha */
+.door-in.md{max-width:none;align-items:flex-end;justify-content:center}
+/* Sin marco ni sombra, y con los cuatro bordes difuminados: el vídeo está
+   graduado al mismo blanco que el fondo de esta parte (rgb 224,228,234), así
+   que sin el recuadro no se ve dónde empieza — parece que el montaje ocurre
+   sobre la misma hoja. */
+/* El difuminado de los cuatro bordes vuelve: se probó sin él —borde recto y
+   filo de 1 px— y el cliente prefiere que la imagen se disuelva en la hoja.
+   Con máscara no caben ni esquinas redondeadas ni filo: la máscara ya recorta. */
+.door-md{width:min(53vw,800px);aspect-ratio:16/9;position:relative;overflow:hidden;--f:13%;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 var(--f),#000 calc(100% - var(--f)),transparent),
+    linear-gradient(180deg,transparent,#000 var(--f),#000 calc(100% - var(--f)),transparent);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(90deg,transparent,#000 var(--f),#000 calc(100% - var(--f)),transparent),
+    linear-gradient(180deg,transparent,#000 var(--f),#000 calc(100% - var(--f)),transparent);
+  mask-composite:intersect}
+/* el pie: rótulo a la izquierda y la línea que se llena con el montaje */
+.door-cap{width:min(53vw,800px);display:flex;align-items:center;gap:clamp(14px,1.6vw,24px);
+  margin-top:clamp(12px,1.3vw,18px)}
+.door-cap .lbl{color:rgba(2,13,31,.42);white-space:nowrap}
+.door-pg{flex:1;height:1px;background:rgba(2,13,31,.14);position:relative;display:block}
+.door-pg b{position:absolute;inset:0;background:rgba(2,13,31,.5);
+  transform:scaleX(0);transform-origin:left}
+.door-md video{position:absolute;left:0;top:-6%;width:100%;height:112%;
+  object-fit:cover;will-change:transform}
+@media (max-width:860px){
+  .door-in.md{align-items:center;justify-content:flex-end;padding-bottom:14vh}
+  .door-md{width:86vw}
+}
+
+/* la marca de scroll, que se apaga en cuanto la camara arranca */
+.door-sc{position:absolute;left:50%;bottom:34px;z-index:3;transform:translateX(-50%);
+  width:1px;height:56px;background:rgba(227,230,235,.22);overflow:hidden}
+.door-sc>i{position:absolute;inset:0;background:var(--light);
+  transform:translateY(-100%);animation:doorsc 2.1s var(--e) infinite}
+@keyframes doorsc{0%{transform:translateY(-100%)}55%,100%{transform:translateY(100%)}}
+
+@media (max-width:860px){ #door{height:520svh} }
+@media (prefers-reduced-motion:reduce){ .door-sc>i{animation:none} }
