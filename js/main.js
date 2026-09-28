@@ -1925,12 +1925,29 @@ gsap.from('.bnr .std .i',{y:22,opacity:0,duration:.9,stagger:.06,ease:'power3.ou
   });
 
   function montar(f){
-    if (f.tl) f.tl.kill();
+    if (f.tl) { f.tl.kill(); f.tl = null; }
+    f.skew = null;
     var p = f.pista;
     p.innerHTML = p.dataset.base;
-    /* se duplica hasta cubrir dos pantallas: con pocas tarjetas, una sola copia
-       dejaría hueco al final del bucle */
-    while (p.scrollWidth < innerWidth * 2) p.innerHTML += p.dataset.base;
+
+    /* Una fila puede no estar en pantalla: la segunda se oculta por debajo de
+       860 px. Y una fila oculta mide CERO.
+
+       Aquí había un `while (p.scrollWidth < innerWidth*2) p.innerHTML += base`
+       que en ese caso no terminaba nunca: duplicaba HTML contra un ancho que
+       jamás crecía hasta tumbar la pestaña. En un móvil la página se quedaba
+       colgada con el precargador a medio contar, y no había error en la
+       consola que lo delatara — el hilo simplemente no volvía.
+
+       Ahora se mide una vez: sin ancho no se monta, y las copias se calculan
+       en vez de buscarse a tientas. Cuando la fila vuelva a tener ancho
+       —girar el teléfono, ensanchar la ventana— el `refreshInit` la monta. */
+    var uno = p.scrollWidth;
+    if (!uno) return;
+    /* el tope es el cinturón: si por lo que sea `uno` saliera diminuto, mejor
+       un hueco en el carrusel que diez mil tarjetas en el DOM */
+    var copias = Math.min(20, Math.max(1, Math.ceil(innerWidth * 2 / uno)));
+    if (copias > 1) p.innerHTML = p.dataset.base.repeat(copias);
     p.innerHTML += p.innerHTML;
     var mitad = p.scrollWidth / 2;
     gsap.set(p, {x: f.dir < 0 ? 0 : -mitad});
@@ -1947,6 +1964,7 @@ gsap.from('.bnr .std .i',{y:22,opacity:0,duration:.9,stagger:.06,ease:'power3.ou
       var v = s.getVelocity();
       var factor = 1 + Math.min(Math.abs(v) / 1400, 3.6);
       filas.forEach(function(f){
+        if (!f.tl) return;                 /* fila oculta: no hay nada que acelerar */
         gsap.to(f.tl, {timeScale: (v < 0 ? -1 : 1) * factor, duration:.45, overwrite:true});
         f.objetivo = gsap.utils.clamp(-7, 7, v / -260) * f.dir;
       });
@@ -1955,6 +1973,7 @@ gsap.from('.bnr .std .i',{y:22,opacity:0,duration:.9,stagger:.06,ease:'power3.ou
      sin esto, al soltar la rueda las tarjetas se quedarían torcidas. */
   gsap.ticker.add(function(){
     filas.forEach(function(f){
+      if (!f.skew) return;                 /* idem: sin montar no hay a quien torcer */
       f.actual = gsap.utils.interpolate(f.actual || 0, f.objetivo || 0, .08);
       f.objetivo = (f.objetivo || 0) * .9;
       f.skew(f.actual);
