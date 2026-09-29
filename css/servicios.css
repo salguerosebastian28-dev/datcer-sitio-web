@@ -114,6 +114,23 @@
 @media (max-width:1080px){ .sv-grid{grid-template-columns:repeat(2,1fr)} }
 @media (max-width:700px){ .sv-grid{grid-template-columns:1fr} .sv-grid .c{aspect-ratio:4/3}
   .sv-grid .sv-abierto{grid-column:span 1;aspect-ratio:auto} }
+/* En un telefono la ficha era casi cuadrada: la foto la llenaba entera y la
+   descripcion caia justo encima del equipo fotografiado. Como las fotos no
+   llevan filtro, aqui se separan: la foto arriba, con el titulo sobre su parte
+   alta, y la descripcion y las etiquetas debajo, sobre el fondo de la ficha.
+   .tx pasa a display:contents para que sus dos bloques se repartan en la
+   rejilla de la ficha sin tocar el marcado. Hasta 1080 px: en una tableta
+   vertical la rejilla va a dos columnas y cada ficha mide lo mismo que en un
+   telefono. */
+@media (max-width:1080px){
+  .sv-grid .c:not(.sv-abierto){aspect-ratio:auto;display:grid;grid-template-columns:1fr;background:#081427}
+  .sv-grid .c:not(.sv-abierto) > img{position:relative;grid-area:1/1;top:0;width:100%;height:auto;aspect-ratio:16/10}
+  .sv-grid .c:not(.sv-abierto) .scrim{position:relative;grid-area:1/1;inset:auto;
+    background:linear-gradient(180deg,rgba(1,8,21,.72) 0%,rgba(1,8,21,.22) 34%,rgba(1,8,21,0) 56%)}
+  .sv-grid .c:not(.sv-abierto) .tx{display:contents}
+  .sv-grid .c:not(.sv-abierto) .tx > div:first-child{grid-area:1/1;align-self:start;position:relative;z-index:3;padding:18px 20px}
+  .sv-grid .c:not(.sv-abierto) .tx > div:last-child{grid-row:2;position:relative;z-index:3;padding:16px 20px 22px}
+}
 
 /* ---------- cierre ---------- */
 #sv-cta{--bg:var(--dark);--fg:var(--light)}

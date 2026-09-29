@@ -252,6 +252,13 @@
   .dk-bar{display:none}
   #br-hero .ft{grid-template-columns:1fr}
   .br-sc{display:none}
+  /* La lamina a sangre (sensores): en escritorio la imagen es el fondo y el
+     texto ocupa la mitad izquierda sobre un velo. Apilada, esa mitad eran 170
+     px de ancho y cuatro palabras por linea. Aqui la imagen va arriba como en
+     las demas laminas y el texto debajo, a todo el ancho. */
+  .sl-full .sl-im{position:relative;inset:auto;grid-row:1;aspect-ratio:2.03/1}
+  .sl-full::before{display:none}
+  .sl-full .sl-bd{grid-row:2;max-width:none}
 }
 @media (prefers-reduced-motion:reduce){
   .br-sc i::after{animation:none}

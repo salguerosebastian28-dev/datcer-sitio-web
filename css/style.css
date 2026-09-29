@@ -1038,7 +1038,13 @@ input[type=range]::-moz-range-thumb{width:13px;height:13px;border:0;border-radiu
 #ok.s{display:block}
 
 /* footer */
-.fw{font-size:clamp(3.4rem,17.5vw,16rem);font-weight:200;letter-spacing:-.065em;line-height:.78;color:transparent;-webkit-text-stroke:1px var(--fg-18);padding-inline:var(--pad);user-select:none;white-space:nowrap}
+/* La franja sobre el pie. Era la palabra DATCER en contorno; ahora es el logo
+   real, dos veces, separado por un punto. Se desliza de lado con el scroll
+   (#fw en main.js), asi que la segunda copia es la que entra por la derecha. */
+.fw{display:flex;align-items:center;gap:clamp(28px,5vw,96px);white-space:nowrap;
+  padding:clamp(24px,3.4vw,56px) var(--pad);user-select:none}
+.fw img{flex:none;height:clamp(64px,11vw,210px);width:auto;display:block}
+.fw i{flex:none;width:clamp(8px,.9vw,14px);aspect-ratio:1;border-radius:50%;background:var(--fg-18)}
 /* position:relative no es decorativo. En shelters, la capa perla del marco del
    hero (.perla-bg) es sticky y vive en todo <main>, asi que acompana la pagina
    entera; un pie estatico se pinta por DEBAJO de cualquier elemento
@@ -1359,3 +1365,102 @@ body.hidec #cx,body.hidec #cr{opacity:0}
 
 @media (max-width:860px){ #door{height:520svh} }
 @media (prefers-reduced-motion:reduce){ .door-sc>i{animation:none} }
+
+/* ============================================================
+   MOVIL Y TABLETA
+   ------------------------------------------------------------
+   Todo lo que salio al recorrer el sitio en un iPhone emulado, pantalla por
+   pantalla. Va al final a proposito: gana por orden de fuente sin subir
+   especificidad, y es un solo sitio donde mirar cuando algo se vea mal en un
+   telefono.
+   ============================================================ */
+
+/* Las fichas de las dos pistas horizontales van envueltas en .hz-fila. En
+   escritorio esa envoltura no existe para el layout: display:contents deja a
+   las fichas como hijas directas de la pista, que el pin sigue arrastrando de
+   lado igual que antes. */
+.hz-fila{display:contents}
+.hz-pista{display:none}
+
+/* Nombre y descripcion de cada contacto, uno debajo del otro. Iban en linea y,
+   en cuanto la columna se estrechaba, «Gerencia General» y «Decisiones y
+   propuestas» se montaban. */
+.wa a > span:first-child{display:grid;gap:4px}
+.wa a .lbl{white-space:nowrap}
+
+@media (max-width:860px){
+  /* El contador de capitulo es fijo abajo a la izquierda. En escritorio vive en
+     el margen; en un telefono no hay margen y se montaba encima del texto en
+     casi todas las pantallas. */
+  #ch{display:none}
+
+  /* ---------- las dos pistas horizontales ----------
+     En escritorio avanzan de lado con el pin. En un telefono el pin no se monta
+     (el JS lo salta por debajo de 861 px) y la pista quedaba como una sola fila
+     deslizable sin ninguna pista visual: los doce servicios vivian fuera de la
+     pantalla, a la derecha, y casi nadie iba a encontrarlos. Ahora los paneles
+     de titulo se apilan a todo el ancho y cada tanda de fichas es un carrusel
+     con imán (scroll-snap), la siguiente ficha asomando y un aviso de que se
+     desliza. */
+  .hz-tr{display:block;overflow:visible;padding-inline:0;padding-bottom:0}
+  .hz-tr > article{padding-inline:var(--pad)}
+  .sv-int,.sv-tit,.pz-tit{flex:none;width:auto;margin:0}
+  .sv-int{display:grid;grid-template-columns:1fr;gap:24px;margin-bottom:64px}
+  .pz-tit2{border-left:0;margin:60px 0 0;padding-top:52px;border-top:1px solid var(--fg-10)}
+  .hz-fila{display:flex;gap:12px;overflow-x:auto;overscroll-behavior-x:contain;
+    scroll-snap-type:x mandatory;scroll-padding-inline:var(--pad);
+    padding:2px var(--pad) 6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .hz-fila::-webkit-scrollbar{display:none}
+  .hz-fila > *{flex:0 0 min(80vw,340px);scroll-snap-align:start;margin-right:0}
+  .hz-pista{display:flex;align-items:center;gap:12px;padding:0 var(--pad);margin:26px 0 14px;
+    font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--fg-38)}
+  .hz-pista i{position:relative;width:26px;height:1px;background:currentColor;
+    animation:hzPista 2.2s var(--e) infinite}
+  .hz-pista i::after{content:'';position:absolute;right:0;top:-3px;width:7px;height:7px;
+    border-right:1px solid currentColor;border-top:1px solid currentColor;transform:rotate(45deg)}
+
+  /* ---------- carrusel de pantallas (Del concepto al data center real) ----------
+     El pie de texto iba a dos columnas: la descripcion quedaba en una columna
+     de cinco palabras por linea. */
+  .tvc{grid-template-columns:1fr;gap:12px;min-height:0}
+
+  /* ---------- contacto ---------- */
+  .wa a{padding:18px}
+}
+@keyframes hzPista{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+@media (prefers-reduced-motion:reduce){ .hz-pista i{animation:none} }
+
+@media (max-width:420px){
+  /* en los telefonos estrechos el numero baja debajo del nombre */
+  .wa a{flex-direction:column;align-items:flex-start;gap:10px}
+}
+
+/* ---------- movil, segunda tanda ---------- */
+@media (max-width:860px){
+  /* La puerta. El titular iba centrado en vertical, justo encima de la hoja
+     blanca de la puerta: blanco sobre blanco. Arriba del plano esta el techo,
+     oscuro, y el velo .door-top ya lo oscurece mas. */
+  .door-tx{justify-content:flex-start;padding-top:max(96px,15svh)}
+  /* Las capas que entran sobre la luz. Centradas se cruzaban con el video de la
+     sala confinada, que en movil va abajo: el texto pasaba por encima de la
+     foto. Arriba, texto; abajo, video; sin cruzarse. */
+  .door-in:not(.md){justify-content:flex-start;padding-top:max(96px,14svh)}
+  /* seis pantallas y media de recorrido cansaban en un telefono; con cuatro y
+     media la camara llega igual a la luz, solo que antes */
+  #door{height:440svh}
+}
+@media (max-width:560px){
+  /* Las cifras, a dos columnas. A una sola, cada cifra con su etiqueta se comia
+     un tercio de pantalla y un bloque de cuatro era una pantalla entera. */
+  .figs{grid-template-columns:repeat(2,1fr)}
+  .figs .f{padding:22px 14px 22px 0;border-right:0;border-bottom:1px solid var(--fg-10)}
+  .figs .f:nth-child(2n+1){border-right:1px solid var(--fg-10)}
+  .figs .f:nth-child(2n){padding-left:18px}
+  .figs .f .num{font-size:clamp(1.9rem,9vw,2.6rem);margin-bottom:10px}
+  .figs.sm .f .num{font-size:clamp(1.5rem,7vw,2rem)}
+  /* Por que DATCER: la foto en 4:5 medía 440 px de alto; cuatro tarjetas eran
+     casi tres pantallas. */
+  .wy-im{aspect-ratio:16/11}
+  /* el pie, a dos columnas: a una, las tres listas eran una pantalla y media */
+  .fgd{grid-template-columns:1fr 1fr;column-gap:20px}
+}

@@ -15,7 +15,8 @@
     calc(var(--hx) * clamp(12px,1.6vw,30px))
     calc(var(--hx) * clamp(12px,1.6vw,30px))
     round calc(var(--hx) * clamp(12px,1.5vw,26px)))}
-@media (max-width:860px){ #sh-hero{--hx:0} }
+/* En movil tambien va enmarcado, como el hero del inicio: sin marco, la
+   cabecera caia sobre la foto clara y el logo no se leia. */
 #sh-hero .in{position:relative;z-index:3;width:100%;padding-bottom:clamp(28px,4.6vw,58px)}
 #sh-hero .tag{display:inline-block;margin-bottom:clamp(18px,2.6vw,34px);color:rgba(227,230,235,.72)}
 #sh-hero h1{max-width:11ch}
@@ -30,15 +31,28 @@
 #sh-hero .sh-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
 #sh-hero .sh-bg img{position:absolute;left:0;top:-7%;width:100%;height:114%;
   object-fit:cover;object-position:52% 42%;will-change:transform}
-#sh-hero .sh-dim{position:absolute;inset:0;
-  background:
-    linear-gradient(to top,rgba(2,13,31,.97) 4%,rgba(2,13,31,.86) 26%,rgba(2,13,31,.5) 58%,rgba(2,13,31,.42)),
-    linear-gradient(95deg,rgba(2,13,31,.88) 6%,rgba(2,13,31,.3) 52%,rgba(2,13,31,.12))}
+/* Sin velo: la foto va en su color. El cliente lo pidio asi, como en las
+   fichas de servicios. El texto se sostiene con sombra en capas -una corta
+   que dibuja el filo y una larga y difusa que separa del fondo-, no con un
+   filtro sobre la imagen. */
+#sh-hero .tag,#sh-hero h1,#sh-hero .ft p{
+  text-shadow:0 1px 2px rgba(2,13,31,.55),0 3px 14px rgba(2,13,31,.55),0 10px 44px rgba(2,13,31,.6)}
+#sh-hero .tag{color:#fff}
+#sh-hero .ft p{color:rgba(255,255,255,.94)}
+/* Solo detras del bloque de texto, abajo a la izquierda, una sombra que se
+   disuelve hacia la foto. El resto de la imagen queda sin tocar. Sin ella el
+   titular blanco se perdia sobre los paneles y el concreto claros. */
+#sh-hero .in::before{content:'';position:absolute;z-index:-1;pointer-events:none;
+  left:-12%;bottom:-18%;width:78%;height:118%;
+  background:radial-gradient(closest-side,rgba(2,13,31,.66),rgba(2,13,31,.38) 58%,rgba(2,13,31,0))}
+@media (max-width:860px){
+  #sh-hero .in::before{left:-20%;width:140%;bottom:-6%;height:118%;
+    background:linear-gradient(to top,rgba(2,13,31,.78) 0,rgba(2,13,31,.62) 55%,rgba(2,13,31,.3) 80%,rgba(2,13,31,0))}
+}
+/* el boton de contorno no se veia sobre la foto clara: lleva fondo */
+#sh-hero .cta .btn:not(.fill){background:rgba(2,13,31,.6);border-color:rgba(227,230,235,.28);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 
-/* el degradado del fondo insinúa el volumen del módulo antes de que cargue */
-#sh-hero::after{content:'';position:absolute;right:-8%;top:-14%;width:70%;height:96%;z-index:0;
-  pointer-events:none;
-  background:radial-gradient(46% 46% at 50% 50%,rgba(94,155,224,.13) 0%,rgba(2,13,31,0) 68%)}
 
 /* ============================================================
    PASARELA
@@ -94,7 +108,16 @@
   mask:url(../assets/logo-dark.png) no-repeat 50% 50%/contain;
   opacity:.55;mix-blend-mode:screen}
 .walk-firma .lbl{color:var(--fg-60);font-size:10px}
-@media (max-width:860px){ .walk-firma{display:none} }
+/* En movil tambien se ve: arriba a la derecha, por debajo de la cabecera y
+   mas pequena. Antes se ocultaba, y en un telefono el modelo quedaba sin
+   firmar. */
+@media (max-width:860px){
+  /* por debajo del texto de los pasos (z 2): en un telefono el texto sube por
+     encima de la firma y era la firma la que tapaba las lineas */
+  .walk-firma{top:84px;right:var(--pad);gap:6px;z-index:1}
+  .walk-firma .sello{width:clamp(130px,38vw,190px)}
+  .walk-firma .lbl{font-size:8.5px}
+}
 
 /* las escuadras de encuadre, como en una lámina de plano */
 .walk-cr{position:absolute;inset:clamp(18px,2.2vw,34px);z-index:1;pointer-events:none}
@@ -181,4 +204,11 @@
   #sh-hero .cta{grid-column:1}
   #sh-hero h1{max-width:none}
   .step{min-height:108svh}
+  /* El texto de cada paso cruza por encima del modelo 3D, y en un telefono el
+     modelo ocupa toda la pantalla: las lineas del DWG se cruzaban con las
+     letras. Una franja oscura va con el texto -el paso lo centra en vertical,
+     asi que el centro de su caja es donde esta el texto- y el modelo se sigue
+     viendo arriba y abajo. */
+  .step{background:linear-gradient(to bottom,rgba(2,13,31,0) 8%,rgba(2,13,31,.78) 30%,
+    rgba(2,13,31,.78) 70%,rgba(2,13,31,0) 92%)}
 }

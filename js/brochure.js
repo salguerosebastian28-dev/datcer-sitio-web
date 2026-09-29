@@ -105,6 +105,21 @@ gsap.timeline({onComplete:()=>{document.body.classList.remove('lock'); heroIn();
 function barraCabecera(hd){
   var bg = hd.querySelector('.hd-bg'); if (!bg || typeof gsap === 'undefined') return function(){};
 
+  /* En telefonos y tabletas, sin montaje: la barra entra con un fundido y ya.
+     Las ~180 celdas animandose a la vez cada vez que se sube un poco se
+     trababan en un telefono, y como el gesto se repite en cada scroll hacia
+     arriba, cansaba. El montaje queda solo para computador. */
+  if (TOUCH || innerWidth <= 860){
+    var ya = null;
+    return function(si){
+      if (si === ya) return;
+      ya = si;
+      hd.classList.toggle('barra', si);
+      bg.classList.toggle('lleno', si);
+      gsap.to(bg, {opacity: si ? 1 : 0, duration: si ? .3 : .2, ease: 'power2.out', overwrite: true});
+    };
+  }
+
   /* Una MALLA, no tiras. Con tiras verticales el montaje se leía como una
      persiana; en celdas pequeñas se lee como material que se deposita. Cada
      celda muestra su trozo del degradado (tamaño N columnas x M filas), así que
