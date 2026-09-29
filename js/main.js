@@ -2023,7 +2023,34 @@ document.getElementById('fm').addEventListener('submit',e=>{
   e.target.reset();
 });
 document.querySelectorAll('.fd input,.fd textarea').forEach(el=>el.addEventListener('input',()=>{el.style.borderColor='';el.style.borderBottomWidth='';}));
-document.getElementById('cko').onclick=()=>gsap.to('#ck',{y:'160%',duration:.7,ease:'power3.in'});
+/* ============================================================
+   AVISO DE COOKIES
+   ------------------------------------------------------------
+   Aceptar tiene que significar algo: se guarda y no se vuelve a preguntar. Si
+   el navegador no deja guardar -modo privado, almacenamiento bloqueado- el
+   aviso reaparecera en la siguiente visita, que es molesto pero correcto; lo
+   que no puede es reventar, de ahi los `try`.
+
+   Y al aceptarlo se quita con `display:none` en vez de dejarlo desplazado
+   fuera de la pantalla: un cuadro invisible pero presente sigue estando en el
+   arbol de accesibilidad y puede volver a asomar por un par de pixeles segun
+   la altura de la ventana.
+   ============================================================ */
+(function(){
+  var ck = document.getElementById('ck'), cko = document.getElementById('cko');
+  if (!ck || !cko) return;
+  var LLAVE = 'datcer:cookies';
+
+  var aceptado = false;
+  try { aceptado = localStorage.getItem(LLAVE) === '1'; } catch (e) {}
+  if (aceptado) { ck.style.display = 'none'; return; }
+
+  cko.onclick = function(){
+    try { localStorage.setItem(LLAVE, '1'); } catch (e) {}
+    gsap.to(ck, {y:'160%', opacity:0, duration:.7, ease:'power3.in',
+      onComplete:function(){ ck.style.display = 'none'; }});
+  };
+})();
 
 /* ============================================================
    EFECTOS EXTRA

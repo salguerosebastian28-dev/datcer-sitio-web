@@ -6,8 +6,17 @@
    distancia. Fuera del botón, el panel es del sitio — navy, vidrio y la misma
    tipografía.
    ============================================================ */
+/* `pointer-events:none` en el contenedor, y solo el boton y el panel lo
+   recuperan. Sin esto, el panel -que aunque este cerrado sigue ocupando sus
+   360 px de ancho y sus 560 de alto, porque se oculta con `visibility`, no con
+   `display`- se come cualquier toque en esa zona. En un telefono de 390 px eso
+   es casi toda la pantalla: el aviso de cookies quedaba debajo y no habia
+   manera de pulsar «Aceptar». En escritorio no se notaba, porque ahi sobra
+   ancho y las dos cosas no coinciden. */
 #wa{position:fixed;right:clamp(16px,2.2vw,32px);bottom:clamp(16px,2.2vw,32px);
-  z-index:420;display:flex;flex-direction:column;align-items:flex-end;gap:14px}
+  z-index:420;display:flex;flex-direction:column;align-items:flex-end;gap:14px;
+  pointer-events:none}
+#wa .wa-bt,#wa .wa-pan{pointer-events:auto}
 
 /* ---------- el botón ---------- */
 .wa-bt{position:relative;width:clamp(54px,4.4vw,64px);height:clamp(54px,4.4vw,64px);

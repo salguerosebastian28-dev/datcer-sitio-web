@@ -1089,7 +1089,9 @@ body.hidec #cx,body.hidec #cr{opacity:0}
   .bnr .in{grid-template-columns:1fr;padding-block:70px}
   .bnr .vg{background:linear-gradient(to top,rgba(2,13,31,.96),rgba(2,13,31,.6))}
   #hall{height:78svh}
-  #ck{left:14px;right:14px;max-width:none}
+  /* el aviso ocupa todo el ancho, asi que se sube por encima del boton de
+     WhatsApp en vez de quedar debajo de el */
+  #ck{left:14px;right:14px;max-width:none;bottom:86px}
   #hd nav a.hs{display:none}
   /* el pie del hero se apila; el indicador de scroll sobraba encima del boton */
   #hero .ft{grid-template-columns:1fr;padding-right:0}
