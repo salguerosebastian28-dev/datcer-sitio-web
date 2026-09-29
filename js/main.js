@@ -1,6 +1,12 @@
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const TOUCH = matchMedia('(hover:none),(pointer:coarse)').matches;
 gsap.registerPlugin(ScrollTrigger);
+/* En un telefono la barra del navegador aparece y se esconde cada vez que se
+   cambia de sentido, y eso cambia el alto de la ventana. Si ese cambio dispara
+   un recalculo, las secciones fijadas se deshacen y se rehacen en pleno gesto
+   y el scroll vuelve atras: la pagina parecia recargarse y no dejaba avanzar.
+   Solo el alto no recalcula; girar el telefono (cambia el ancho) si. */
+ScrollTrigger.config({ignoreMobileResize:true});
 gsap.defaults({ease:'power3.out'});
 
 /* ---------- smooth scroll ---------- */
@@ -12,6 +18,19 @@ if (!RM && typeof Lenis !== 'undefined'){
   gsap.ticker.lagSmoothing(0);
 }
 const to = s => ln ? ln.scrollTo(s,{duration:1.5}) : document.querySelector(s)?.scrollIntoView({behavior:'smooth'});
+
+/* Llegar con un ancla —index.html#cfg desde el menu de otra pagina—. El
+   navegador intenta saltar al cargar, pero en ese momento el precargador
+   bloquea el scroll y las secciones fijadas aun no han metido su alto: se
+   quedaba arriba. Se salta aqui, cuando ya esta todo medido. */
+function irAlAncla(){
+  var h = location.hash; if (!h || h.length < 2) return;
+  var el = null; try { el = document.querySelector(h); } catch (e) { return; }
+  if (!el) return;
+  requestAnimationFrame(function(){
+    if (ln) ln.scrollTo(el, {immediate:true, force:true}); else el.scrollIntoView();
+  });
+}
 
 /* ============================================================
    SPLIT: líneas reales (medidas tras el layout)
@@ -82,7 +101,7 @@ function heroIn(){
   gsap.to('#ck', {y:0, duration:1, delay:3, ease:'power3.out'});
 }
 
-gsap.timeline({onComplete:()=>{document.body.classList.remove('lock'); heroIn(); ScrollTrigger.refresh();}})
+gsap.timeline({onComplete:()=>{document.body.classList.remove('lock'); heroIn(); ScrollTrigger.refresh(); irAlAncla();}})
   .to(cnt, {v:100, duration:2, ease:'power2.inOut', onUpdate:()=>pc.textContent=Math.round(cnt.v)}, 0)
   .to(pb, {scaleX:1, duration:2, ease:'power2.inOut'}, 0)
   .to('#pre .word, #pre .pc, #pre .top', {opacity:0, y:-18, duration:.55, stagger:.04}, '>-.05')
@@ -202,7 +221,14 @@ function tog(f){
   if (open){ mtl.play(); ln&&ln.stop(); } else { mtl.reverse(); ln&&ln.start(); gsap.delayedCall(.95,()=>{ if(!open) gsap.set(mn,{visibility:'hidden'}); }); }
 }
 bgB.addEventListener('click',()=>tog());
-mLinks.forEach(a=>a.addEventListener('click',e=>{e.preventDefault(); const t=a.getAttribute('href'); tog(false); gsap.delayedCall(.6,()=>to(t));}));
+/* Solo las anclas de esta pagina se interceptan para el desplazamiento suave.
+   Antes se cancelaba TODO clic del menu y se intentaba desplazar a su href:
+   con servicios.html o shelters.html eso no llevaba a ninguna parte. */
+mLinks.forEach(a=>a.addEventListener('click',e=>{
+  const t=a.getAttribute('href');
+  if (t.charAt(0)==='#' && t.length>1 && document.querySelector(t)){ e.preventDefault(); tog(false); gsap.delayedCall(.6,()=>to(t)); }
+  else tog(false);
+}));
 addEventListener('keydown',e=>{ if(e.key==='Escape'&&open) tog(false); });
 document.querySelectorAll('a[href^="#"]:not(#mn a)').forEach(a=>a.addEventListener('click',e=>{
   const t=a.getAttribute('href'); if(t.length>1&&document.querySelector(t)){e.preventDefault(); to(t);}
@@ -2101,7 +2127,14 @@ gsap.utils.toArray('.figs, .std, .acc').forEach(el=>{
 
 /* refresh */
 addEventListener('load',()=>ScrollTrigger.refresh());
-let rt; addEventListener('resize',()=>{clearTimeout(rt); rt=setTimeout(()=>{
+/* Solo si cambia el ancho. Este manejador recalculaba con cualquier cambio de
+   tamano, y en un telefono la barra del navegador cambia el alto cada vez que
+   se invierte el sentido del scroll: la pagina saltaba de vuelta al mismo
+   sitio y no dejaba avanzar. */
+let rt, anchoAntes = innerWidth; addEventListener('resize',()=>{
+  if (innerWidth === anchoAntes) return;
+  anchoAntes = innerWidth;
+  clearTimeout(rt); rt=setTimeout(()=>{
   splitMap.clear();
   document.querySelectorAll('[data-split="line"]').forEach(el=>el.dataset.bound='');
   ScrollTrigger.refresh();

@@ -185,7 +185,8 @@ function draw(){c.clearRect(0,0,W,H);const s=Math.min(W/(state.unifilar>.5?870:8
 function resize(){const r=canvas.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);W=r.width;H=r.height;canvas.width=W*d;canvas.height=H*d;c.setTransform(d,0,0,d,0,0);needsDraw=true;draw()}
 function update(){const p=state.p;setPhase(p<.235?0:p<.48?1:p<.735?2:3);$('.nd-progress').style.transform=`scaleX(${p})`;$('#nd-pct').textContent=String(Math.round(p*100)).padStart(2,'0')+' — 100';needsDraw=true;}
 function fallbackAt(p){state.p=p;state.plan=clamp((p-.12)/.18);state.unifilar=1-clamp((p-.13)/.17);state.iso=clamp((p-.43)/.22);state.racks=clamp((p-.44)/.2);state.systems=clamp((p-.61)/.2);state.build=clamp((p-.73)/.18);state.roof=clamp((p-.88)/.1);update();draw()}
-function navigate(i){const ratios=[0,.35,.65,1];if(reduced||!scrollTrigger){fallbackAt(ratios[i]);return}const y=scrollTrigger.start+(scrollTrigger.end-scrollTrigger.start)*ratios[i];if(typeof ln!=='undefined'&&ln)ln.scrollTo(y,{duration:1.4});else window.scrollTo({top:y,behavior:'smooth'});}
+const ND_PARADAS=[0,.292,.584,.858];
+function navigate(i){const ratios=ND_PARADAS;if(reduced||!scrollTrigger){fallbackAt(ratios[i]);return}const y=scrollTrigger.start+(scrollTrigger.end-scrollTrigger.start)*ratios[i];if(typeof ln!=='undefined'&&ln)ln.scrollTo(y,{duration:1.4});else window.scrollTo({top:y,behavior:'smooth'});}
 $$('.nd-phase').forEach(el=>el.addEventListener('click',()=>navigate(Number(el.dataset.phase))));
 $$('.nd-system').forEach(el=>el.addEventListener('click',()=>{const key=el.dataset.system;visible[key]=!visible[key];el.setAttribute('aria-pressed',String(visible[key]));needsDraw=true;draw()}));
 const report=document.getElementById('nd-report');
@@ -202,9 +203,18 @@ setPhase(0);resize();window.addEventListener('resize',resize);new ResizeObserver
    en la página. Si se refrescara después que los disparadores de más abajo,
    todos calcularían su posición sin contarlo y quedarían corridos (ya pasó con
    el pin de servicios, que lleva prioridad 1). */
+/* Cuatro fases, cuatro gestos. Con 5,8 pantallas de recorrido el cliente
+   sentia que habia que scrollear mucho y que no avanzaba. Ahora son 3,6, y en
+   computador el scroll tiene iman: cada gesto de rueda o trackpad termina
+   exactamente en la fase siguiente. Las paradas son el reposo de cada fase
+   en la linea de tiempo (0, 3,4, 6,8 y 10 de 11,65 tiempos) y la ultima, 1,
+   es la salida hacia la seccion siguiente. En tactil NO hay iman: pelea con
+   la inercia del dedo y da la sensacion de que la pagina se atasca. */
+const ND_TACTIL=matchMedia('(hover:none),(pointer:coarse)').matches;
 if(window.gsap&&window.ScrollTrigger&&!reduced){
  const tl=gsap.timeline({defaults:{ease:'none'},scrollTrigger:{trigger:root,pin:$('.nd-vp'),start:'top top',
-  end:()=>'+='+Math.max(innerHeight*5.8,4200),scrub:1.15,invalidateOnRefresh:true,anticipatePin:1,refreshPriority:2},onUpdate:update});
+  end:()=>'+='+Math.max(innerHeight*3.6,2600),scrub:.8,invalidateOnRefresh:true,anticipatePin:1,refreshPriority:2,
+  snap:ND_TACTIL?false:{snapTo:ND_PARADAS.concat(1),duration:{min:.35,max:.8},delay:.08,ease:'power2.inOut',directional:true}},onUpdate:update});
  tl.to(state,{p:1,duration:10},0).to(state,{plan:1,duration:1.8},1.2).to(state,{unifilar:0,duration:1.7},1.3).to(state,{iso:.22,duration:1.2},3.8).to(state,{racks:1,duration:2},4.4).to(state,{iso:1,duration:1.8},4.8).to(state,{systems:1,duration:1.8},6.1).to(state,{build:1,duration:1.8},7.3).to(state,{roof:1,duration:1.1},8.8);
  tl.to($('.nd-grid'),{backgroundPosition:'0px -170px',duration:10},0);scrollTrigger=tl.scrollTrigger;
  /* Salida hacia la foto de la sala, todavía con el lienzo fijo. Primero se

@@ -88,9 +88,18 @@ app = app[:a] + u'''/* El pin. Mismo guion que el original, pero con el GSAP y e
    en la página. Si se refrescara después que los disparadores de más abajo,
    todos calcularían su posición sin contarlo y quedarían corridos (ya pasó con
    el pin de servicios, que lleva prioridad 1). */
+/* Cuatro fases, cuatro gestos. Con 5,8 pantallas de recorrido el cliente
+   sentia que habia que scrollear mucho y que no avanzaba. Ahora son 3,6, y en
+   computador el scroll tiene iman: cada gesto de rueda o trackpad termina
+   exactamente en la fase siguiente. Las paradas son el reposo de cada fase
+   en la linea de tiempo (0, 3,4, 6,8 y 10 de 11,65 tiempos) y la ultima, 1,
+   es la salida hacia la seccion siguiente. En tactil NO hay iman: pelea con
+   la inercia del dedo y da la sensacion de que la pagina se atasca. */
+const ND_TACTIL=matchMedia('(hover:none),(pointer:coarse)').matches;
 if(window.gsap&&window.ScrollTrigger&&!reduced){
  const tl=gsap.timeline({defaults:{ease:'none'},scrollTrigger:{trigger:root,pin:$('.nd-vp'),start:'top top',
-  end:()=>'+='+Math.max(innerHeight*5.8,4200),scrub:1.15,invalidateOnRefresh:true,anticipatePin:1,refreshPriority:2},onUpdate:update});
+  end:()=>'+='+Math.max(innerHeight*3.6,2600),scrub:.8,invalidateOnRefresh:true,anticipatePin:1,refreshPriority:2,
+  snap:ND_TACTIL?false:{snapTo:ND_PARADAS.concat(1),duration:{min:.35,max:.8},delay:.08,ease:'power2.inOut',directional:true}},onUpdate:update});
  tl.to(state,{p:1,duration:10},0).to(state,{plan:1,duration:1.8},1.2).to(state,{unifilar:0,duration:1.7},1.3).to(state,{iso:.22,duration:1.2},3.8).to(state,{racks:1,duration:2},4.4).to(state,{iso:1,duration:1.8},4.8).to(state,{systems:1,duration:1.8},6.1).to(state,{build:1,duration:1.8},7.3).to(state,{roof:1,duration:1.1},8.8);
  tl.to($('.nd-grid'),{backgroundPosition:'0px -170px',duration:10},0);scrollTrigger=tl.scrollTrigger;
  /* Salida hacia la foto de la sala, todavía con el lienzo fijo. Primero se
@@ -126,6 +135,11 @@ let enVista=false;
 new IntersectionObserver(e=>{enVista=e[0].isIntersecting;if(enVista)needsDraw=true},{rootMargin:'120px'}).observe(root);
 ''' + app[b:]
 app = rep(app, u"if(document.hidden||ms-last<32)return;", u"if(document.hidden||!enVista||ms-last<32)return;")
+# Los botones de fase saltaban a 0 / .35 / .65 / 1 del pin ENTERO, que incluye
+# la salida: el 04 caia donde el edificio ya se habia desvanecido. Ahora van a
+# las mismas paradas que el iman del scroll.
+app = rep(app, u"function navigate(i){const ratios=[0,.35,.65,1];",
+               u"const ND_PARADAS=[0,.292,.584,.858];\nfunction navigate(i){const ratios=ND_PARADAS;")
 
 salida = u'''/* ============================================================
    DEL UNIFILAR AL EDIFICIO — el diseño de un data center, con el scroll

@@ -12,6 +12,12 @@
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const TOUCH = matchMedia('(hover:none),(pointer:coarse)').matches;
 gsap.registerPlugin(ScrollTrigger);
+/* En un telefono la barra del navegador aparece y se esconde cada vez que se
+   cambia de sentido, y eso cambia el alto de la ventana. Si ese cambio dispara
+   un recalculo, las secciones fijadas se deshacen y se rehacen en pleno gesto
+   y el scroll vuelve atras: la pagina parecia recargarse y no dejaba avanzar.
+   Solo el alto no recalcula; girar el telefono (cambia el ancho) si. */
+ScrollTrigger.config({ignoreMobileResize:true});
 gsap.defaults({ease:'power3.out'});
 
 /* ---------- scroll suave ---------- */
@@ -23,6 +29,19 @@ if (!RM && typeof Lenis !== 'undefined'){
   gsap.ticker.lagSmoothing(0);
 }
 const to = s => ln ? ln.scrollTo(s,{duration:1.5}) : document.querySelector(s)?.scrollIntoView({behavior:'smooth'});
+
+/* Llegar con un ancla —index.html#cfg desde el menu de otra pagina—. El
+   navegador intenta saltar al cargar, pero en ese momento el precargador
+   bloquea el scroll y las secciones fijadas aun no han metido su alto: se
+   quedaba arriba. Se salta aqui, cuando ya esta todo medido. */
+function irAlAncla(){
+  var h = location.hash; if (!h || h.length < 2) return;
+  var el = null; try { el = document.querySelector(h); } catch (e) { return; }
+  if (!el) return;
+  requestAnimationFrame(function(){
+    if (ln) ln.scrollTo(el, {immediate:true, force:true}); else el.scrollIntoView();
+  });
+}
 
 /* ---------- split en líneas reales ---------- */
 function splitLines(el){
@@ -88,7 +107,7 @@ function heroIn(){
 }
 listo.then(()=>{ doSplits(); arranque(); });
 function arranque(){
-gsap.timeline({onComplete:()=>{document.body.classList.remove('lock'); heroIn(); ScrollTrigger.refresh();}})
+gsap.timeline({onComplete:()=>{document.body.classList.remove('lock'); heroIn(); ScrollTrigger.refresh(); irAlAncla();}})
   .to(cnt, {v:100, duration:1.6, ease:'power2.inOut', onUpdate:()=>pc.textContent=Math.round(cnt.v)}, 0)
   .to(pb, {scaleX:1, duration:1.6, ease:'power2.inOut'}, 0)
   .to('#pre .word, #pre .pc, #pre .top', {opacity:0, y:-18, duration:.55, stagger:.04}, '>-.05')
