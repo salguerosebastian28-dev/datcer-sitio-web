@@ -1181,10 +1181,17 @@ body.hidec #cx,body.hidec #cr{opacity:0}
    bandeado de los degradados del hero y le quita a las superficies grandes de
    color liso el aspecto de plastico. El desplazamiento va en `transform` para
    que lo componga la GPU sin repintar el ruido en cada fotograma. */
+/* El grano era un SVG con feTurbulence recalculado en vivo. Chrome lo guarda
+   como imagen; Safari lo re-rasteriza en cada pintado, y con el desplazamiento
+   de 4 pasos por segundo sobre una pantalla retina ahogaba el hilo principal:
+   en WebKit emulando un iPad el reloj de GSAP avanzaba 0,43 s por cada 8 s
+   reales -la carga casi no avanzaba y nada se movia-. Sin la capa, 5,68 s.
+   Ahora es un PNG de ruido ya fabricado (assets/img/grano.png, 180 px, tesela
+   sin costura): el mismo aspecto y el compositor lo mueve gratis. */
 #grain{
   position:fixed;inset:-70px;z-index:9;pointer-events:none;opacity:.035;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation:grain 1s steps(4) infinite;
+  background-image:url("../assets/img/grano.png");background-size:180px 180px;
+  animation:grain 1s steps(4) infinite;will-change:transform;
 }
 @keyframes grain{
   0%{transform:translate(0,0)}         25%{transform:translate(-24px,14px)}
@@ -1263,6 +1270,12 @@ body.hidec #cx,body.hidec #cr{opacity:0}
 .std .i:hover::after{transform:scaleX(1)}
 
 @media (prefers-reduced-motion:reduce){ #grain{animation:none} }
+/* En tactil no hay grano. Es una capa fija, semitransparente y a pantalla
+   completa por encima de todo, y en WebKit emulando un iPad bastaba con que
+   existiera -quieta o no- para que el reloj de GSAP avanzara 0,36 s por cada
+   8 reales: la carga no terminaba y nada se movia. Sin ella, 6,97 s. Es un
+   ruido al 3,5 %: en un telefono o una tableta no se echa de menos. */
+@media (hover:none),(pointer:coarse){ #grain{display:none} }
 
 
 /* ============================================================
