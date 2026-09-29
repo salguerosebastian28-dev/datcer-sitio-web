@@ -1176,28 +1176,12 @@ body.hidec #cx,body.hidec #cr{opacity:0}
   }
 }
 
-/* ---------- grano ----------
-   Ruido fijo sobre todo el documento, al 3,5 %. No se ve: se nota. Rompe el
-   bandeado de los degradados del hero y le quita a las superficies grandes de
-   color liso el aspecto de plastico. El desplazamiento va en `transform` para
-   que lo componga la GPU sin repintar el ruido en cada fotograma. */
-/* El grano era un SVG con feTurbulence recalculado en vivo. Chrome lo guarda
-   como imagen; Safari lo re-rasteriza en cada pintado, y con el desplazamiento
-   de 4 pasos por segundo sobre una pantalla retina ahogaba el hilo principal:
-   en WebKit emulando un iPad el reloj de GSAP avanzaba 0,43 s por cada 8 s
-   reales -la carga casi no avanzaba y nada se movia-. Sin la capa, 5,68 s.
-   Ahora es un PNG de ruido ya fabricado (assets/img/grano.png, 180 px, tesela
-   sin costura): el mismo aspecto y el compositor lo mueve gratis. */
-#grain{
-  position:fixed;inset:-70px;z-index:9;pointer-events:none;opacity:.035;
-  background-image:url("../assets/img/grano.png");background-size:180px 180px;
-  animation:grain 1s steps(4) infinite;will-change:transform;
-}
-@keyframes grain{
-  0%{transform:translate(0,0)}         25%{transform:translate(-24px,14px)}
-  50%{transform:translate(18px,-20px)} 75%{transform:translate(-12px,-8px)}
-  100%{transform:translate(0,0)}
-}
+/* ---------- grano: retirado ----------
+   Hubo una capa de ruido fijo sobre toda la pagina, al 3,5 %, vibrando cuatro
+   veces por segundo. El cliente la vio como «grano de pelicula que se mueve
+   todo el tiempo» y no la quiere; ademas, en Safari era el mayor coste medido
+   (WebKit emulando un iPad: la carga no terminaba). No volver a ponerla sin
+   preguntar. */
 
 /* El blanco del final de la puerta es neutro (237,237,237) —el mismo del vídeo
    de la sala confinada— y la sección siguiente va en el claro de la casa
@@ -1269,13 +1253,6 @@ body.hidec #cx,body.hidec #cr{opacity:0}
 }
 .std .i:hover::after{transform:scaleX(1)}
 
-@media (prefers-reduced-motion:reduce){ #grain{animation:none} }
-/* En tactil no hay grano. Es una capa fija, semitransparente y a pantalla
-   completa por encima de todo, y en WebKit emulando un iPad bastaba con que
-   existiera -quieta o no- para que el reloj de GSAP avanzara 0,36 s por cada
-   8 reales: la carga no terminaba y nada se movia. Sin ella, 6,97 s. Es un
-   ruido al 3,5 %: en un telefono o una tableta no se echa de menos. */
-@media (hover:none),(pointer:coarse){ #grain{display:none} }
 
 
 /* ============================================================
