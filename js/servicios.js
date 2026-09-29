@@ -386,3 +386,27 @@ if (!TOUCH) document.querySelectorAll('[data-tilt]').forEach(function(pn){
     else v.pause();
   }, {threshold:.25}).observe(v);
 })();
+
+/* ============================================================
+   DE LA OBRA A LA OPERACION · la franja se abre y el video viaja
+   ------------------------------------------------------------
+   Tres piezas, cada una sobre un elemento distinto para que no se pisen:
+     · la caja se abre desde un recuadro redondeado hasta el ancho completo;
+     · el video, dentro, hace parallax (va mas lento que la pagina) y se
+       asienta de una escala algo mayor;
+     · el rotulo sube al entrar.
+   ============================================================ */
+(function(){
+  var sec = document.getElementById('sv-obra');
+  if (!sec || RM || typeof gsap === 'undefined') return;
+  var caja = sec.querySelector('.obra'), v = caja && caja.querySelector('video');
+  if (!caja || !v) return;
+
+  gsap.fromTo(caja, {clipPath:'inset(9% 7% 9% 7% round 22px)'},
+    {clipPath:'inset(0% 0% 0% 0% round 0px)', ease:'none',
+     scrollTrigger:{trigger:sec, start:'top 92%', end:'top 22%', scrub:1}});
+  gsap.fromTo(v, {yPercent:-6, scale:1.08}, {yPercent:6, scale:1, ease:'none',
+    scrollTrigger:{trigger:caja, start:'top bottom', end:'bottom top', scrub:true}});
+  gsap.from(sec.querySelectorAll('.obra-pie > *'), {y:28, opacity:0, stagger:.1, duration:1,
+    ease:'power3.out', scrollTrigger:{trigger:sec.querySelector('.obra-pie'), start:'top 90%'}});
+})();

@@ -24,6 +24,20 @@
 #br-hero .ft{display:grid;grid-template-columns:1fr auto;gap:clamp(24px,4vw,70px);align-items:end}
 #br-hero .ft p{max-width:48ch;color:var(--fg-60);font-size:clamp(.98rem,1.08vw,1.16rem);line-height:1.62}
 #br-hero .cta{display:flex;gap:14px;flex-wrap:wrap}
+/* La foto de la portada. En escritorio va a la derecha, alineada con la
+   etiqueta de arriba y con un ancho que no alcanza al titular (15ch). En
+   tableta y telefono pasa debajo del titular, a todo el ancho. La imagen mide
+   116 % y arranca en -8 %: el sobrante que recorre el parallax. */
+.br-im{position:absolute;z-index:2;top:0;right:var(--pad);margin:0;
+  width:min(31vw,600px);aspect-ratio:4/3;overflow:hidden;
+  border-radius:clamp(10px,1vw,18px);background:#0B1A30;
+  box-shadow:0 0 0 1px rgba(227,230,235,.12),0 40px 90px -40px rgba(0,0,0,.8)}
+.br-im img{position:absolute;left:0;top:-8%;width:100%;height:116%;object-fit:cover;
+  display:block;will-change:transform}
+@media (max-width:1080px){
+  .br-im{position:relative;right:auto;width:100%;aspect-ratio:16/10;
+    margin:0 0 clamp(28px,4vw,44px)}
+}
 #br-hero::after{
   content:'';position:absolute;left:50%;bottom:-44%;transform:translateX(-50%);
   width:min(2200px,170vw);height:72%;pointer-events:none;z-index:1;
@@ -335,4 +349,8 @@
   overflow:hidden;border-radius:clamp(10px,1vw,18px);background:#000;
   box-shadow:0 0 0 1px rgba(227,230,235,.12),0 40px 90px -40px rgba(0,0,0,.85)}
 .film video{display:block;width:100%;height:100%;object-fit:contain;background:#000}
+/* la perspectiva para que el marco llegue inclinado; el giro nace de su canto
+   inferior, como una pantalla que se levanta */
+#br-film .pad{perspective:1600px}
+.film{transform-origin:50% 100%;will-change:transform}
 @media print{ #br-film{display:none!important} }

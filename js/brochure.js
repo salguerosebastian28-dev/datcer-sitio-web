@@ -436,3 +436,57 @@ document.querySelectorAll('.dl-b[href]').forEach(function(a){
     else if (!v.paused){ mia = true; v.pause(); }
   }, {threshold:.55}).observe(v);
 })();
+
+/* ============================================================
+   LA PELICULA · entrada y salida con el scroll
+   ------------------------------------------------------------
+   Una sola linea de tiempo para todo el paso de la seccion por la pantalla
+   (de 'top bottom' a 'bottom top'), en tres tramos:
+
+     · 0 a .45, la entrada: el marco llega inclinado hacia atras, mas pequeno
+       y mas abajo, y se endereza; dentro, la imagen se enciende desde el
+       centro, como una pantalla (clip-path sobre el <video>, no sobre el
+       marco: el marco conserva su borde y su sombra).
+     · .45 a .70, quieta. La seccion esta centrada en pantalla y la pelicula
+       se ve ENTERA: sin recorte y sin nada encima. Eso es lo que se pidio.
+     · .70 a 1, la salida: se aleja un poco hacia arriba.
+
+   En una sola linea de tiempo y no en tres tweens sueltos porque tocan las
+   mismas propiedades del mismo elemento, y dos tweens con scrub sobre la misma
+   propiedad se pisan al refrescar.
+   ============================================================ */
+(function(){
+  var sec = document.getElementById('br-film');
+  if (!sec || RM || typeof gsap === 'undefined') return;
+  var marco = sec.querySelector('.film'), v = marco && marco.querySelector('video');
+  if (!marco || !v) return;
+
+  gsap.timeline({scrollTrigger:{trigger:sec, start:'top bottom', end:'bottom top', scrub:1}})
+    .fromTo(marco, {rotateX:14, scale:.9, y:90}, {rotateX:0, scale:1, y:0, ease:'power2.out', duration:.45}, 0)
+    .fromTo(v, {clipPath:'inset(18% 26% 18% 26%)', filter:'brightness(.55)'},
+               {clipPath:'inset(0% 0% 0% 0%)', filter:'brightness(1)', ease:'power2.out', duration:.4}, .05)
+    .to(marco, {duration:.25}, .45)
+    .to(marco, {scale:.95, y:-50, ease:'none', duration:.3}, .70);
+
+  gsap.from(sec.querySelectorAll('.film-hd .lbl'), {y:22, opacity:0, stagger:.08, duration:.9,
+    ease:'power3.out', scrollTrigger:{trigger:sec, start:'top 78%'}});
+})();
+
+/* ============================================================
+   LA FOTO DE LA PORTADA · entra y viaja
+   ------------------------------------------------------------
+   La cortina va en el marco (clip-path) y el parallax en la imagen
+   (yPercent): elementos distintos, no se pisan. La entrada va en tiempo, no
+   con el scroll, porque la portada ya esta a la vista al cargar; espera a que
+   se vaya el precargador.
+   ============================================================ */
+(function(){
+  var m = document.querySelector('#br-hero .br-im');
+  if (!m || RM || typeof gsap === 'undefined') return;
+  var im = m.querySelector('img');
+  gsap.fromTo(m, {clipPath:'inset(100% 0% 0% 0% round 18px)'},
+    {clipPath:'inset(0% 0% 0% 0% round 18px)', duration:1.5, ease:'expo.out', delay:2.9});
+  gsap.fromTo(im, {scale:1.18}, {scale:1, duration:2.2, ease:'expo.out', delay:2.9});
+  gsap.fromTo(im, {yPercent:-6}, {yPercent:6, ease:'none',
+    scrollTrigger:{trigger:'#br-hero', start:'top top', end:'bottom top', scrub:true}});
+})();
