@@ -12,38 +12,59 @@
    ============================================================ */
 
 /* ---------- hero ---------- */
-#br-hero{
-  position:relative;min-height:84svh;display:flex;align-items:flex-end;
-  padding-block:clamp(150px,18vh,230px) clamp(40px,6vh,84px);
+/* ---------- portada ----------
+   La seccion es el perla (el mismo del inicio y de shelters, con el reflejo
+   que mueve --hs) y dentro va el marco: navy, la foto y el texto. El marco se
+   recorta con clip-path y --hx, que el JS lleva de 1 a 0 al bajar: el perla
+   asoma por los bordes y se cierra. Con clip-path y no con inset porque asi no
+   se recalcula el layout del texto en cada fotograma. */
+#br-hero{position:relative;height:100svh;min-height:640px;overflow:hidden;--hx:1;
+  background:
+    linear-gradient(105deg,rgba(255,255,255,0) 40%,rgba(255,255,255,.75) 50%,rgba(255,255,255,0) 60%) var(--hs,120%) 0/260% 100% no-repeat,
+    radial-gradient(60% 55% at 14% 6%,rgba(255,236,242,.2),rgba(255,236,242,0) 62%),
+    radial-gradient(55% 60% at 88% 96%,rgba(210,228,255,.62),rgba(210,228,255,0) 64%),
+    linear-gradient(115deg,#E7E8EB 0%,#F8F8F6 20%,#DFE3E9 42%,#F4F3F0 60%,#E2E6EC 80%,#F1F1EF 100%)}
+.br-fr{position:absolute;inset:0;display:flex;align-items:flex-end;
   --bg:var(--dark);--fg:var(--light);background:var(--bg);color:var(--fg);
-  overflow:hidden;
+  clip-path:inset(
+    calc(var(--hx) * clamp(84px,10.5vh,124px))
+    calc(var(--hx) * clamp(12px,1.6vw,30px))
+    calc(var(--hx) * clamp(12px,1.6vw,30px))
+    round calc(var(--hx) * clamp(12px,1.5vw,26px)))}
+/* la foto: 114 % de alto y -7 % arriba, el sobrante del parallax */
+.br-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
+.br-bg img{position:absolute;left:0;top:-7%;width:100%;height:114%;
+  object-fit:cover;object-position:62% 45%;will-change:transform}
+/* el texto sobre la foto: sombra en capas y una sombra local solo detras del
+   bloque de texto, abajo a la izquierda */
+#br-hero .tag,#br-hero h1,#br-hero .ft p{
+  text-shadow:0 1px 2px rgba(2,13,31,.55),0 3px 14px rgba(2,13,31,.55),0 10px 44px rgba(2,13,31,.6)}
+#br-hero .in::before{content:'';position:absolute;z-index:-1;pointer-events:none;
+  left:-14%;bottom:-16%;width:84%;height:150%;
+  background:radial-gradient(closest-side,rgba(2,13,31,.8),rgba(2,13,31,.55) 55%,rgba(2,13,31,0))}
+/* «veintiocho oficios» es texto metalico: degradado recortado a la letra con
+   color transparente. Una text-shadow se ve A TRAVES de la letra y la
+   ensucia; aqui la sombra va con drop-shadow, que sigue el contorno. */
+#br-hero h1 .ln>i em{text-shadow:none;
+  filter:drop-shadow(0 2px 3px rgba(2,13,31,.55)) drop-shadow(0 8px 26px rgba(2,13,31,.6))}
+/* lo que va sobre la foto clara necesita su propio fondo: el boton de
+   contorno, las pastillas de descarga y sus rotulos */
+#br-hero .cta .btn:not(.fill),#br-hero .dl-b{background:rgba(2,13,31,.62);
+  border-color:rgba(227,230,235,.26);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+#br-hero .dl .lbl,#br-hero .br-sc{color:rgba(255,255,255,.82);text-shadow:0 2px 12px rgba(2,13,31,.8)}
+#br-hero .ft p{color:rgba(255,255,255,.9)!important}
+@media (max-width:860px){
+  #br-hero .in::before{left:-20%;width:140%;bottom:-6%;height:118%;
+    background:linear-gradient(to top,rgba(2,13,31,.82) 0,rgba(2,13,31,.62) 55%,rgba(2,13,31,.3) 80%,rgba(2,13,31,0))}
 }
-#br-hero .in{position:relative;z-index:2;width:100%}
+#br-hero .in{position:relative;z-index:2;width:100%;padding-bottom:calc(clamp(12px,1.6vw,30px) + clamp(30px,5vh,64px))}
 #br-hero .tag{display:inline-block;margin-bottom:clamp(18px,2.6vw,34px);color:rgba(227,230,235,.72)}
 #br-hero h1{max-width:15ch;margin-bottom:clamp(34px,5vw,66px)}
 #br-hero .ft{display:grid;grid-template-columns:1fr auto;gap:clamp(24px,4vw,70px);align-items:end}
 #br-hero .ft p{max-width:48ch;color:var(--fg-60);font-size:clamp(.98rem,1.08vw,1.16rem);line-height:1.62}
 #br-hero .cta{display:flex;gap:14px;flex-wrap:wrap}
-/* La foto de la portada. En escritorio va a la derecha, alineada con la
-   etiqueta de arriba y con un ancho que no alcanza al titular (15ch). En
-   tableta y telefono pasa debajo del titular, a todo el ancho. La imagen mide
-   116 % y arranca en -8 %: el sobrante que recorre el parallax. */
-.br-im{position:absolute;z-index:2;top:0;right:var(--pad);margin:0;
-  width:min(31vw,600px);aspect-ratio:4/3;overflow:hidden;
-  border-radius:clamp(10px,1vw,18px);background:#0B1A30;
-  box-shadow:0 0 0 1px rgba(227,230,235,.12),0 40px 90px -40px rgba(0,0,0,.8)}
-.br-im img{position:absolute;left:0;top:-8%;width:100%;height:116%;object-fit:cover;
-  display:block;will-change:transform}
-@media (max-width:1080px){
-  .br-im{position:relative;right:auto;width:100%;aspect-ratio:16/10;
-    margin:0 0 clamp(28px,4vw,44px)}
-}
-#br-hero::after{
-  content:'';position:absolute;left:50%;bottom:-44%;transform:translateX(-50%);
-  width:min(2200px,170vw);height:72%;pointer-events:none;z-index:1;
-  background:radial-gradient(50% 50% at 50% 50%,rgba(120,158,232,.20) 0%,rgba(2,13,31,0) 70%);
-  filter:blur(24px);
-}
+
+/* (el resplandor azul de la portada se retiro: se pintaba sobre la foto) */
 /* la marca de «esto va de lado»: una flecha que insiste hacia la derecha */
 .br-sc{position:absolute;right:var(--pad);bottom:clamp(30px,4.6vw,58px);z-index:3;
   display:flex;align-items:center;gap:14px;color:rgba(227,230,235,.5)}

@@ -473,20 +473,29 @@ document.querySelectorAll('.dl-b[href]').forEach(function(a){
 })();
 
 /* ============================================================
-   LA FOTO DE LA PORTADA · entra y viaja
+   LA PORTADA · el marco se abre y la foto viaja
    ------------------------------------------------------------
-   La cortina va en el marco (clip-path) y el parallax en la imagen
-   (yPercent): elementos distintos, no se pisan. La entrada va en tiempo, no
-   con el scroll, porque la portada ya esta a la vista al cargar; espera a que
-   se vaya el precargador.
+   Mismo gesto que en el inicio y en shelters: --hx de 1 a 0 al bajar, y
+   mientras el perla asoma la cabecera va en oscuro con el logo original. La
+   foto entra ampliada cuando se va el precargador y despues hace parallax.
    ============================================================ */
 (function(){
-  var m = document.querySelector('#br-hero .br-im');
-  if (!m || RM || typeof gsap === 'undefined') return;
-  var im = m.querySelector('img');
-  gsap.fromTo(m, {clipPath:'inset(100% 0% 0% 0% round 18px)'},
-    {clipPath:'inset(0% 0% 0% 0% round 18px)', duration:1.5, ease:'expo.out', delay:2.9});
-  gsap.fromTo(im, {scale:1.18}, {scale:1, duration:2.2, ease:'expo.out', delay:2.9});
+  var hero = document.getElementById('br-hero'), hd = document.getElementById('hd');
+  if (!hero || !hd || typeof gsap === 'undefined') return;
+  if (!RM) gsap.fromTo(hero, {'--hx':1}, {'--hx':0, ease:'none',
+    scrollTrigger:{trigger:hero, start:'top top', end:'58% top', scrub:.6}});
+  var pinta = function(y){
+    hd.classList.toggle('perla', y < innerHeight * .3);
+    document.documentElement.style.setProperty('--hs', (120 - (y * .12) % 240) + '%');
+  };
+  ScrollTrigger.create({start:0, end:'max',
+    onUpdate:function(st){ pinta(st.scroll()); },
+    onRefresh:function(st){ pinta(st.scroll()); }});
+  pinta(window.scrollY || 0);
+
+  var im = hero.querySelector('.br-bg img');
+  if (!im || RM) return;
+  gsap.fromTo(im, {scale:1.12}, {scale:1, duration:2.2, ease:'expo.out', delay:2.6});
   gsap.fromTo(im, {yPercent:-6}, {yPercent:6, ease:'none',
-    scrollTrigger:{trigger:'#br-hero', start:'top top', end:'bottom top', scrub:true}});
+    scrollTrigger:{trigger:hero, start:'top top', end:'bottom top', scrub:true}});
 })();
