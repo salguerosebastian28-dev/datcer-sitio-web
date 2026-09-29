@@ -144,3 +144,16 @@
 @media (prefers-reduced-motion:reduce){
   .sv-grid .c,.sv-grid .c > img{transform:none!important}
 }
+
+/* ---------- de la obra a la operacion ----------
+   A todo el ancho y en 2:1 (el clip es 16:9): se recorta poco arriba y abajo
+   y las gruas siguen en cuadro. Por encima del grano de la pagina (z 9). */
+#sv-obra{--bg:var(--dark);--fg:var(--light);background:var(--bg);color:var(--fg);
+  padding-bottom:clamp(36px,4.6vw,76px)}
+#sv-obra .obra{position:relative;z-index:10;aspect-ratio:2/1;overflow:hidden;background:#0B1A30}
+#sv-obra .obra video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 42%}
+#sv-obra .obra-pie{display:flex;justify-content:space-between;align-items:baseline;gap:24px;
+  flex-wrap:wrap;padding-top:clamp(18px,2vw,28px)}
+#sv-obra .obra-pie .lbl{color:var(--fg-60)}
+#sv-obra .obra-pie p{max-width:54ch;color:var(--fg-60)}
+@media (max-width:860px){ #sv-obra .obra{aspect-ratio:16/10} }

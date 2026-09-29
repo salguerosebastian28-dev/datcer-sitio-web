@@ -372,3 +372,17 @@ if (!TOUCH) document.querySelectorAll('[data-tilt]').forEach(function(pn){
   ScrollTrigger.create({trigger:'#sv-hero', start:'top bottom', end:'bottom top',
     onToggle:function(st){ st.isActive ? v.play().catch(function(){}) : v.pause(); }});
 })();
+
+/* ============================================================
+   DE LA OBRA A LA OPERACION · el timelapse solo corre a la vista
+   ============================================================ */
+(function(){
+  var v = document.querySelector('#sv-obra video');
+  if (!v) return;
+  if (RM){ v.removeAttribute('loop'); return; }
+  if (!('IntersectionObserver' in window)){ v.play(); return; }
+  new IntersectionObserver(function(e){
+    if (e[0].isIntersecting){ var p = v.play(); if (p && p.catch) p.catch(function(){}); }
+    else v.pause();
+  }, {threshold:.25}).observe(v);
+})();

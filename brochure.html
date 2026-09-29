@@ -92,6 +92,25 @@
   <div class="br-sc"><span class="lbl">Desplace de lado</span><i></i></div>
 </section>
 
+<!-- LA PELICULA
+     DATCER en 44 segundos. Se ve entera y sin nada encima: ni velo, ni texto,
+     ni recorte (object-fit:contain). Arranca sola al entrar en pantalla y se
+     pausa al salir; si el visitante la pausa, no vuelve a arrancar por su
+     cuenta. No lleva audio, asi que muted no le quita nada. -->
+<section id="br-film">
+  <div class="pad">
+    <div class="film-hd">
+      <span class="lbl">DATCER en 44 segundos</span>
+      <span class="lbl">Pel&iacute;cula</span>
+    </div>
+    <div class="film">
+      <video id="film" controls muted playsinline loop preload="metadata" poster="assets/img/datcer-film-poster.jpg">
+        <source src="assets/video/datcer-film.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+</section>
+
 <!-- LA PRESENTACION
      El lienzo se queda pegado y la pista se mueve en HORIZONTAL con el scroll.
      Cada lamina es un servicio. El JS no sabe cuantas hay ni que dicen: mide la

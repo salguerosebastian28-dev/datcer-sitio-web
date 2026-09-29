@@ -418,3 +418,21 @@ document.querySelectorAll('.dl-b[href]').forEach(function(a){
     if (n) em.textContent = (n / 1048576).toFixed(1).replace('.', ',') + ' MB';
   }).catch(function(){});
 });
+
+/* ============================================================
+   LA PELICULA · arranca al entrar en pantalla
+   ------------------------------------------------------------
+   Sola al llegar, en pausa al salir. Si la pausa el visitante, se respeta:
+   no vuelve a arrancar cuando pasa otra vez por delante.
+   ============================================================ */
+(function(){
+  var v = document.getElementById('film');
+  if (!v || !('IntersectionObserver' in window)) return;
+  var mia = false, suya = false;
+  v.addEventListener('pause', function(){ if (!mia && !v.ended) suya = true; mia = false; });
+  v.addEventListener('play', function(){ suya = false; });
+  new IntersectionObserver(function(e){
+    if (e[0].isIntersecting){ if (!suya){ var p = v.play(); if (p && p.catch) p.catch(function(){}); } }
+    else if (!v.paused){ mia = true; v.pause(); }
+  }, {threshold:.55}).observe(v);
+})();

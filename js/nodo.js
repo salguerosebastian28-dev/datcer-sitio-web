@@ -203,18 +203,9 @@ setPhase(0);resize();window.addEventListener('resize',resize);new ResizeObserver
    en la página. Si se refrescara después que los disparadores de más abajo,
    todos calcularían su posición sin contarlo y quedarían corridos (ya pasó con
    el pin de servicios, que lleva prioridad 1). */
-/* Cuatro fases, cuatro gestos. Con 5,8 pantallas de recorrido el cliente
-   sentia que habia que scrollear mucho y que no avanzaba. Ahora son 3,6, y en
-   computador el scroll tiene iman: cada gesto de rueda o trackpad termina
-   exactamente en la fase siguiente. Las paradas son el reposo de cada fase
-   en la linea de tiempo (0, 3,4, 6,8 y 10 de 11,65 tiempos) y la ultima, 1,
-   es la salida hacia la seccion siguiente. En tactil NO hay iman: pelea con
-   la inercia del dedo y da la sensacion de que la pagina se atasca. */
-const ND_TACTIL=matchMedia('(hover:none),(pointer:coarse)').matches;
 if(window.gsap&&window.ScrollTrigger&&!reduced){
  const tl=gsap.timeline({defaults:{ease:'none'},scrollTrigger:{trigger:root,pin:$('.nd-vp'),start:'top top',
-  end:()=>'+='+Math.max(innerHeight*3.6,2600),scrub:.8,invalidateOnRefresh:true,anticipatePin:1,refreshPriority:2,
-  snap:ND_TACTIL?false:{snapTo:ND_PARADAS.concat(1),duration:{min:.35,max:.8},delay:.08,ease:'power2.inOut',directional:true}},onUpdate:update});
+  end:()=>'+='+Math.max(innerHeight*5.8,4200),scrub:1.15,invalidateOnRefresh:true,anticipatePin:1,refreshPriority:2},onUpdate:update});
  tl.to(state,{p:1,duration:10},0).to(state,{plan:1,duration:1.8},1.2).to(state,{unifilar:0,duration:1.7},1.3).to(state,{iso:.22,duration:1.2},3.8).to(state,{racks:1,duration:2},4.4).to(state,{iso:1,duration:1.8},4.8).to(state,{systems:1,duration:1.8},6.1).to(state,{build:1,duration:1.8},7.3).to(state,{roof:1,duration:1.1},8.8);
  tl.to($('.nd-grid'),{backgroundPosition:'0px -170px',duration:10},0);scrollTrigger=tl.scrollTrigger;
  /* Salida hacia la foto de la sala, todavía con el lienzo fijo. Primero se
