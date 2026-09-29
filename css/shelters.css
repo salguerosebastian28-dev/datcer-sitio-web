@@ -82,15 +82,18 @@
    y sobre el indicador de capítulo */
 .walk-firma{position:absolute;right:4.5%;top:clamp(92px,12vh,140px);z-index:3;
   display:flex;flex-direction:column;align-items:flex-end;gap:10px;pointer-events:none}
-.walk-firma .sello{position:relative;display:block;width:clamp(120px,11vw,168px)}
-.walk-firma .sello img{width:100%;height:auto;display:block;opacity:.3}
+/* La firma tiene que verse: es el DWG de DATCER. Al 30 % de opacidad y a
+   150 px pasaba por una marca de agua y nadie la registraba. */
+.walk-firma .sello{position:relative;display:block;width:clamp(210px,21vw,340px)}
+.walk-firma .sello img{width:100%;height:auto;display:block;opacity:.95;
+  filter:drop-shadow(0 6px 22px rgba(2,13,31,.55))}
 .walk-firma .sello i{position:absolute;inset:0;
   background:linear-gradient(105deg,rgba(255,255,255,0) 40%,rgba(255,255,255,.85) 50%,rgba(255,255,255,0) 60%);
   background-size:260% 100%;background-position:var(--hs,120%) 0;
   -webkit-mask:url(../assets/logo-dark.png) no-repeat 50% 50%/contain;
   mask:url(../assets/logo-dark.png) no-repeat 50% 50%/contain;
   opacity:.55;mix-blend-mode:screen}
-.walk-firma .lbl{color:var(--fg-38);font-size:9.5px}
+.walk-firma .lbl{color:var(--fg-60);font-size:10px}
 @media (max-width:860px){ .walk-firma{display:none} }
 
 /* las escuadras de encuadre, como en una lámina de plano */

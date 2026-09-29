@@ -125,6 +125,18 @@ section{background:var(--bg);color:var(--fg);position:relative}
 #pre .top{display:flex;justify-content:space-between;align-items:flex-start}
 #pre .mid{display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex:1;align-self:stretch;padding-block:8vh}
 #pre .word{font-size:clamp(3rem,13vw,13rem);font-weight:200;letter-spacing:-.06em;line-height:1;align-self:flex-end}
+/* En el inicio no va la palabra: va el logo. Ocupa lo mismo que ocupaba el
+   texto, para que la composicion del precargador no cambie. */
+#pre .word.logo{line-height:0}
+#pre .word.logo img{display:block;width:clamp(240px,52vw,900px);height:auto}
+/* En un telefono el logo va a todo el ancho y en el centro de la pantalla, con
+   el contador debajo: a 240 px y pegado abajo quedaba media pantalla vacia. */
+@media (max-width:620px){
+  #pre .mid{flex-wrap:wrap;align-content:center;align-items:center;row-gap:18px}
+  #pre .word.logo{flex:0 0 100%}
+  #pre .word.logo img{width:100%}
+  #pre .pc{margin-left:auto}
+}
 #pre .pc{font-size:clamp(1.4rem,4vw,3.4rem);font-weight:200;letter-spacing:-.03em;align-self:flex-end;font-variant-numeric:tabular-nums}
 #pre .bar{height:1px;background:rgba(227,230,235,.16);position:relative}
 #pre .bar>i{position:absolute;inset:0;background:var(--light);transform:scaleX(0);transform-origin:left}
@@ -143,9 +155,10 @@ section{background:var(--bg);color:var(--fg);position:relative}
    cuando la cabecera esta sobre fondo claro. Todo lo de dentro tira de
    `currentColor`, incluidas las barras del boton. */
 #hd{
+  --lg-h:clamp(44px,3.9vw,64px);
   position:fixed;top:0;left:0;right:0;z-index:400;
   display:flex;align-items:center;justify-content:space-between;
-  padding:24px var(--pad);color:var(--light);
+  padding:clamp(14px,1.4vw,22px) var(--pad);color:var(--light);
   transition:transform .6s var(--e),padding .6s var(--e),color .45s var(--e);
 }
 /* .lite: sobre fondo claro. .perla: sobre el marco perla del hero (ver .cover) */
@@ -193,14 +206,16 @@ section{background:var(--bg);color:var(--fg);position:relative}
   background:rgba(2,13,31,.10)}
 @media (prefers-reduced-motion:reduce){ .hd-bg i{transform:none!important;filter:none!important} }
 #hd.up{transform:translateY(-102%)}
-#hd .lg{display:flex;align-items:flex-end;gap:15px}
+#hd .lg{display:flex;align-items:center;gap:15px}
 
 /* Dos versiones cruzadas. La de fondo oscuro conserva el naranja de marca y
    sube el gris al claro de la casa: el gris original sobre el navy se queda en
-   2,5:1 de contraste y se hunde. Sobre claro —y sobre el marco perla— entra el
-   archivo original. */
-#hd .lgi{position:relative;display:block;height:38px}
-#hd .lgi img{height:38px;width:auto;display:block;transition:opacity .45s var(--e)}
+   2,5:1 de contraste y se hunde. Sobre claro —el marco perla, la barra— entra
+   el archivo original, logo.png, tal cual. Hubo una version con los grises
+   oscurecidos para la barra (logo-barra.png) y el cliente la noto: no era el
+   logo. */
+#hd .lgi{position:relative;display:block;height:var(--lg-h)}
+#hd .lgi img{height:var(--lg-h);width:auto;display:block;transition:opacity .45s var(--e)}
 #hd .lgi .lt{position:absolute;left:0;top:0;opacity:0}
 /* `.barra` faltaba aquí: sobre la barra perla seguía saliendo la versión para
    fondo oscuro, cuyo gris claro desaparece contra el blanco — el «CER» del
@@ -1024,7 +1039,11 @@ input[type=range]::-moz-range-thumb{width:13px;height:13px;border:0;border-radiu
 
 /* footer */
 .fw{font-size:clamp(3.4rem,17.5vw,16rem);font-weight:200;letter-spacing:-.065em;line-height:.78;color:transparent;-webkit-text-stroke:1px var(--fg-18);padding-inline:var(--pad);user-select:none;white-space:nowrap}
-footer{--bg:var(--dark);--fg:var(--light);background:var(--bg);color:var(--fg);padding:clamp(50px,6vw,90px) var(--pad) 30px;border-top:1px solid rgba(227,230,235,.1)}
+/* position:relative no es decorativo. En shelters, la capa perla del marco del
+   hero (.perla-bg) es sticky y vive en todo <main>, asi que acompana la pagina
+   entera; un pie estatico se pinta por DEBAJO de cualquier elemento
+   posicionado, y el pie de shelters salia como una pantalla perla vacia. */
+footer{position:relative;--bg:var(--dark);--fg:var(--light);background:var(--bg);color:var(--fg);padding:clamp(50px,6vw,90px) var(--pad) 30px;border-top:1px solid rgba(227,230,235,.1)}
 .fgd{display:grid;grid-template-columns:1.5fr repeat(3,1fr);gap:clamp(22px,4vw,60px);padding-bottom:clamp(38px,5vw,68px)}
 .fgd h5{color:rgba(227,230,235,.35);margin-bottom:19px}
 .fgd ul{list-style:none;display:grid;gap:10px}
