@@ -1454,3 +1454,72 @@ body.hidec #cx,body.hidec #cr{opacity:0}
   /* el pie, a dos columnas: a una, las tres listas eran una pantalla y media */
   .fgd{grid-template-columns:1fr 1fr;column-gap:20px}
 }
+
+/* ============================================================
+   INICIO CON VIDEO (#hero.hero-v)
+   ------------------------------------------------------------
+   Comparte con la portada de rayos X -que ahora vive en servicios- el marco
+   perla, el sticky, el velo de cruce (.dim) y las guias punteadas (.rt): todo
+   lo que hace el cruce hacia el modelo NODO. Lo propio va aqui, bajo
+   .hero-v, para no tocar aquella.
+
+   Composicion centrada: el video es simetrico en cuanto los haces llenan el
+   encuadre, y un bloque al centro -etiqueta, logo, titular, botones- es lo que
+   se atraviesa al bajar.
+   ============================================================ */
+#hero.hero-v .in{justify-content:center;align-items:center;text-align:center;
+  padding:clamp(120px,15vh,170px) var(--pad) clamp(70px,10vh,110px)}
+/* el video va en su color: solo una franja corta arriba para la cabecera y
+   otra abajo para el pie; el centro, limpio */
+#hero.hero-v .vg{background:
+  linear-gradient(to bottom,rgba(2,13,31,.55) 0,rgba(2,13,31,0) 16%),
+  linear-gradient(to top,rgba(2,13,31,.7) 0,rgba(2,13,31,0) 22%)}
+/* una sombra local detras del bloque central, no un filtro sobre el video */
+.hv-halo{position:absolute;left:50%;top:52%;width:min(1100px,92vw);height:min(720px,80vh);
+  transform:translate(-50%,-50%);z-index:-1;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(2,13,31,.66),rgba(2,13,31,.38) 55%,rgba(2,13,31,0))}
+#hero.hero-v .in{isolation:isolate}
+/* el video sobresale 30 px por cada lado: el puntero lo desplaza hasta 22 y
+   asi nunca asoma el borde */
+#hero.hero-v .bgm{inset:-30px}
+
+.hv-k{color:rgba(227,230,235,.78);letter-spacing:.32em;margin-bottom:clamp(18px,2.4vw,30px);
+  font-variant-numeric:tabular-nums}
+.hv-cod{display:inline-block;min-width:1ch;white-space:pre}
+
+/* --rv: cuanto del logo ya escribio el haz (0-100). Sin JS queda en 100. */
+.hv-logo{position:relative;--rv:100;width:clamp(280px,44vw,780px);will-change:transform,opacity}
+.hv-logo img{display:block;width:100%;height:auto;
+  clip-path:inset(-10% calc(100% - var(--rv) * 1%) -10% 0);
+  filter:drop-shadow(0 10px 40px rgba(2,13,31,.75))}
+/* el haz: una linea de luz violeta, del color de la fibra del video, que va
+   delante del corte. Se enciende al arrancar y se apaga al llegar. */
+.hv-haz{position:absolute;top:-14%;bottom:-14%;left:calc(var(--rv) * 1%);width:3px;
+  transform:translateX(-1px);pointer-events:none;
+  background:linear-gradient(to bottom,transparent,#C9B8FF 18%,#fff 50%,#C9B8FF 82%,transparent);
+  box-shadow:0 0 18px 4px rgba(150,120,255,.75),0 0 60px 12px rgba(120,90,255,.35);
+  opacity:calc(min(var(--rv)/4, 1) * (1 - max((var(--rv) - 92)/8, 0)))}
+
+.hv-t{font-size:clamp(1.7rem,3.5vw,3.6rem);font-weight:200;letter-spacing:-.035em;line-height:1.08;
+  max-width:20ch;margin-top:clamp(22px,3vw,40px);color:#F2F4F8}
+.hv-t .w{display:inline-block;overflow:visible}
+.hv-t .w i{display:inline-block;font-style:normal;will-change:transform,filter,opacity}
+/* lo que viaja por la fibra, en el violeta de la fibra */
+.hv-t em{font-style:normal;color:#C9B8FF;text-shadow:0 0 28px rgba(150,120,255,.55)}
+
+#hero.hero-v .cta.hv-cta{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;
+  margin-top:clamp(26px,3.4vw,42px)}
+#hero.hero-v .hv-cta .bt2{align-self:auto}
+
+.hv-pie{position:absolute;left:var(--pad);bottom:clamp(26px,3.4vw,46px);text-align:left;
+  display:flex;flex-direction:column;gap:7px}
+.hv-pie .lbl{color:rgba(227,230,235,.48)}
+.hv-pie b{font-size:.82rem;font-weight:400;color:rgba(227,230,235,.86)}
+
+@media (max-width:860px){
+  .hv-logo{width:min(82vw,420px)}
+  .hv-t{font-size:clamp(1.6rem,7vw,2.2rem)}
+  #hero.hero-v .cta.hv-cta{flex-direction:column;align-items:center}
+  .hv-pie{position:static;margin-top:32px;align-items:center;text-align:center}
+  .hv-k{letter-spacing:.2em;font-size:9.5px}
+}

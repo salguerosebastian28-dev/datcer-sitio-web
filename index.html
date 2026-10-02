@@ -77,42 +77,38 @@
      .cover, asi el hero no se queda pegado detras del resto de la pagina. -->
 <div class="cover">
 
-<section id="hero" data-ch="00" data-nm="Inicio">
+<section id="hero" class="hero-v" data-ch="00" data-nm="Inicio">
+  <!-- La portada del inicio: el video de los servidores (haces de fibra que
+       salen de un rack). En bucle sin costura: el final esta fundido con el
+       principio. La portada de rayos X que habia aqui se fue a servicios. -->
   <div class="bgm">
-    <!-- Dos renders del MISMO edificio, misma camara y mismo encuadre: uno
-         opaco y otro en rayos X. El scroll barre del primero al segundo, asi
-         que la fachada se vuelve transparente y aparece lo que hay dentro —
-         que es exactamente lo que vende la empresa. -->
     <div class="mv">
-      <img class="ph" src="assets/img/hero-edificio.jpg" alt="Data center al atardecer, fachada opaca" width="2200" height="1228">
-      <img class="ph rx" src="assets/img/hero-edificio-rx.jpg" alt="El mismo edificio en corte, con las salas de racks, la sala el&eacute;ctrica y las oficinas a la vista" width="2200" height="1228">
-      <span class="wp" aria-hidden="true"></span>
+      <video class="ph" autoplay muted loop playsinline preload="auto" poster="assets/img/hero-datos-poster.jpg" aria-hidden="true">
+        <source src="assets/video/hero-datos.mp4" type="video/mp4">
+      </video>
     </div>
   </div>
   <div class="vg"></div>
   <div class="rt" aria-hidden="true"></div>
   <div class="dim"></div>
   <div class="in">
-    <div class="up">
-      <span class="lbl tag" data-anim="tag">Alta disponibilidad &middot; TIER I &ndash; IV</span>
-      <h1 class="d1" data-split="line">Infraestructura que <em>no puede fallar</em></h1>
-      <div class="cta" data-anim="up">
-        <a class="bt2 pri" href="#contact"><span>Solicitar consulta</span><i class="ar"></i></a>
-        <a class="bt2 gls" href="servicios.html"><span>Ver los veintiocho servicios</span></a>
-      </div>
+    <!-- el halo: una sombra suave solo detras del bloque central -->
+    <span class="hv-halo" aria-hidden="true"></span>
+    <p class="lbl hv-k"><span class="hv-cod">Data Center &middot; Design &amp; Consulting</span></p>
+    <!-- El logo se escribe con luz: un haz violeta lo recorre de izquierda a
+         derecha y deja el logo detras, como la fibra del video. -->
+    <div class="hv-logo">
+      <img src="assets/logo-dark.png" alt="DATCER">
+      <i class="hv-haz" aria-hidden="true"></i>
     </div>
-
-    <div class="lo">
-      <div class="cred" data-anim="up">
-        <span class="lbl">Dise&ntilde;amos bajo</span>
-        <b>TIA-942 &middot; ASHRAE &middot; Uptime Institute</b>
-      </div>
-      <p class="lead" data-anim="up">DATCER dise&ntilde;a, documenta y entrega data centers completos. Ingenier&iacute;a de precisi&oacute;n para organizaciones que no pueden permitirse una interrupci&oacute;n.</p>
-      <a class="card" href="shelters.html" data-anim="up">
-        <div class="hd"><span class="lbl">Servicio destacado</span><span class="lbl d">SH-002-2</span></div>
-        <b>Data center completo en shelter,<br>montado y probado en f&aacute;brica</b>
-        <i class="ar"></i>
-      </a>
+    <h1 class="hv-t"><span class="w"><i>Diseñamos</i></span> <span class="w"><i>el</i></span> <span class="w"><i>lugar</i></span> <span class="w"><i>donde</i></span> <span class="w"><i><em>viven</em></i></span> <span class="w"><i><em>sus</em></i></span> <span class="w"><i><em>datos.</em></i></span></h1>
+    <div class="cta hv-cta">
+      <a class="bt2 pri" href="#contact"><span>Solicitar consulta</span><i class="ar"></i></a>
+      <a class="bt2 gls" href="servicios.html"><span>Ver los veintiocho servicios</span></a>
+    </div>
+    <div class="hv-pie">
+      <span class="lbl">Dise&ntilde;amos bajo</span>
+      <b>TIA-942 &middot; ASHRAE &middot; Uptime Institute</b>
     </div>
   </div>
   <div id="sc"><span>Scroll</span><i class="l"></i></div>

@@ -97,11 +97,13 @@ document.body.classList.add('lock');
 const pre = document.getElementById('pre'), pc = pre.querySelector('.pc'), pb = pre.querySelector('.bar > i');
 const cnt = {v:0};
 function heroIn(){
+  /* la entrada de la portada, la misma que tenia en el inicio */
   gsap.timeline()
-    .from('#sv-hero .tag', {yPercent:120, opacity:0, duration:1}, .1)
-    .from(splitMap.get(document.querySelector('#sv-hero h1')) || [],
+    .from('#hero .mv', {scale:1.22, duration:2.4, ease:'power2.out'}, 0)
+    .from('#hero .tag', {yPercent:120, opacity:0, duration:1}, .1)
+    .from(splitMap.get(document.querySelector('#hero h1')) || [],
           {yPercent:112, duration:1.35, stagger:.09, ease:'expo.out'}, .2)
-    .from('#sv-hero .ft', {y:40, opacity:0, duration:1.1}, .7)
+    .from('#hero .lo', {y:40, opacity:0, duration:1.1}, .7)
     .from('#hd, #sc', {opacity:0, duration:.9}, .6)
     .to('#ch', {opacity:1, duration:.8}, .9);
 }
@@ -258,14 +260,14 @@ listo.then(()=>{
   brillo('.ln > i em');
   brillo('.sh-tbl li b');
   document.querySelectorAll('[data-split="line"]').forEach(el=>{
-    if (el.closest('#sv-hero')) return;
+    if (el.closest('#hero')) return;
     gsap.from(splitMap.get(el)||[], {yPercent:112, duration:1.15, stagger:.075, ease:'expo.out',
       scrollTrigger:{trigger:el, start:'top 87%'}});
   });
   ScrollTrigger.refresh();
 });
 document.querySelectorAll('[data-anim="up"]').forEach(el=>{
-  if (el.closest('#sv-hero')) return;
+  if (el.closest('#hero')) return;
   gsap.from(el,{y:38, opacity:0, duration:1.1, scrollTrigger:{trigger:el, start:'top 92%'}});
 });
 document.querySelectorAll('.step .bd, .step .bd-s, .step .idx, .sh-tbl li').forEach(el=>{
@@ -362,15 +364,40 @@ if (!TOUCH) document.querySelectorAll('[data-tilt]').forEach(function(pn){
 })();
 
 
-/* El vídeo del hero: viaja con el scroll y solo se reproduce mientras se ve.
-   Diez segundos de taller no tienen por qué seguir decodificando cuando la
-   página ya va por la rejilla. */
+/* ============================================================
+   LA PORTADA · el barrido de rayos X y el marco
+   ------------------------------------------------------------
+   En el inicio la portada era sticky y tenia un tramo propio (.hold) para el
+   barrido. Aqui no hay nada que suba a taparla, asi que el barrido va mientras
+   la portada se va: entero antes de que haya salido la mitad, que es cuando
+   todavia se ve. El marco se abre algo antes, como alla. Las dos fotos en un
+   solo tween: si se movieran por separado el corte dejaria de casar.
+   Mientras el perla asoma, la cabecera va en oscuro con el logo original.
+   ============================================================ */
 (function(){
-  var v = document.getElementById('svbg'); if (!v) return;
-  if (!RM) gsap.fromTo(v, {yPercent:-5}, {yPercent:5, ease:'none',
-    scrollTrigger:{trigger:'#sv-hero', start:'top top', end:'bottom top', scrub:true}});
-  ScrollTrigger.create({trigger:'#sv-hero', start:'top bottom', end:'bottom top',
-    onToggle:function(st){ st.isActive ? v.play().catch(function(){}) : v.pause(); }});
+  var hero = document.getElementById('hero'), hd = document.getElementById('hd');
+  if (!hero || !hd || typeof gsap === 'undefined') return;
+  if (!RM){
+    gsap.timeline({defaults:{ease:'none'},
+      scrollTrigger:{trigger:hero, start:'top top', end:'55% top', scrub:.6}})
+      .fromTo(hero, {'--wp':0}, {'--wp':100, duration:1}, 0)
+      .fromTo(hero, {'--hx':1}, {'--hx':0, duration:.65}, 0);
+    gsap.fromTo('#hero .ph', {yPercent:0, scale:1}, {yPercent:9, scale:1.08, ease:'none',
+      scrollTrigger:{trigger:hero, start:'top top', end:'bottom top', scrub:true}});
+    gsap.fromTo('#hero .in', {yPercent:0}, {yPercent:-10, ease:'none',
+      scrollTrigger:{trigger:hero, start:'top top', end:'bottom top', scrub:true}});
+    gsap.to('#sc', {opacity:0, ease:'none', immediateRender:false,
+      scrollTrigger:{trigger:hero, start:'top top', end:'20% top', scrub:true}});
+  }
+  var marco = getComputedStyle(hero).getPropertyValue('--hx').trim() !== '0';
+  var pinta = function(y){
+    if (marco) hd.classList.toggle('perla', y < innerHeight * .3);
+    document.documentElement.style.setProperty('--hs', (120 - (y * .12) % 240) + '%');
+  };
+  ScrollTrigger.create({start:0, end:'max',
+    onUpdate:function(st){ pinta(st.scroll()); },
+    onRefresh:function(st){ pinta(st.scroll()); }});
+  pinta(window.scrollY || 0);
 })();
 
 /* ============================================================

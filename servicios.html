@@ -70,30 +70,54 @@
 <main id="top">
 
 <!-- HERO -->
-<section id="sv-hero" data-ch="00" data-nm="Servicios">
-  <!-- El taller de fondo: soldadura sobre azul, con las chispas en el naranja
-       de la marca. El velo cae sobre la franja del titular. -->
-  <div class="sv-bg" aria-hidden="true">
-    <video id="svbg" muted loop playsinline preload="auto" poster="assets/img/servicios-hero-poster.jpg">
-      <source src="assets/video/servicios-hero.mp4" type="video/mp4">
-    </video>
-    <span class="sv-dim"></span>
-    <!-- las mismas guías punteadas del hero del inicio -->
-    <span class="sv-rt"></span>
+<!-- LA PORTADA. Era la del inicio: dos renders del mismo edificio, opaco y en
+     rayos X, que el scroll barre del primero al segundo, dentro del marco
+     perla. Paso aqui cuando el inicio estreno su video de servidores. Va dentro
+     de .cover por el perla de detras (.cover::before), pero sin .hold: aqui no
+     hay seccion que suba a taparla, asi que el barrido corre mientras la
+     portada se va. -->
+<div class="cover">
+<section id="hero" data-ch="00" data-nm="Servicios">
+  <div class="bgm">
+    <!-- Dos renders del MISMO edificio, misma camara y mismo encuadre: uno
+         opaco y otro en rayos X. El scroll barre del primero al segundo, asi
+         que la fachada se vuelve transparente y aparece lo que hay dentro —
+         que es exactamente lo que vende la empresa. -->
+    <div class="mv">
+      <img class="ph" src="assets/img/hero-edificio.jpg" alt="Data center al atardecer, fachada opaca" width="2200" height="1228">
+      <img class="ph rx" src="assets/img/hero-edificio-rx.jpg" alt="El mismo edificio en corte, con las salas de racks, la sala el&eacute;ctrica y las oficinas a la vista" width="2200" height="1228">
+      <span class="wp" aria-hidden="true"></span>
+    </div>
   </div>
-  <div class="pad in">
-    <span class="lbl tag" data-anim="up">Veintiocho servicios &middot; Infraestructura cr&iacute;tica</span>
-    <h1 class="d1" data-split="line">Del primer c&aacute;lculo <em>a la puesta en marcha</em></h1>
-    <div class="ft">
-      <p data-anim="up">Cubrimos el ciclo completo de una sala t&eacute;cnica: el dise&ntilde;o que la define, los sistemas que la sostienen y las pruebas que demuestran que hace lo que promete.</p>
+  <div class="vg"></div>
+  <div class="rt" aria-hidden="true"></div>
+  <div class="dim"></div>
+  <div class="in">
+    <div class="up">
+      <span class="lbl tag" data-anim="tag">Alta disponibilidad &middot; TIER I &ndash; IV</span>
+      <h1 class="d1" data-split="line">Infraestructura que <em>no puede fallar</em></h1>
       <div class="cta" data-anim="up">
-        <a class="btn fill" href="#sv-01"><span class="t">Ver los veintiocho</span><span class="a"></span></a>
-        <a class="btn" href="index.html#contact"><span class="t">Hablar con un ingeniero</span><span class="a"></span></a>
+        <a class="bt2 pri" href="index.html#contact"><span>Solicitar consulta</span><i class="ar"></i></a>
+        <a class="bt2 gls" href="#sv-01"><span>Ver los veintiocho servicios</span></a>
       </div>
+    </div>
+
+    <div class="lo">
+      <div class="cred" data-anim="up">
+        <span class="lbl">Dise&ntilde;amos bajo</span>
+        <b>TIA-942 &middot; ASHRAE &middot; Uptime Institute</b>
+      </div>
+      <p class="lead" data-anim="up">DATCER dise&ntilde;a, documenta y entrega data centers completos. Ingenier&iacute;a de precisi&oacute;n para organizaciones que no pueden permitirse una interrupci&oacute;n.</p>
+      <a class="card" href="shelters.html" data-anim="up">
+        <div class="hd"><span class="lbl">Servicio destacado</span><span class="lbl d">SH-002-2</span></div>
+        <b>Data center completo en shelter,<br>montado y probado en f&aacute;brica</b>
+        <i class="ar"></i>
+      </a>
     </div>
   </div>
   <div id="sc"><span>Scroll</span><i class="l"></i></div>
 </section>
+</div>
 
 <!-- LOS DOCE
      Filas alternas: foto a un lado, texto al otro. Las tres capas de cada fila

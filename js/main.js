@@ -89,16 +89,41 @@ const pre = document.getElementById('pre'), pc = pre.querySelector('.pc'), pb = 
 const cnt = {v:0};
 
 function heroIn(){
+  /* La entrada del inicio, en cuatro tiempos que se solapan:
+       · el video se asienta desde un acercamiento;
+       · la etiqueta se descifra letra a letra, como un codigo que se resuelve;
+       · el logo se escribe con el haz de luz, de izquierda a derecha;
+       · el titular se enfoca palabra por palabra, de borroso a nitido. */
   const t = gsap.timeline();
-  /* el zoom de entrada va sobre .mv, no sobre el <video>: el parallax de scroll
-     usa el <video> y si compartieran transform se anularian entre si */
   t.from('#hero .mv', {scale:1.22, duration:2.4, ease:'power2.out'}, 0)
-   .from('#hero .tag', {yPercent:120, opacity:0, duration:1}, .1)
-   .from(splitMap.get(document.querySelector('#hero h1')) || [], {yPercent:112, duration:1.35, stagger:.09, ease:'expo.out'}, .2)
-   .from('#hero .lo', {y:40, opacity:0, duration:1.1}, .7)
+   .add(descifra(document.querySelector('#hero .hv-cod'), 1.3), .15)
+   .fromTo('#hero .hv-logo', {'--rv':0}, {'--rv':100, duration:1.7, ease:'power2.inOut'}, .35)
+   .from('#hero .hv-t .w i', {yPercent:70, opacity:0, filter:'blur(14px)', duration:1.1,
+      stagger:.07, ease:'power3.out'}, 1.15)
+   .from('#hero .hv-cta > *', {y:24, opacity:0, duration:.9, stagger:.08}, 1.7)
+   .from('#hero .hv-pie', {y:20, opacity:0, duration:.9}, 1.9)
    .from('#hd, #sc', {opacity:0, duration:.9}, .6)
    .to('#ch', {opacity:1, duration:.8}, .9);
   gsap.to('#ck', {y:0, duration:1, delay:3, ease:'power3.out'});
+}
+
+/* Un texto que se descifra: cada letra pasa por signos al azar antes de
+   asentarse, y se asientan de izquierda a derecha. Devuelve un tween para
+   meterlo en una linea de tiempo. Los espacios y el punto medio no cambian:
+   son la estructura que se lee desde el primer cuadro. */
+function descifra(el, dur){
+  if (!el) return gsap.timeline();
+  const final = el.textContent, SIG = '01<>/#_+=*[]';
+  const o = {p:0};
+  return gsap.to(o, {p:1, duration:dur, ease:'none', onUpdate:function(){
+    const n = Math.floor(o.p * final.length);
+    let s = '';
+    for (let k = 0; k < final.length; k++){
+      const c = final[k];
+      s += (k < n || c === ' ' || c === '\u00b7') ? c : SIG[(Math.random() * SIG.length) | 0];
+    }
+    el.textContent = s;
+  }, onComplete:function(){ el.textContent = final; }});
 }
 
 gsap.timeline({onComplete:()=>{document.body.classList.remove('lock'); heroIn(); ScrollTrigger.refresh(); irAlAncla();}})
@@ -292,6 +317,19 @@ if (intro){
          ver dos edificios desalineados. */
       .fromTo('#hero .ph', {yPercent:0, scale:1}, {yPercent:5, scale:1.08, duration:1}, 0);
 
+    /* El paso a traves del logo. Mientras el marco se abre, el logo crece, se
+       desenfoca y se disuelve, y el video se acerca: se atraviesa la marca para
+       entrar. La etiqueta y el titular se separan hacia arriba a distinto paso,
+       que es lo que da la profundidad. */
+    if (document.querySelector('#hero.hero-v')){
+      gsap.timeline({scrollTrigger:abre(), defaults:{ease:'none'}})
+        .fromTo('#hero .hv-logo', {scale:1, opacity:1, filter:'blur(0px)'},
+                                  {scale:2.6, opacity:0, filter:'blur(8px)', duration:.75}, 0)
+        .fromTo('#hero .hv-k',   {y:0, opacity:1}, {y:-90, opacity:0, duration:.55}, 0)
+        .fromTo('#hero .hv-t',   {yPercent:0}, {yPercent:-45, duration:1}, 0)
+        .fromTo('#hero .hv-halo',{opacity:1}, {opacity:.55, duration:1}, 0);
+    }
+
     /* --- el cruce: la seccion siguiente sube y lo tapa --- */
     gsap.timeline({scrollTrigger:cover(), defaults:{ease:'none'}})
       .fromTo('#hero .ph', {yPercent:5}, {yPercent:11, duration:1}, 0)
@@ -308,11 +346,14 @@ if (intro){
        Cada linea viaja mas que la de encima y el pie mas que todas, asi que el
        bloque se abre al bajar en vez de subir en plancha. Va aparte del timeline
        porque `#hero .in` ya lleva su propio yPercent y estos suman encima. */
-    var capas = [['#hero .tag', -14]];
-    [].forEach.call(document.querySelectorAll('#hero h1 .ln'), function(l, i){
-      capas.push([l, -(24 + i*20)]);
-    });
-    capas.push(['#hero .lo', -64]);
+    var capas = document.querySelector('#hero.hero-v')
+      ? [['#hero .hv-t', -40], ['#hero .hv-cta', -56], ['#hero .hv-pie', -70]]
+      : (function(){
+          var c = [['#hero .tag', -14]];
+          [].forEach.call(document.querySelectorAll('#hero h1 .ln'), function(l, i){ c.push([l, -(24 + i*20)]); });
+          c.push(['#hero .lo', -64]);
+          return c;
+        })();
     capas.forEach(function(c){
       gsap.fromTo(c[0], {y:0}, {y:c[1], ease:'none', scrollTrigger:cover()});
     });
@@ -2181,4 +2222,24 @@ let rt, anchoAntes = innerWidth; addEventListener('resize',()=>{
   var door = document.getElementById('door');
   if (door) ScrollTrigger.create({trigger:door, start:'32% '+BORDE, end:'bottom '+BORDE,
     onToggle:function(st){ marca(st.isActive); }});
+})();
+
+/* ============================================================
+   INICIO · el puntero mueve el logo y el video en sentidos opuestos
+   ------------------------------------------------------------
+   Poco, lo justo para que la portada tenga fondo: el logo se va hacia el
+   puntero y el video hacia el otro lado. Solo con raton.
+   ============================================================ */
+(function(){
+  var hero = document.querySelector('#hero.hero-v');
+  if (!hero || TOUCH || RM) return;
+  var lx = gsap.quickTo('#hero .hv-logo', 'x', {duration:.9, ease:'power3'}),
+      ly = gsap.quickTo('#hero .hv-logo', 'y', {duration:.9, ease:'power3'}),
+      vx = gsap.quickTo('#hero .bgm', 'x', {duration:1.2, ease:'power3'}),
+      vy = gsap.quickTo('#hero .bgm', 'y', {duration:1.2, ease:'power3'});
+  hero.addEventListener('mousemove', function(e){
+    var px = e.clientX / innerWidth - .5, py = e.clientY / innerHeight - .5;
+    lx(px * 26); ly(py * 18); vx(px * -22); vy(py * -14);
+  });
+  hero.addEventListener('mouseleave', function(){ lx(0); ly(0); vx(0); vy(0); });
 })();
