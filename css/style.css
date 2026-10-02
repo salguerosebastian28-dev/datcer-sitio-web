@@ -1621,3 +1621,42 @@ body.hidec #cx,body.hidec #cr{opacity:0}
   .fl-cap{top:84px}
   .fl-f{font-size:clamp(2.1rem,10.5vw,3.2rem)}
 }
+
+/* ============================================================
+   PORTADA DEL INICIO, SEGUNDA PASADA
+   ------------------------------------------------------------
+   Lo que le restaba: dos logos a la vez (cabecera y centro), el naranja
+   peleando con el violeta del video y demasiadas piezas. Ahora:
+   · el logo del centro va en plata, en dos tonos (las dos piezas del icono
+     se distinguen), con un brillo metalico que lo recorre;
+   · la cabecera esconde su logo mientras se esta en la portada: una sola
+     marca en pantalla;
+   · fuera la etiqueta descifrada y las normas del pie; botones en pildora
+     como el resto del sitio; titular con la voz de la seccion siguiente.
+   ============================================================ */
+.hv-logo{width:clamp(260px,36vw,640px)}
+.hv-logo img{filter:drop-shadow(0 8px 34px rgba(2,13,31,.7))}
+.hv-brillo{position:absolute;inset:0;pointer-events:none;
+  -webkit-mask:url(../assets/logo-plata.png) no-repeat 0 0/100% 100%;
+          mask:url(../assets/logo-plata.png) no-repeat 0 0/100% 100%;
+  clip-path:inset(-10% calc(100% - var(--rv) * 1%) -10% 0);
+  background:linear-gradient(105deg,rgba(255,255,255,0) 40%,rgba(214,206,255,.95) 49%,#fff 50%,rgba(214,206,255,.95) 51%,rgba(255,255,255,0) 60%)
+    0 0/300% 100% no-repeat;
+  animation:hvBrillo 6.5s cubic-bezier(.6,0,.2,1) 3.2s infinite}
+@keyframes hvBrillo{0%{background-position:120% 0}38%,100%{background-position:-20% 0}}
+.hv-t{font-size:clamp(2.2rem,4.6vw,5.4rem);max-width:none;letter-spacing:-.045em;line-height:1.02;
+  margin-top:clamp(26px,3.4vw,46px);text-shadow:0 4px 30px rgba(2,13,31,.7)}
+.hv-t em{color:transparent;text-shadow:none;
+  background:linear-gradient(96deg,var(--gl1) 30%,var(--gl2) 43%,var(--gl3) 48%,var(--gl2) 53%,var(--gl1) 66%);
+  background-size:340% 100%;background-position:var(--sheen,145%) 0;
+  -webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 4px 22px rgba(2,13,31,.7))}
+#hero.hero-v .cta.hv-cta{gap:12px;margin-top:clamp(30px,3.8vw,48px)}
+#hero.hero-v .hv-cta .btn:not(.fill){background:rgba(2,13,31,.42);border-color:rgba(227,230,235,.3);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+/* una sola marca: la cabecera esconde su logo sobre la portada */
+/* #hero h1{max-width:12ch} es de la portada de rayos X y gana en especificidad */
+#hero.hero-v h1.hv-t{max-width:none}
+#hd .lg{transition:opacity .6s var(--e)}
+#hd.hv-sinlogo .lg{opacity:0;pointer-events:none}
+@media (max-width:860px){ .hv-logo{width:min(78vw,380px)} .hv-t{font-size:clamp(2rem,9vw,2.8rem)} }
+@media (prefers-reduced-motion:reduce){ .hv-brillo{animation:none;opacity:0} }

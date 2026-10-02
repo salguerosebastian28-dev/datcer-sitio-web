@@ -96,12 +96,10 @@ function heroIn(){
        · el titular se enfoca palabra por palabra, de borroso a nitido. */
   const t = gsap.timeline();
   t.from('#hero .mv', {scale:1.22, duration:2.4, ease:'power2.out'}, 0)
-   .add(descifra(document.querySelector('#hero .hv-cod'), 1.3), .15)
    .fromTo('#hero .hv-logo', {'--rv':0}, {'--rv':100, duration:1.7, ease:'power2.inOut'}, .35)
    .from('#hero .hv-t .w i', {yPercent:70, opacity:0, filter:'blur(14px)', duration:1.1,
       stagger:.07, ease:'power3.out'}, 1.15)
    .from('#hero .hv-cta > *', {y:24, opacity:0, duration:.9, stagger:.08}, 1.7)
-   .from('#hero .hv-pie', {y:20, opacity:0, duration:.9}, 1.9)
    .from('#hd, #sc', {opacity:0, duration:.9}, .6)
    .to('#ch', {opacity:1, duration:.8}, .9);
   gsap.to('#ck', {y:0, duration:1, delay:3, ease:'power3.out'});
@@ -336,7 +334,6 @@ if (intro){
         .fromTo('#hero .bgm', {scale:1}, {scale:1.4, ease:'power1.inOut', duration:1}, 0)
         .fromTo('#hero .hv-logo', {scale:1, opacity:1, filter:'blur(0px)'},
                                   {scale:2.6, opacity:0, filter:'blur(8px)', duration:.75}, 0)
-        .fromTo('#hero .hv-k',   {y:0, opacity:1}, {y:-90, opacity:0, duration:.55}, 0)
         .fromTo('#hero .hv-t',   {yPercent:0}, {yPercent:-45, duration:1}, 0)
         .fromTo('#hero .hv-halo',{opacity:1}, {opacity:.55, duration:1}, 0);
     }
@@ -358,7 +355,7 @@ if (intro){
        bloque se abre al bajar en vez de subir en plancha. Va aparte del timeline
        porque `#hero .in` ya lleva su propio yPercent y estos suman encima. */
     var capas = document.querySelector('#hero.hero-v')
-      ? [['#hero .hv-t', -40], ['#hero .hv-cta', -56], ['#hero .hv-pie', -70]]
+      ? [['#hero .hv-t', -40], ['#hero .hv-cta', -56]]
       : (function(){
           var c = [['#hero .tag', -14]];
           [].forEach.call(document.querySelectorAll('#hero h1 .ln'), function(l, i){ c.push([l, -(24 + i*20)]); });
@@ -2355,4 +2352,14 @@ let rt, anchoAntes = innerWidth; addEventListener('resize',()=>{
     scrollTrigger:{trigger:sec, start:'top top', end:'bottom bottom', scrub:true}});
   gsap.to(sec.querySelector('.fl-prog'), {opacity:0, ease:'none',
     scrollTrigger:{trigger:sec, start:'92% bottom', end:'bottom bottom', scrub:true}});
+})();
+
+/* una sola marca en pantalla: sobre la portada, la cabecera sin logo */
+(function(){
+  var hd = document.getElementById('hd');
+  if (!hd || !document.querySelector('#hero.hero-v')) return;
+  ScrollTrigger.create({start:0, end:'max',
+    onUpdate:function(st){ hd.classList.toggle('hv-sinlogo', st.scroll() < innerHeight * .7); },
+    onRefresh:function(st){ hd.classList.toggle('hv-sinlogo', st.scroll() < innerHeight * .7); }});
+  hd.classList.toggle('hv-sinlogo', (window.scrollY || 0) < innerHeight * .7);
 })();
