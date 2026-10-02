@@ -33,7 +33,7 @@
     round calc(var(--hx) * clamp(12px,1.5vw,26px)))}
 /* la foto: 114 % de alto y -7 % arriba, el sobrante del parallax */
 .br-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
-.br-bg img{position:absolute;left:0;top:-7%;width:100%;height:114%;
+.br-bg img,.br-bg video{position:absolute;left:0;top:-7%;width:100%;height:114%;
   object-fit:cover;object-position:62% 45%;will-change:transform}
 /* el texto sobre la foto: sombra en capas y una sombra local solo detras del
    bloque de texto, abajo a la izquierda */

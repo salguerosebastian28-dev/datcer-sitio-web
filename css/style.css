@@ -1660,3 +1660,83 @@ body.hidec #cx,body.hidec #cr{opacity:0}
 #hd.hv-sinlogo .lg{opacity:0;pointer-events:none}
 @media (max-width:860px){ .hv-logo{width:min(78vw,380px)} .hv-t{font-size:clamp(2rem,9vw,2.8rem)} }
 @media (prefers-reduced-motion:reduce){ .hv-brillo{animation:none;opacity:0} }
+
+/* ============================================================
+   LO QUE NOS DEFINE · fichas de vidrio liquido
+   ============================================================ */
+.lq{position:relative;overflow:hidden;isolation:isolate;
+  height:clamp(520px,44vw,760px);border-radius:clamp(20px,2vw,32px);background:#0B1A30;
+  box-shadow:0 0 0 1px rgba(168,151,240,.22),0 50px 110px -50px rgba(0,0,0,.85);
+  touch-action:pan-y;user-select:none;-webkit-user-select:none}
+/* el respaldo sin WebGL, y lo que se ve mientras cargan las texturas */
+.lq-fb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:0;transition:opacity 1s var(--e)}
+.lq-fb img.on{opacity:1}
+.lq-cv{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .6s}
+.lq.gl .lq-cv{opacity:1}
+/* solo abajo, donde va el texto */
+.lq-velo{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to top,rgba(2,13,31,.82) 0,rgba(2,13,31,.42) 34%,rgba(2,13,31,0) 62%),
+             linear-gradient(to bottom,rgba(2,13,31,.4) 0,rgba(2,13,31,0) 22%)}
+
+/* ---------- vidrio liquido ----------
+   Desenfoca y satura lo de detras; el canto lleva un filo de luz arriba y uno
+   tenue abajo (el grosor del vidrio), y un brillo especular que sigue al
+   cursor (--gx, --gy, que escribe el JS). */
+.lq-glass{position:absolute;z-index:2;color:#fff;
+  background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.05) 45%,rgba(168,151,240,.08));
+  -webkit-backdrop-filter:blur(18px) saturate(175%);backdrop-filter:blur(18px) saturate(175%);
+  border:1px solid rgba(255,255,255,.2);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.42),inset 0 -1px 0 rgba(255,255,255,.08),
+    inset 0 0 26px rgba(255,255,255,.05),0 22px 50px -26px rgba(0,0,0,.7)}
+.lq-glass::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(160px circle at var(--gx,-200px) var(--gy,-200px),rgba(255,255,255,.3),rgba(255,255,255,0) 70%);
+  mix-blend-mode:overlay;opacity:var(--gs,0);transition:opacity .4s}
+.lq-chip{left:clamp(16px,2vw,30px);top:clamp(16px,2vw,30px);border-radius:100px;padding:9px 16px;
+  display:flex;align-items:center;gap:10px;font-size:10.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase}
+.lq-chip i{width:7px;height:7px;border-radius:50%;background:var(--vi-hi);box-shadow:0 0 10px var(--vi-glow)}
+.lq-cnt{right:clamp(16px,2vw,30px);top:clamp(16px,2vw,30px);border-radius:100px;padding:9px 16px;
+  font-family:ui-monospace,Consolas,monospace;font-size:11px;letter-spacing:.12em;color:rgba(255,255,255,.7)}
+.lq-cnt b{color:#fff;font-weight:500}
+.lq-tx{left:clamp(16px,2vw,30px);bottom:clamp(96px,8.6vw,124px);max-width:min(620px,calc(100% - 32px));
+  border-radius:clamp(16px,1.6vw,24px);padding:clamp(20px,2.2vw,32px) clamp(22px,2.4vw,36px)}
+.lq-t{margin:0 0 14px;font-size:clamp(1.9rem,3.6vw,3.6rem);font-weight:200;letter-spacing:-.04em;line-height:1.02}
+.lq-t em{font-style:normal;
+  background:linear-gradient(96deg,var(--gl1) 30%,var(--gl2) 43%,var(--gl3) 48%,var(--gl2) 53%,var(--gl1) 66%);
+  background-size:340% 100%;background-position:var(--sheen,145%) 0;
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.lq-q{margin:0;padding-left:16px;border-left:2px solid var(--vi-hi);
+  font-size:clamp(.98rem,1.15vw,1.18rem);line-height:1.55;color:rgba(255,255,255,.86);font-style:italic;font-weight:300}
+.lq-t,.lq-q{will-change:transform,opacity,filter}
+.lq-tabs{left:clamp(16px,2vw,30px);right:clamp(16px,2vw,30px);bottom:clamp(16px,2vw,30px);
+  border-radius:clamp(14px,1.4vw,20px);padding:12px;display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.lq-tab{background:none;border:0;color:rgba(255,255,255,.55);font:inherit;cursor:pointer;text-align:left;
+  padding:8px 10px;border-radius:10px;display:grid;gap:9px;transition:color .4s,background .4s}
+.lq-tab span{font-size:10.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.lq-tab i{display:block;height:3px;border-radius:3px;background:rgba(255,255,255,.16);overflow:hidden}
+.lq-tab b{display:block;height:100%;background:linear-gradient(90deg,var(--vi),var(--vi-hi));
+  transform:scaleX(0);transform-origin:left;box-shadow:0 0 10px var(--vi-glow)}
+.lq-tab:hover{color:#fff;background:rgba(255,255,255,.06)}
+.lq-tab.on{color:#fff}
+.lq-tab.hecho b{transform:scaleX(1)}
+@media (max-width:860px){
+  .lq{height:min(78svh,640px)}
+  .lq-tx{bottom:86px;left:12px;right:12px;max-width:none}
+  .lq-tabs{left:12px;right:12px;bottom:12px;padding:8px;gap:4px}
+  .lq-tab{padding:6px}
+  .lq-tab span{font-size:8.5px;letter-spacing:.08em}
+  .lq-chip{left:12px;top:12px}.lq-cnt{right:12px;top:12px}
+}
+
+/* «viven sus datos.» se perdia: su base era el violeta medio del sitio, el
+   mismo de la fibra del fondo, y el brillo solo corria con el scroll. Aqui va
+   en plata lavanda clara con un brillo metalico que la recorre sin parar, y
+   una sombra doble que la despega del video. */
+#hero.hero-v .hv-t em{
+  background:linear-gradient(100deg,#B9AEF5 0%,#E6E0FF 22%,#FFFFFF 30%,#D9D1FF 38%,#B9AEF5 52%,#CFC6FF 70%,#FFFFFF 78%,#C7BDFA 86%,#B9AEF5 100%);
+  background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 2px 3px rgba(2,13,31,.75)) drop-shadow(0 6px 26px rgba(2,13,31,.85));
+  animation:hvMetal 4.8s linear infinite}
+@keyframes hvMetal{from{background-position:0% 0}to{background-position:-220% 0}}
+@media (prefers-reduced-motion:reduce){ #hero.hero-v .hv-t em{animation:none} }

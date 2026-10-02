@@ -77,7 +77,12 @@
        clip-path (--hx), que se abre al bajar. La foto va sin velo; el texto se
        sostiene con sombra, como en shelters. -->
   <div class="br-fr">
-    <div class="br-bg" aria-hidden="true"><img src="assets/img/br-portada.jpg" alt=""></div>
+    <div class="br-bg" aria-hidden="true">
+      <!-- el timelapse de obra en movimiento; la foto fija de antes es su cartel -->
+      <video autoplay muted loop playsinline preload="auto" poster="assets/img/br-portada.jpg">
+        <source src="assets/video/obra-a-operacion.mp4" type="video/mp4">
+      </video>
+    </div>
     <div class="pad in">
       <span class="lbl tag" data-anim="up">Portafolio de servicios &middot; DATCER 2026</span>
       <h1 class="d1" data-split="line">Un data center es <em>veintiocho oficios</em> a la vez</h1>

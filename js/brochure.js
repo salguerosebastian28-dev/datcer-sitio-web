@@ -493,7 +493,7 @@ document.querySelectorAll('.dl-b[href]').forEach(function(a){
     onRefresh:function(st){ pinta(st.scroll()); }});
   pinta(window.scrollY || 0);
 
-  var im = hero.querySelector('.br-bg img');
+  var im = hero.querySelector('.br-bg video');
   if (!im || RM) return;
   gsap.fromTo(im, {scale:1.12}, {scale:1, duration:2.2, ease:'expo.out', delay:2.6});
   gsap.fromTo(im, {yPercent:-6}, {yPercent:6, ease:'none',

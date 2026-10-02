@@ -307,6 +307,52 @@
 </section>
 
 <!-- ══ CIFRAS (oscuro) ══ -->
+<!-- ══ LO QUE NOS DEFINE · carrusel de fichas ══
+     Las fotos se pintan en WebGL como agua: el cursor es una lente que las
+     refracta y deja ondas que se calman solas, y el paso de una ficha a otra
+     es una disolucion liquida. La interfaz es vidrio liquido. Sin WebGL quedan
+     las <img> de .lq-fb con un fundido. Los textos de cada ficha viven en
+     .lq-src y el JS los copia. -->
+<section class="sec" id="fichas" data-ch="00" data-nm="Lo que nos define">
+  <div class="pad">
+    <div class="two" style="align-items:end;margin-bottom:clamp(30px,3.6vw,52px)">
+      <h2 class="d2" data-split="line" style="max-width:13ch">Lo que nos <em>define</em></h2>
+      <p class="bd" data-anim="up">Cinco compromisos que sostienen cada proyecto, del primer c&aacute;lculo a la sala en operaci&oacute;n.</p>
+    </div>
+    <div class="lq">
+      <div class="lq-fb" aria-hidden="true">
+        <img src="assets/img/por-que-norma.jpg" alt="" decoding="async" class="on">
+        <img src="assets/img/diseno-sala.jpg" alt="" decoding="async">
+        <img src="assets/img/por-que-cliente.jpg" alt="" decoding="async">
+        <img src="assets/img/tier-aerea.jpg" alt="" decoding="async">
+        <img src="assets/img/por-que-entrega.jpg" alt="" decoding="async">
+      </div>
+      <canvas class="lq-cv" aria-hidden="true"></canvas>
+      <span class="lq-velo" aria-hidden="true"></span>
+      <div class="lq-glass lq-chip"><i></i><span>Precisión técnica</span></div>
+      <div class="lq-glass lq-cnt"><b class="lq-n">01</b> / 05</div>
+      <div class="lq-glass lq-tx" aria-live="polite">
+        <h3 class="lq-t">Ingeniería de <em>precisión</em></h3>
+        <p class="lq-q">Cada cálculo se verifica dos veces: en el papel y en la puesta en marcha.</p>
+      </div>
+      <div class="lq-glass lq-tabs" role="tablist">
+        <button class="lq-tab on" type="button" data-i="0"><span>Precisión</span><i><b></b></i></button>
+        <button class="lq-tab" type="button" data-i="1"><span>Disponibilidad</span><i><b></b></i></button>
+        <button class="lq-tab" type="button" data-i="2"><span>Visión</span><i><b></b></i></button>
+        <button class="lq-tab" type="button" data-i="3"><span>Resultados</span><i><b></b></i></button>
+        <button class="lq-tab" type="button" data-i="4"><span>Cobertura</span><i><b></b></i></button>
+      </div>
+    </div>
+    <div class="lq-src" hidden>
+      <article data-k="Precisión técnica"><h3>Ingeniería de <em>precisión</em></h3><p>Cada cálculo se verifica dos veces: en el papel y en la puesta en marcha.</p></article>
+      <article data-k="Alta disponibilidad"><h3>Disponibilidad <em>sin concesiones</em></h3><p>Diseñamos para que una falla nunca llegue a convertirse en una caída.</p></article>
+      <article data-k="Visión de largo plazo"><h3>Visión <em>estratégica</em></h3><p>La sala que diseñamos hoy ya tiene previsto el crecimiento de mañana.</p></article>
+      <article data-k="Entrega verificable"><h3>Resultados <em>medibles</em></h3><p>Planos as-built, pruebas y protocolos: todo queda documentado y firmado.</p></article>
+      <article data-k="Desde Chía"><h3>Presencia <em>nacional</em></h3><p>Acompañamos proyectos en todo el país, con diseño remoto donde haga falta.</p></article>
+    </div>
+  </div>
+</section>
+
 <section class="sec" data-ch="01" data-nm="Nosotros" style="padding-block:clamp(38px,4.6vw,80px)">
   <div class="pad">
     <div class="figs">
