@@ -53,7 +53,7 @@
 #sv-hero::after{
   content:'';position:absolute;left:50%;bottom:-42%;transform:translateX(-50%);
   width:min(2200px,170vw);height:70%;pointer-events:none;z-index:1;
-  background:radial-gradient(50% 50% at 50% 50%,rgba(120,158,232,.20) 0%,rgba(2,13,31,0) 70%);
+  background:radial-gradient(50% 50% at 50% 50%,rgba(132,115,215,.22) 0%,rgba(2,13,31,0) 70%);
   filter:blur(24px);
 }
 

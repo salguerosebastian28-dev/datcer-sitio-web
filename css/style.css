@@ -193,11 +193,11 @@ section{background:var(--bg);color:var(--fg);position:relative}
     linear-gradient(115deg,#E7E8EB 0%,#F8F8F6 20%,#DFE3E9 42%,#F4F3F0 60%,#E2E6EC 80%,#F1F1EF 100%)}
 /* el filo que enciende cada celda justo al posarse */
 .hd-bg i::after{content:'';position:absolute;inset:0;opacity:0;
-  background:linear-gradient(180deg,rgba(150,195,255,.55),rgba(150,195,255,0) 60%)}
+  background:linear-gradient(180deg,rgba(168,151,240,.55),rgba(168,151,240,0) 60%)}
 /* el cabezal: la línea que va por delante, dejando material detrás */
 .hd-bg .cab{position:absolute;top:0;bottom:0;width:2px;opacity:0;
-  background:linear-gradient(to bottom,rgba(120,170,255,0),rgba(150,195,255,.95),rgba(120,170,255,0));
-  box-shadow:0 0 14px 3px rgba(130,180,255,.55)}
+  background:linear-gradient(to bottom,rgba(132,115,215,0),rgba(190,176,255,.95),rgba(132,115,215,0));
+  box-shadow:0 0 14px 3px rgba(150,130,240,.6)}
 .hd-bg .br{position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(100deg,rgba(255,255,255,0) 42%,rgba(255,255,255,.9) 50%,rgba(255,255,255,0) 58%);
   mix-blend-mode:soft-light;opacity:.9}
@@ -324,7 +324,7 @@ body.mo .bg i:last-child{transform:translateY(-3.5px) rotate(-45deg);width:100%}
   pointer-events:none;transform:translateX(-1px);
   background:linear-gradient(to bottom,transparent,rgba(255,255,255,.85) 22%,
     rgba(255,255,255,.95) 50%,rgba(255,255,255,.85) 78%,transparent);
-  box-shadow:0 0 22px 3px rgba(190,215,255,.45);
+  box-shadow:0 0 22px 3px rgba(190,176,255,.55);
   opacity:calc(min(var(--wp,0)/6, 1) * (1 - max((var(--wp,0) - 88)/12, 0)))}
 /* El rack del video se desplaza a la derecha durante la animacion y aterriza
    detras del titular. Este velo horizontal le da al texto una cama limpia en la
@@ -482,8 +482,8 @@ body.mo .bg i:last-child{transform:translateY(-3.5px) rotate(-45deg);width:100%}
 .seam>i{position:absolute;inset:0;opacity:0;will-change:opacity,transform}
 .seam>i::before{content:'';position:absolute;inset:-12%;
   background:
-    radial-gradient(42% 38% at 50% 50%,rgba(186,212,255,.52) 0%,
-      rgba(104,146,238,.24) 32%,rgba(2,13,31,0) 70%),
+    radial-gradient(42% 38% at 50% 50%,rgba(205,192,255,.55) 0%,
+      rgba(132,115,215,.30) 32%,rgba(2,13,31,0) 70%),
     radial-gradient(72% 64% at 50% 50%,rgba(88,128,214,.22) 0%,rgba(2,13,31,0) 78%);
   filter:blur(30px)}
 .seam>i::after{content:'';position:absolute;left:0;right:0;top:50%;height:2px;
@@ -1158,9 +1158,16 @@ body.hidec #cx,body.hidec #cr{opacity:0}
 /* El azul de accion. Es el unico color saturado del sitio y solo aparece en un
    sitio: el cuadro de flecha del boton principal. Un color que solo significa
    «pulsa aqui» no compite con nada. */
-:root{ --acc:#2B6BF0 }
-:root{ --gl1:#8FA3BE; --gl2:#DDE5EF; --gl3:#FFFFFF }
-.on-light{ --gl1:#020D1F; --gl2:#2C3D57; --gl3:#5D7292 }
+/* EL VIOLETA. Medido sobre la fibra del video de la portada: #6E5EC5 en el
+   tono medio, #8473D7 en el nucleo, #9885E4 en el brillo. Es el acento del
+   sitio: lo que se destaca, lo que avanza y lo que brilla. El navy sigue
+   siendo el fondo, el naranja sigue siendo solo del logo. */
+:root{ --acc:#6E5EC5; --vi:#8473D7; --vi-hi:#A897F0; --vi-lo:#5A4BB8;
+  --vi-glow:rgba(132,115,215,.5) }
+/* en las secciones claras el violeta baja de tono para leerse sobre el perla */
+.on-light{ --vi-hi:#5143C2 }
+:root{ --gl1:#8473D7; --gl2:#D6CEFF; --gl3:#FFFFFF }
+.on-light{ --gl1:#241A6B; --gl2:#4B3DBA; --gl3:#8473D7 }
 
 /* respaldo solido, y lo que ven los navegadores sin recorte sobre texto */
 .ln>i em,.d4 em,.bd em{font-style:normal;color:var(--gl2)}
@@ -1216,7 +1223,7 @@ body.hidec #cx,body.hidec #cr{opacity:0}
   --bg:#020D1F;--fg:#E3E6EB;
   --fg-60:rgba(227,230,235,.60);--fg-38:rgba(227,230,235,.38);
   --fg-18:rgba(227,230,235,.18);--fg-10:rgba(227,230,235,.10);
-  --gl1:#8FA3BE;--gl2:#DDE5EF;--gl3:#FFFFFF}
+  --gl1:#8473D7;--gl2:#D6CEFF;--gl3:#FFFFFF}
 .ent-band .hair{background:var(--fg-18)}
 
 /* ---------- entregables del diseño ----------
@@ -1305,7 +1312,7 @@ body.hidec #cx,body.hidec #cr{opacity:0}
   display:flex;flex-direction:column;justify-content:center;gap:clamp(14px,1.6vw,24px);
   padding-inline:var(--pad);max-width:min(60ch,90vw);
   --fg:#020D1F;--fg-60:rgba(2,13,31,.62);--fg-38:rgba(2,13,31,.40);
-  --gl1:#020D1F;--gl2:#2C3D57;--gl3:#5D7292;
+  --gl1:#241A6B;--gl2:#4B3DBA;--gl3:#8473D7;
   color:var(--fg)}
 .door-in .lbl{color:var(--fg-38)}
 .door-in .bd{color:var(--fg-60);max-width:44ch}
@@ -1530,3 +1537,27 @@ body.hidec #cx,body.hidec #cr{opacity:0}
   .hv-pie{position:static;margin-top:32px;align-items:center;text-align:center}
   .hv-k{letter-spacing:.2em;font-size:9.5px}
 }
+
+/* ============================================================
+   EL VIOLETA, DONDE ACTUA
+   ------------------------------------------------------------
+   Va al final para ganar por orden sin subir especificidad.
+   ============================================================ */
+::selection{background:var(--vi);color:#fff}
+:focus-visible{outline-color:var(--vi-hi)}
+/* la numeracion de cada seccion: el hilo de color que recorre la pagina */
+.lbl.idx{color:var(--vi-hi)}
+/* botones: el relleno que sube al pasar el raton es violeta, en las dos pieles */
+.btn::before{background:var(--vi)}
+.btn:hover{color:#fff;border-color:var(--vi)}
+.btn.fill:hover{color:#fff}
+.bt2.gls:hover{background:rgba(132,115,215,.32);border-color:rgba(168,151,240,.6)}
+/* lo que avanza: barras de progreso, la regla de las tarjetas, el carrusel */
+.hz-bar>i,.sl-nav .tk>i,.door-pg b,.pz-rl{background:var(--vi)}
+.pz-c.on .pz-rl,.pz-f.on .pz-rl{box-shadow:0 0 14px var(--vi-glow)}
+/* el punto de cada fase del proceso, encendido */
+.pz-f.on .pz-dt{background:var(--vi-hi);box-shadow:0 0 0 4px rgba(132,115,215,.22),0 0 18px var(--vi-glow)}
+/* las pildoras de norma al pasar */
+.tg span:hover{border-color:var(--vi-hi);color:var(--vi-hi)}
+/* el formulario: el campo activo */
+.fd input:focus,.fd select:focus,.fd textarea:focus{border-color:var(--vi-hi)}
