@@ -282,6 +282,10 @@ document.querySelectorAll('[data-ch]').forEach(s=>{
    0 → 1 del cruce entre las dos secciones.
    ============================================================ */
 const intro = document.getElementById('intro');
+/* Lo que sube sobre la portada. Era #intro; desde que existe la seccion de la
+   fibra (#flujo) es esa, y el cruce -texto que se apaga, velo- va atado a
+   ella. El horizonte (.seam) sigue siendo de #intro y va atado a #intro. */
+const sube  = document.getElementById('flujo') || intro;
 const hvid  = document.querySelector('#hero .bgm video');
 
 if (intro){
@@ -301,7 +305,7 @@ if (intro){
   const abre  = () => ({trigger:capa, start:'top top',
     end:() => '+=' + (hold ? hold.offsetHeight : innerHeight),
     scrub:.6, invalidateOnRefresh:true});
-  const cover = () => ({trigger:intro, start:'top bottom', end:'top top', scrub:true});
+  const cover = () => ({trigger:sube, start:'top bottom', end:'top top', scrub:true});
 
   if (!RM){
     /* el hero se hunde: el video sigue subiendo un poco (parallax), el texto se
@@ -368,7 +372,7 @@ if (intro){
     /* aparte del timeline y con immediateRender:false: si renderizara en el
        progreso 0 fijaria opacity:1 y se comeria el fundido de entrada de #sc */
     gsap.to('#sc', {opacity:0, ease:'none', immediateRender:false,
-      scrollTrigger:{trigger:intro, start:'top bottom', end:'top 72%', scrub:true}});
+      scrollTrigger:{trigger:sube, start:'top bottom', end:'top 72%', scrub:true}});
 
     /* el horizonte: enciende mientras cruza la pantalla y se apaga al llegar
        arriba, cuando ya no hay hero debajo que separar */
@@ -377,7 +381,7 @@ if (intro){
        primero se enciende, luego se difumina. El scrub la deja en manos del
        dedo, asi que se puede parar a media ignicion. */
     const sm = intro.querySelector('.seam > i');
-    if (sm) gsap.timeline({scrollTrigger:cover(), defaults:{ease:'none'}})
+    if (sm) gsap.timeline({scrollTrigger:{trigger:intro, start:'top bottom', end:'top top', scrub:true}, defaults:{ease:'none'}})
       .fromTo(sm, {opacity:0, scaleX:.62, scaleY:.34},
                   {opacity:1, scaleX:1,   scaleY:1,   duration:.58})
       .to(sm,     {opacity:0, scaleX:1.1, scaleY:1.9, duration:.42});
@@ -390,7 +394,7 @@ if (intro){
 
   /* una vez tapado, el hero no tiene por que seguir componiendose ni el video
      decodificando cuadros detras de toda la pagina */
-  ScrollTrigger.create({trigger:intro, start:'top top',
+  ScrollTrigger.create({trigger:sube, start:'top top',
     onEnter:    ()=>{ gsap.set('#hero',{visibility:'hidden'}); hvid && hvid.pause(); },
     onLeaveBack:()=>{ gsap.set('#hero',{visibility:'visible'}); hvid && hvid.play().catch(()=>{}); }});
 }
@@ -2270,4 +2274,69 @@ let rt, anchoAntes = innerWidth; addEventListener('resize',()=>{
       gsap.to(o, {r:meta, duration:.35, ease:'power2.out', overwrite:true, onUpdate:pon,
         onComplete:function(){ gsap.to(o, {r:1, duration:1.5, ease:'power2.out', onUpdate:pon}); }});
     }});
+})();
+
+/* ============================================================
+   00A · FIG. 01 · la fibra, arrastrada por el scroll
+   ------------------------------------------------------------
+   El video no se reproduce: el scroll fija su tiempo. Pero no de golpe: el
+   tiempo persigue al scroll con inercia (12 % de la distancia por cuadro),
+   asi que la fibra sigue brotando un instante despues de soltar y se
+   asienta sola. Eso es lo que lo hace sentir asistido y no pegado.
+
+   iOS no carga un video hasta que se reproduce, y uno sin cargar no se puede
+   arrastrar: al acercarse la seccion se le da play y pausa enseguida.
+   ============================================================ */
+(function(){
+  var sec = document.getElementById('flujo');
+  if (!sec || typeof gsap === 'undefined') return;
+  var v = sec.querySelector('.bru-v');
+
+  var cebado = false;
+  var ceba = function(){
+    if (cebado) return; cebado = true;
+    var p = v.play();
+    if (p && p.then) p.then(function(){ v.pause(); }).catch(function(){}); else v.pause();
+  };
+  if ('IntersectionObserver' in window)
+    new IntersectionObserver(function(e){ if (e[0].isIntersecting) ceba(); }, {rootMargin:'120% 0px'}).observe(sec);
+  else ceba();
+
+  if (RM){ v.addEventListener('loadedmetadata', function(){ v.currentTime = Math.min(6.5, v.duration - .1); }); return; }
+
+  /* el tiempo del video: de 'top 55%' (la seccion aun subiendo) al final */
+  var meta = 0, t = 0, activo = false;
+  ScrollTrigger.create({trigger:sec, start:'top 55%', end:'bottom bottom',
+    onUpdate:function(st){ meta = st.progress; }});
+  ScrollTrigger.create({trigger:sec, start:'top bottom', end:'bottom top',
+    onToggle:function(st){ activo = st.isActive; }});
+  gsap.ticker.add(function(){
+    if (!activo || !v.duration || v.seeking) return;
+    t += (meta - t) * .12;
+    var ct = Math.min(v.duration - .05, t * v.duration);
+    if (Math.abs(v.currentTime - ct) > 1/60) v.currentTime = ct;
+  });
+
+  /* la tipografia cinetica y lo demas, en una linea de tiempo con scrub 1.2 */
+  var W = function(f){ return function(){ return innerWidth * f; }; };
+  var n = {v:0}, nEl = sec.querySelector('.bru-n'), pcEl = sec.querySelector('.bru-pc');
+  gsap.timeline({defaults:{ease:'none'},
+    scrollTrigger:{trigger:sec, start:'top bottom', end:'bottom bottom', scrub:1.2, invalidateOnRefresh:true}})
+    .fromTo(sec.querySelector('.l1'), {x:W(.24)},  {x:W(-.14), duration:1}, 0)
+    .fromTo(sec.querySelector('.l2'), {x:W(-.24)}, {x:W(.14),  duration:1}, 0)
+    .fromTo(sec.querySelector('.l3'), {x:W(.32)},  {x:W(-.08), duration:1}, 0)
+    .fromTo(v, {scale:1.18}, {scale:1, duration:1}, 0)
+    .fromTo(sec.querySelector('.bru-bloque'), {clipPath:'inset(0% 100% 0% 0%)'},
+            {clipPath:'inset(0% 0% 0% 0%)', duration:.16, ease:'power2.out'}, .38)
+    .fromTo(sec.querySelector('.bru-dato'), {y:40, opacity:0}, {y:0, opacity:1, duration:.12}, .3)
+    .fromTo(n, {v:0}, {v:99.995, duration:.32, ease:'power2.out',
+      onUpdate:function(){ nEl.textContent = n.v.toFixed(3).replace('.', ','); }}, .3);
+
+  gsap.fromTo(sec.querySelector('.bru-prog b'), {scaleX:0}, {scaleX:1, ease:'none',
+    scrollTrigger:{trigger:sec, start:'top top', end:'bottom bottom', scrub:true,
+      onUpdate:function(st){ pcEl.textContent = String(Math.round(st.progress * 100)).padStart(3, '0'); }}});
+
+  /* la estructura aparece al llegar: la barra celda a celda */
+  gsap.from(sec.querySelectorAll('.bru-bar span'), {y:-14, opacity:0, duration:.7, stagger:.07,
+    ease:'power3.out', scrollTrigger:{trigger:sec, start:'top 40%'}});
 })();

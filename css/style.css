@@ -1561,3 +1561,71 @@ body.hidec #cx,body.hidec #cr{opacity:0}
 .tg span:hover{border-color:var(--vi-hi);color:var(--vi-hi)}
 /* el formulario: el campo activo */
 .fd input:focus,.fd select:focus,.fd textarea:focus{border-color:var(--vi-hi)}
+
+/* ============================================================
+   00A · FIG. 01 · CONECTIVIDAD (brutalismo corporativo)
+   ------------------------------------------------------------
+   La seccion mide 300 pantallas de alto y su lamina (.bru-pin) es sticky:
+   ese recorrido es el que arrastra el video y mueve la tipografia. Sticky de
+   CSS y no pin de GSAP: no mete espaciador ni pelea con los pines de abajo.
+
+   El lenguaje es el opuesto al de la portada a proposito: alli todo es suave
+   y luminoso; aqui la estructura se ve -reticula de 6x4, lineas de 1 px,
+   rotulos en monoespaciada, cero esquinas redondeadas- y el texto es enorme,
+   pesado y en mayusculas. El unico color es el violeta, en bloques solidos.
+   ============================================================ */
+#flujo{position:relative;height:300svh;background:#000;color:#F2F4F8;
+  --fg:#F2F4F8;--fg-60:rgba(242,244,248,.62);--fg-38:rgba(242,244,248,.4)}
+.bru-pin{position:sticky;top:0;height:100svh;overflow:hidden}
+.bru-v{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;will-change:transform}
+.bru .mono{font-family:ui-monospace,'SFMono-Regular',Consolas,'Courier New',monospace;
+  font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase}
+/* la reticula: seis columnas y cuatro filas, a la vista */
+.bru-ret{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(to right,rgba(242,244,248,.13) 1px,transparent 1px),
+                   linear-gradient(to bottom,rgba(242,244,248,.13) 1px,transparent 1px);
+  background-size:calc(100% / 6) 100%,100% calc(100% / 4)}
+/* la barra de arriba: cuatro celdas con su divisoria, bajo la cabecera */
+.bru-bar{position:absolute;left:0;right:0;top:clamp(78px,10vh,104px);display:grid;
+  grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(242,244,248,.32);
+  border-bottom:1px solid rgba(242,244,248,.32);color:rgba(242,244,248,.82)}
+.bru-bar span{padding:12px var(--pad);border-right:1px solid rgba(242,244,248,.32);white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.bru-bar span:last-child{border-right:0;text-align:right}
+/* el titular: tres lineas enormes que cruzan la pantalla en sentidos
+   opuestos con el scroll */
+.bru-h{position:absolute;left:0;right:0;top:calc(clamp(78px,10vh,104px) + 64px);margin:0;
+  font-weight:800;font-size:clamp(3rem,9.6vw,11.2rem);line-height:.86;letter-spacing:-.055em;
+  text-transform:uppercase}
+.bru-l{display:block;white-space:nowrap;padding-inline:var(--pad);will-change:transform}
+.bru-l.l2{text-align:right}
+.bru-h b{font-weight:800;background:var(--vi);color:#000;padding:0 .08em;margin-left:.04em}
+/* abajo a la izquierda, el bloque violeta solido; a la derecha, el dato */
+.bru-bloque{position:absolute;left:var(--pad);bottom:clamp(70px,9vh,96px);max-width:min(30ch,40vw);
+  background:var(--vi);color:#fff;padding:clamp(16px,1.6vw,24px) clamp(18px,1.8vw,28px)}
+.bru-bloque p{margin:0;font-size:clamp(.98rem,1.2vw,1.25rem);line-height:1.38;font-weight:500;letter-spacing:-.01em}
+.bru-dato{position:absolute;right:var(--pad);bottom:clamp(70px,9vh,96px);display:grid;gap:8px;
+  justify-items:end;text-align:right;padding:14px 0 0;border-top:1px solid rgba(242,244,248,.5)}
+.bru-dato b{font-weight:800;font-size:clamp(2.6rem,6.4vw,7rem);line-height:.9;letter-spacing:-.05em;
+  font-variant-numeric:tabular-nums;color:#fff}
+.bru-dato b i{font-style:normal;color:var(--vi-hi);margin-left:.04em}
+.bru-dato .mono{color:rgba(242,244,248,.72)}
+.bru-dato .bru-nota{color:rgba(242,244,248,.45)}
+/* el pie: rotulo, progreso del recorrido y su cifra */
+.bru-pie{position:absolute;left:0;right:0;bottom:0;display:grid;grid-template-columns:auto 1fr auto;
+  align-items:center;gap:24px;padding:14px var(--pad);border-top:1px solid rgba(242,244,248,.32);
+  color:rgba(242,244,248,.78);background:rgba(0,0,0,.35)}
+.bru-prog{display:block;height:3px;background:rgba(242,244,248,.16);position:relative}
+.bru-prog b{position:absolute;inset:0;background:var(--vi);transform:scaleX(0);transform-origin:left}
+.bru-pc{font-variant-numeric:tabular-nums}
+
+@media (max-width:860px){
+  #flujo{height:240svh}
+  .bru-bar{grid-template-columns:1fr 1fr;top:72px}
+  .bru-bar span:nth-child(2),.bru-bar span:nth-child(3){display:none}
+  .bru-h{font-size:clamp(2.6rem,14.5vw,5.4rem);top:132px}
+  .bru-bloque{right:var(--pad);max-width:none;bottom:auto;top:62%}
+  .bru-dato{left:var(--pad);right:var(--pad);bottom:64px;justify-items:start;text-align:left}
+  .bru-dato b{font-size:clamp(2.4rem,13vw,3.6rem)}
+  .bru-pie{grid-template-columns:auto 1fr auto;gap:14px}
+}
