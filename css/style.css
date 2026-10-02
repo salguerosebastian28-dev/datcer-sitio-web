@@ -1671,3 +1671,15 @@ body.hidec #cx,body.hidec #cr{opacity:0}
   animation:hvMetal 4.8s linear infinite}
 @keyframes hvMetal{from{background-position:0% 0}to{background-position:-220% 0}}
 @media (prefers-reduced-motion:reduce){ #hero.hero-v .hv-t em{animation:none} }
+
+/* ---------- el menu cabe en cualquier alto ----------
+   Diez entradas a 3,9rem medidas solo por el ancho no cabian en una ventana
+   de ~850 px de alto: la ultima se salia por abajo. Ahora letra y aire miden
+   tambien el alto (min de vw y vh), el relleno se ajusta, y si aun asi no
+   cabe -una ventana muy baja- el menu se desplaza en vez de cortarse.
+   `safe center` evita que el centrado esconda la parte de arriba. */
+#mn{padding:clamp(84px,11vh,120px) var(--pad) clamp(20px,3.4vh,40px);
+  overflow-y:auto;overscroll-behavior:contain;justify-content:safe center}
+#mn ol a{font-size:clamp(1.4rem,min(4.4vw,4.6vh),3.9rem);padding-block:clamp(6px,min(1.3vw,1.1vh),17px)}
+/* la etiqueta encima del dato, no pegada a el */
+#mn .side .lbl{display:block}
