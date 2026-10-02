@@ -15,7 +15,7 @@
        datos      #E6BD7C   seguridad  #E59B8D
    ============================================================ */
 #nodo{
-  --nd-bg:#020D1F; --nd-ink:#E3E6EB; --nd-muted:#8593A8; --nd-accent:#A897F0;
+  --nd-bg:#020D1F; --nd-ink:#E3E6EB; --nd-muted:#8593A8; --nd-accent:#7FB0FF;
   --nd-line:#ffffff1f; --nd-blue:#6FD6C6; --nd-amber:#E6BD7C; --nd-red:#E59B8D;
   --nd-mono:ui-monospace,'SF Mono',Consolas,'Courier New',monospace;
   position:relative;background:var(--nd-bg);color:var(--nd-ink);font-family:var(--font)}
@@ -44,7 +44,7 @@
 #nodo .nd-stat{display:flex;gap:40px;padding-top:23px;border-top:1px solid var(--nd-line);max-width:310px}
 #nodo .nd-stat strong{display:block;font-weight:300;font-size:28px;letter-spacing:-.02em;margin-bottom:5px}
 #nodo .nd-stat small{color:var(--nd-muted);font-size:10px;letter-spacing:1px}
-#nodo .nd-open{margin-top:19px;background:none;color:var(--nd-accent);border:0;border-bottom:1px solid rgba(168,151,240,.4);padding:6px 0;cursor:pointer;font-size:12px}
+#nodo .nd-open{margin-top:19px;background:none;color:var(--nd-accent);border:0;border-bottom:1px solid #7fb0ff65;padding:6px 0;cursor:pointer;font-size:12px}
 
 #nodo .nd-drawing{position:absolute;left:38%;right:2.5%;top:17%;bottom:20%}
 #nodo .nd-drawing canvas{width:100%;height:100%;display:block}
