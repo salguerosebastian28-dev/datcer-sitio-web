@@ -1479,6 +1479,10 @@ body.hidec #cx,body.hidec #cr{opacity:0}
   transform:translate(-50%,-50%);z-index:-1;pointer-events:none;
   background:radial-gradient(closest-side,rgba(2,13,31,.66),rgba(2,13,31,.38) 55%,rgba(2,13,31,0))}
 #hero.hero-v .in{isolation:isolate}
+/* Sin marco perla: el video ocupa la pantalla entera desde el primer cuadro y
+   la cabecera va encima, en claro. --hx queda en 0 (el recorte del marco no
+   existe) y el JS no lo anima en esta portada. */
+#hero.hero-v{--hx:0}
 /* el video sobresale 30 px por cada lado: el puntero lo desplaza hasta 22 y
    asi nunca asoma el borde */
 #hero.hero-v .bgm{inset:-30px}
@@ -1488,9 +1492,9 @@ body.hidec #cx,body.hidec #cr{opacity:0}
 .hv-cod{display:inline-block;min-width:1ch;white-space:pre}
 
 /* --rv: cuanto del logo ya escribio el haz (0-100). Sin JS queda en 100. */
-/* Sin el aro (assets/logo-sin-aro.png: el mismo logo con el circulo quitado).
-   Grande, casi la mitad del ancho: se probo a 24vw y el cliente prefirio este
-   tamano, que es el que hace que atravesarlo al bajar se lea en 3D. */
+/* El logo completo, con su aro. Grande, casi la mitad del ancho: se probo a
+   24vw y el cliente prefirio este tamano, que es el que hace que atravesarlo
+   al bajar se lea en 3D. */
 .hv-logo{position:relative;--rv:100;width:clamp(280px,44vw,780px);will-change:transform,opacity}
 .hv-logo img{display:block;width:100%;height:auto;
   clip-path:inset(-10% calc(100% - var(--rv) * 1%) -10% 0);

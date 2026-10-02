@@ -311,7 +311,8 @@ if (intro){
       /* el barrido de rayos X ocupa el grueso del tramo, que es lo que hay que
          mirar; el marco se abre algo antes para no competir con el */
       .fromTo('#hero', {'--wp':0}, {'--wp':100, duration:.82}, 0)
-      .fromTo('#hero', {'--hx':1}, {'--hx':0,   duration:.52}, 0)
+      /* la portada de video va sin marco: ahi --hx se queda en 0 */
+      .fromTo('#hero', {'--hx':document.querySelector('#hero.hero-v') ? 0 : 1}, {'--hx':0, duration:.52}, 0)
       /* Las dos fotos en un solo tween: mismos valores, asi que se mueven
          exactamente igual y el corte del barrido sigue casando. Separarlas seria
          ver dos edificios desalineados. */
