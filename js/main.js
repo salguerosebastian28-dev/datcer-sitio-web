@@ -2277,12 +2277,16 @@ let rt, anchoAntes = innerWidth; addEventListener('resize',()=>{
 })();
 
 /* ============================================================
-   00A · FIG. 01 · la fibra, arrastrada por el scroll
+   00A · CONECTIVIDAD · la fibra, arrastrada por el scroll
    ------------------------------------------------------------
-   El video no se reproduce: el scroll fija su tiempo. Pero no de golpe: el
-   tiempo persigue al scroll con inercia (12 % de la distancia por cuadro),
-   asi que la fibra sigue brotando un instante despues de soltar y se
-   asienta sola. Eso es lo que lo hace sentir asistido y no pegado.
+   El video no se reproduce: el scroll fija su tiempo, y lo persigue con
+   inercia (12 % de la distancia por cuadro), asi que la fibra sigue brotando
+   un instante despues de soltar y se asienta sola.
+
+   Las tres frases se relevan sobre la misma celda, cada una en el tramo en
+   que la fibra hace lo que dice: el rack quieto, la fibra brotando, la fibra
+   llenandolo todo. Entran enfocandose y salen desenfocandose. Al final el
+   video se apaga hasta el navy de la pagina, que es el fondo de lo que sube.
 
    iOS no carga un video hasta que se reproduce, y uno sin cargar no se puede
    arrastrar: al acercarse la seccion se le da play y pausa enseguida.
@@ -2290,7 +2294,7 @@ let rt, anchoAntes = innerWidth; addEventListener('resize',()=>{
 (function(){
   var sec = document.getElementById('flujo');
   if (!sec || typeof gsap === 'undefined') return;
-  var v = sec.querySelector('.bru-v');
+  var v = sec.querySelector('.fl-v');
 
   var cebado = false;
   var ceba = function(){
@@ -2302,11 +2306,21 @@ let rt, anchoAntes = innerWidth; addEventListener('resize',()=>{
     new IntersectionObserver(function(e){ if (e[0].isIntersecting) ceba(); }, {rootMargin:'120% 0px'}).observe(sec);
   else ceba();
 
-  if (RM){ v.addEventListener('loadedmetadata', function(){ v.currentTime = Math.min(6.5, v.duration - .1); }); return; }
+  if (RM){
+    gsap.set(sec.querySelector('.f3'), {opacity:1});
+    v.addEventListener('loadedmetadata', function(){ v.currentTime = Math.min(6.5, v.duration - .1); });
+    return;
+  }
 
-  /* el tiempo del video: de 'top 55%' (la seccion aun subiendo) al final */
+  /* El tiempo del video va con las frases: mientras se lee «Un solo rack.»
+     el rack sigue quieto (el clip arranca oscuro y la fibra no sale hasta el
+     segundo y medio), la fibra brota con «Miles de conexiones.» y termina de
+     llenar la pantalla con «Ninguna puede fallar.». En tramos del recorrido
+     de la lamina: de .16 a .80. */
   var meta = 0, t = 0, activo = false;
-  ScrollTrigger.create({trigger:sec, start:'top 55%', end:'bottom bottom',
+  var tramo = function(f){ return function(){
+    return 'top+=' + Math.round((sec.offsetHeight - innerHeight) * f) + ' top'; }; };
+  ScrollTrigger.create({trigger:sec, start:tramo(.16), end:tramo(.80), invalidateOnRefresh:true,
     onUpdate:function(st){ meta = st.progress; }});
   ScrollTrigger.create({trigger:sec, start:'top bottom', end:'bottom top',
     onToggle:function(st){ activo = st.isActive; }});
@@ -2317,26 +2331,28 @@ let rt, anchoAntes = innerWidth; addEventListener('resize',()=>{
     if (Math.abs(v.currentTime - ct) > 1/60) v.currentTime = ct;
   });
 
-  /* la tipografia cinetica y lo demas, en una linea de tiempo con scrub 1.2 */
-  var W = function(f){ return function(){ return innerWidth * f; }; };
-  var n = {v:0}, nEl = sec.querySelector('.bru-n'), pcEl = sec.querySelector('.bru-pc');
+  var ent = {opacity:0, y:46, filter:'blur(12px)'}, quieta = {opacity:1, y:0, filter:'blur(0px)'},
+      sal = {opacity:0, y:-46, filter:'blur(10px)'};
+  var n = {v:0}, nEl = sec.querySelector('.fl-n');
+  var f1 = sec.querySelector('.f1'), f2 = sec.querySelector('.f2'), f3 = sec.querySelector('.f3');
   gsap.timeline({defaults:{ease:'none'},
-    scrollTrigger:{trigger:sec, start:'top bottom', end:'bottom bottom', scrub:1.2, invalidateOnRefresh:true}})
-    .fromTo(sec.querySelector('.l1'), {x:W(.24)},  {x:W(-.14), duration:1}, 0)
-    .fromTo(sec.querySelector('.l2'), {x:W(-.24)}, {x:W(.14),  duration:1}, 0)
-    .fromTo(sec.querySelector('.l3'), {x:W(.32)},  {x:W(-.08), duration:1}, 0)
-    .fromTo(v, {scale:1.18}, {scale:1, duration:1}, 0)
-    .fromTo(sec.querySelector('.bru-bloque'), {clipPath:'inset(0% 100% 0% 0%)'},
-            {clipPath:'inset(0% 0% 0% 0%)', duration:.16, ease:'power2.out'}, .38)
-    .fromTo(sec.querySelector('.bru-dato'), {y:40, opacity:0}, {y:0, opacity:1, duration:.12}, .3)
-    .fromTo(n, {v:0}, {v:99.995, duration:.32, ease:'power2.out',
-      onUpdate:function(){ nEl.textContent = n.v.toFixed(3).replace('.', ','); }}, .3);
+    scrollTrigger:{trigger:sec, start:'top top', end:'bottom bottom', scrub:1}})
+    .fromTo(v, {scale:1.12}, {scale:1, duration:.86}, 0)
+    .fromTo(sec.querySelector('.fl-cap'), {opacity:0, y:16}, {opacity:1, y:0, duration:.06}, .02)
+    .fromTo(f1, ent, Object.assign({duration:.1}, quieta), .02)
+    .to(f1, Object.assign({duration:.07}, sal), .24)
+    .fromTo(f2, ent, Object.assign({duration:.1}, quieta), .32)
+    .to(f2, Object.assign({duration:.07}, sal), .54)
+    .fromTo(f3, ent, Object.assign({duration:.1}, quieta), .62)
+    .fromTo(n, {v:0}, {v:99.995, duration:.16, ease:'power2.out',
+      onUpdate:function(){ nEl.textContent = n.v.toFixed(3).replace('.', ','); }}, .64)
+    /* la salida: frase, rotulo y video se apagan hasta el navy */
+    .to(f3, Object.assign({duration:.08}, sal), .88)
+    .to(sec.querySelector('.fl-cap'), {opacity:0, duration:.06}, .9)
+    .to(v, {opacity:0, duration:.1}, .9);
 
-  gsap.fromTo(sec.querySelector('.bru-prog b'), {scaleX:0}, {scaleX:1, ease:'none',
-    scrollTrigger:{trigger:sec, start:'top top', end:'bottom bottom', scrub:true,
-      onUpdate:function(st){ pcEl.textContent = String(Math.round(st.progress * 100)).padStart(3, '0'); }}});
-
-  /* la estructura aparece al llegar: la barra celda a celda */
-  gsap.from(sec.querySelectorAll('.bru-bar span'), {y:-14, opacity:0, duration:.7, stagger:.07,
-    ease:'power3.out', scrollTrigger:{trigger:sec, start:'top 40%'}});
+  gsap.fromTo(sec.querySelector('.fl-prog b'), {scaleX:0}, {scaleX:1, ease:'none',
+    scrollTrigger:{trigger:sec, start:'top top', end:'bottom bottom', scrub:true}});
+  gsap.to(sec.querySelector('.fl-prog'), {opacity:0, ease:'none',
+    scrollTrigger:{trigger:sec, start:'92% bottom', end:'bottom bottom', scrub:true}});
 })();
