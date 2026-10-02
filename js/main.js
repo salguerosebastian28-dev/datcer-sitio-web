@@ -322,7 +322,13 @@ if (intro){
        entrar. La etiqueta y el titular se separan hacia arriba a distinto paso,
        que es lo que da la profundidad. */
     if (document.querySelector('#hero.hero-v')){
-      gsap.timeline({scrollTrigger:abre(), defaults:{ease:'none'}})
+      /* Asistido: scrub 1.4 en vez de .6. El movimiento no va pegado al dedo
+         sino que lo sigue con inercia y se asienta solo cuando se para, como
+         una camara en grua. La camara entra en el video: .bgm se acerca un
+         40 % (va aparte del .ph, que ya lleva su propio parallax, y del .mv,
+         que lleva la entrada; tres elementos, tres transformaciones). */
+      gsap.timeline({scrollTrigger:Object.assign(abre(), {scrub:1.4}), defaults:{ease:'none'}})
+        .fromTo('#hero .bgm', {scale:1}, {scale:1.4, ease:'power1.inOut', duration:1}, 0)
         .fromTo('#hero .hv-logo', {scale:1, opacity:1, filter:'blur(0px)'},
                                   {scale:2.6, opacity:0, filter:'blur(8px)', duration:.75}, 0)
         .fromTo('#hero .hv-k',   {y:0, opacity:1}, {y:-90, opacity:0, duration:.55}, 0)
@@ -2242,4 +2248,25 @@ let rt, anchoAntes = innerWidth; addEventListener('resize',()=>{
     lx(px * 26); ly(py * 18); vx(px * -22); vy(py * -14);
   });
   hero.addEventListener('mouseleave', function(){ lx(0); ly(0); vx(0); vy(0); });
+})();
+
+/* ============================================================
+   INICIO · los haces se aceleran con el scroll
+   ------------------------------------------------------------
+   Mientras se baja, la fibra del video corre mas: la velocidad de
+   reproduccion sube con la del scroll (hasta 3,2x) y, al parar, vuelve a su
+   ritmo en un segundo y medio. Es lo que hace que el scroll se vea EN el
+   video y no solo encima. Solo mientras la portada esta en pantalla.
+   ============================================================ */
+(function(){
+  var v = document.querySelector('#hero.hero-v video');
+  if (!v || RM || typeof gsap === 'undefined') return;
+  var o = {r:1};
+  var pon = function(){ try { v.playbackRate = o.r; } catch (e) {} };
+  ScrollTrigger.create({trigger:'.cover', start:'top top', end:'bottom top',
+    onUpdate:function(st){
+      var meta = 1 + Math.min(Math.abs(st.getVelocity()) / 900, 2.2);
+      gsap.to(o, {r:meta, duration:.35, ease:'power2.out', overwrite:true, onUpdate:pon,
+        onComplete:function(){ gsap.to(o, {r:1, duration:1.5, ease:'power2.out', onUpdate:pon}); }});
+    }});
 })();

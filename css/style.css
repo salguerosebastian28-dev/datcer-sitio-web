@@ -1488,7 +1488,10 @@ body.hidec #cx,body.hidec #cr{opacity:0}
 .hv-cod{display:inline-block;min-width:1ch;white-space:pre}
 
 /* --rv: cuanto del logo ya escribio el haz (0-100). Sin JS queda en 100. */
-.hv-logo{position:relative;--rv:100;width:clamp(280px,44vw,780px);will-change:transform,opacity}
+/* Sin el aro (assets/logo-sin-aro.png: el mismo logo con el circulo quitado)
+   y bastante mas contenido que la primera version, que ocupaba casi la mitad
+   del ancho: el protagonista es el video, el logo firma. */
+.hv-logo{position:relative;--rv:100;width:clamp(210px,24vw,440px);will-change:transform,opacity}
 .hv-logo img{display:block;width:100%;height:auto;
   clip-path:inset(-10% calc(100% - var(--rv) * 1%) -10% 0);
   filter:drop-shadow(0 10px 40px rgba(2,13,31,.75))}
@@ -1517,7 +1520,7 @@ body.hidec #cx,body.hidec #cr{opacity:0}
 .hv-pie b{font-size:.82rem;font-weight:400;color:rgba(227,230,235,.86)}
 
 @media (max-width:860px){
-  .hv-logo{width:min(82vw,420px)}
+  .hv-logo{width:min(62vw,300px)}
   .hv-t{font-size:clamp(1.6rem,7vw,2.2rem)}
   #hero.hero-v .cta.hv-cta{flex-direction:column;align-items:center}
   .hv-pie{position:static;margin-top:32px;align-items:center;text-align:center}
