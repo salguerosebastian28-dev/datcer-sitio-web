@@ -60,7 +60,8 @@
 /* ---------- la sección de los doce ---------- */
 /* El fondo de esta sección es el azul de la página, sin más: se probó con una
    retícula de plano, halos y degradado y el cliente lo descartó. */
-.sv-wrap{position:relative;padding-block:clamp(52px,6vw,96px) clamp(80px,9vw,150px)}
+/* fondo propio: sube sobre la portada, que sigue pegada detras */
+.sv-wrap{position:relative;background:var(--dark);padding-block:clamp(52px,6vw,96px) clamp(80px,9vw,150px)}
 /* la entradilla, que ocupa la franja que antes quedaba vacía */
 .sv-hd{display:grid;grid-template-columns:1fr minmax(0,52ch);gap:clamp(20px,4vw,72px);
   align-items:end;margin-bottom:clamp(34px,4.4vw,64px)}

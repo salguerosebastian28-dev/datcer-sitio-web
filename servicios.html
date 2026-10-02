@@ -117,7 +117,12 @@
   </div>
   <div id="sc"><span>Scroll</span><i class="l"></i></div>
 </section>
-</div>
+
+<!-- El tramo propio de la portada: mientras se recorre, la portada se queda
+     quieta y pasa lo suyo -el barrido de rayos X y la apertura del marco-.
+     Sin el, la portada se iba con el primer scroll y el efecto ocurria
+     mientras desaparecia. Despues, el catalogo sube y la tapa. -->
+<div class="hold" aria-hidden="true"></div>
 
 <!-- LOS DOCE
      Filas alternas: foto a un lado, texto al otro. Las tres capas de cada fila
@@ -367,6 +372,7 @@
     </div>
   </div>
 </section>
+</div><!-- /.cover -->
 
 <!-- DE LA OBRA A LA OPERACION
      El timelapse de un data center levantandose: de la estructura al edificio

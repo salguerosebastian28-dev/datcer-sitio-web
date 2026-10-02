@@ -367,31 +367,46 @@ if (!TOUCH) document.querySelectorAll('[data-tilt]').forEach(function(pn){
 /* ============================================================
    LA PORTADA · el barrido de rayos X y el marco
    ------------------------------------------------------------
-   En el inicio la portada era sticky y tenia un tramo propio (.hold) para el
-   barrido. Aqui no hay nada que suba a taparla, asi que el barrido va mientras
-   la portada se va: entero antes de que haya salido la mitad, que es cuando
-   todavia se ve. El marco se abre algo antes, como alla. Las dos fotos en un
-   solo tween: si se movieran por separado el corte dejaria de casar.
-   Mientras el perla asoma, la cabecera va en oscuro con el logo original.
+   El mismo guion que tenia en el inicio, en dos recorridos:
+
+   · abre(): el tramo propio (.hold). La portada esta quieta y pasa lo suyo:
+     el barrido de rayos X ocupa el grueso del tramo y el marco se abre algo
+     antes, para no competir con el.
+   · cubre(): el catalogo sube y la tapa. El texto se adelanta y se apaga en la
+     primera mitad -llegando vivo al borde se leeria cortado- y el velo la
+     lleva casi a negro.
+
+   Una vez tapada, la portada deja de componerse.
    ============================================================ */
 (function(){
   var hero = document.getElementById('hero'), hd = document.getElementById('hd');
-  if (!hero || !hd || typeof gsap === 'undefined') return;
+  var hold = document.querySelector('.cover .hold'), sube = document.querySelector('.sv-wrap');
+  if (!hero || !hd || !hold || !sube || typeof gsap === 'undefined') return;
+  var abre  = function(){ return {trigger:'.cover', start:'top top',
+    end:function(){ return '+=' + hold.offsetHeight; }, scrub:.6, invalidateOnRefresh:true}; };
+  var cubre = function(){ return {trigger:sube, start:'top bottom', end:'top top', scrub:true}; };
+
   if (!RM){
-    gsap.timeline({defaults:{ease:'none'},
-      scrollTrigger:{trigger:hero, start:'top top', end:'55% top', scrub:.6}})
-      .fromTo(hero, {'--wp':0}, {'--wp':100, duration:1}, 0)
-      .fromTo(hero, {'--hx':1}, {'--hx':0, duration:.65}, 0);
-    gsap.fromTo('#hero .ph', {yPercent:0, scale:1}, {yPercent:9, scale:1.08, ease:'none',
-      scrollTrigger:{trigger:hero, start:'top top', end:'bottom top', scrub:true}});
-    gsap.fromTo('#hero .in', {yPercent:0}, {yPercent:-10, ease:'none',
-      scrollTrigger:{trigger:hero, start:'top top', end:'bottom top', scrub:true}});
+    gsap.timeline({scrollTrigger:abre(), defaults:{ease:'none'}})
+      .fromTo(hero, {'--wp':0}, {'--wp':100, duration:.82}, 0)
+      .fromTo(hero, {'--hx':1}, {'--hx':0, duration:.52}, 0)
+      .fromTo('#hero .ph', {yPercent:0, scale:1}, {yPercent:5, scale:1.08, duration:1}, 0);
+    gsap.timeline({scrollTrigger:cubre(), defaults:{ease:'none'}})
+      .fromTo('#hero .ph',  {yPercent:5}, {yPercent:11, duration:1}, 0)
+      .fromTo('#hero .in',  {yPercent:0}, {yPercent:-15, duration:1}, 0)
+      .fromTo('#hero .in',  {opacity:1}, {opacity:0, duration:.38}, 0)
+      .fromTo('#hero .dim', {opacity:0}, {opacity:.92, duration:.82}, 0);
     gsap.to('#sc', {opacity:0, ease:'none', immediateRender:false,
-      scrollTrigger:{trigger:hero, start:'top top', end:'20% top', scrub:true}});
+      scrollTrigger:{trigger:'.cover', start:'top top', end:'+=200', scrub:true}});
   }
-  var marco = getComputedStyle(hero).getPropertyValue('--hx').trim() !== '0';
+  ScrollTrigger.create({trigger:sube, start:'top top',
+    onEnter:    function(){ gsap.set(hero, {visibility:'hidden'}); },
+    onLeaveBack:function(){ gsap.set(hero, {visibility:'visible'}); }});
+
+  /* la cabecera en oscuro, con el logo original, mientras el perla asoma: el
+     marco se cierra al 52 % del tramo */
   var pinta = function(y){
-    if (marco) hd.classList.toggle('perla', y < innerHeight * .3);
+    hd.classList.toggle('perla', !RM && y < hold.offsetHeight * .45);
     document.documentElement.style.setProperty('--hs', (120 - (y * .12) % 240) + '%');
   };
   ScrollTrigger.create({start:0, end:'max',
