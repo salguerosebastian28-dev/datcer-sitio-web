@@ -142,10 +142,6 @@
 @media (max-width:1000px){
   #sv-hero .ft{grid-template-columns:1fr}
 }
-@media (prefers-reduced-motion:reduce){
-  .sv-grid .c,.sv-grid .c > img{transform:none!important}
-}
-
 /* ---------- de la obra a la operacion ----------
    A todo el ancho y en 2:1 (el clip es 16:9): se recorta poco arriba y abajo
    y las gruas siguen en cuadro. Por encima del grano de la pagina (z 9). */

@@ -295,12 +295,6 @@
   .sl-full::before{display:none}
   .sl-full .sl-bd{grid-row:2;max-width:none}
 }
-@media (prefers-reduced-motion:reduce){
-  .br-sc i::after{animation:none}
-  .sl-im,.sl-im img{transform:none!important}
-}
-
-
 /* ============================================================
    IMPRESION
    ------------------------------------------------------------

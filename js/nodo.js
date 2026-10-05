@@ -67,7 +67,7 @@ const $=s=>root.querySelector(s),$$=s=>[...root.querySelectorAll(s)];
 const C={ink:'#cdd6e4',dim:'#5f7089',green:'#7fb0ff',blue:'#6fd6c6',amber:'#e6bd7c',red:'#e59b8d',dark:'#020d1f'};
 const state={p:0,iso:0,plan:0,racks:0,build:0,systems:0,roof:0,unifilar:1};
 const visible={power:true,cooling:true,data:true,fire:true};
-const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reduced=false;
 let W=800,H=560,t=0,phase=-1,last=0,scrollTrigger,needsDraw=true;
 const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
 const lerp=(a,b,p)=>a+(b-a)*p;

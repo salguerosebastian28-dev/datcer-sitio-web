@@ -125,6 +125,8 @@ if(window.gsap&&window.ScrollTrigger&&!reduced){
 let enVista=false;
 new IntersectionObserver(e=>{enVista=e[0].isIntersecting;if(enVista)needsDraw=true},{rootMargin:'120px'}).observe(root);
 ''' + app[b:]
+# «Reducir movimiento» no apaga el modelo: decision del cliente (oct. 2026)
+app = rep(app, u"const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;", u"const reduced=false;")
 app = rep(app, u"if(document.hidden||ms-last<32)return;", u"if(document.hidden||!enVista||ms-last<32)return;")
 # Los botones de fase saltaban a 0 / .35 / .65 / 1 del pin ENTERO, que incluye
 # la salida: el 04 caia donde el edificio ya se habia desvanecido. Ahora van a

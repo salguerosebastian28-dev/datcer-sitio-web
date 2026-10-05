@@ -108,8 +108,6 @@
   #nodo .nd-phase .nd-sub{display:none}
   #nodo .nd-bar{font-size:8px;padding:0 6%}
   #nodo .nd-bar .nd-label{display:none}}
-@media(prefers-reduced-motion:reduce){#nodo .nd-phase::before{transition:none}}
-
 /* ---------- entrada desde el hero ----------
    El cruce original estaba pensado para una foto: una banda vacía de hasta
    270 px para que se abriera el halo, y una línea de horizonte dura. Con el
@@ -138,10 +136,10 @@
 #intro .tras-modelo{position:relative}
 /* Sube sobre el final del modelo mientras el edificio se disuelve. Sin este
    solape, al soltarse el pin queda casi una pantalla de azul vacío. */
-@media (prefers-reduced-motion:no-preference){
+
   #intro .tras-modelo{z-index:4;margin-top:-34svh;padding-top:clamp(20px,4vw,60px)}
-}
-@media (prefers-reduced-motion:no-preference) and (max-width:860px){
+
+@media (max-width:860px){
   #intro .tras-modelo{margin-top:-22svh}
 }
 

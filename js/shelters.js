@@ -6,7 +6,11 @@
    repite abajo es el núcleo común —preloader, cabecera, menú, split, reveals—
    y de ahí en adelante todo es propio de esta página.
    ============================================================ */
-const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* «Reducir movimiento» del sistema NO apaga los efectos: decision del
+   cliente (oct. 2026). Muchos telefonos lo activan con el ahorro de
+   bateria y la pagina se quedaba quieta. RM se deja en false, no se borra,
+   para poder volver atras cambiando una linea. */
+const RM = false;
 const TOUCH = matchMedia('(hover:none),(pointer:coarse)').matches;
 gsap.registerPlugin(ScrollTrigger);
 /* En un telefono la barra del navegador aparece y se esconde cada vez que se
@@ -137,7 +141,11 @@ function heroIn(){
 }
 listo.then(()=>{ doSplits(); arranque(); });
 function arranque(){
-gsap.timeline({onComplete:()=>{document.body.classList.remove('lock'); heroIn(); ScrollTrigger.refresh(); irAlAncla();}})
+/* Seguro: si el dispositivo va tan lento que la animacion de carga no avanza,
+   a los 4 s reales se completa igual y la pagina se libera. */
+const tlPre = gsap.timeline({onComplete:()=>{document.body.classList.remove('lock'); heroIn(); ScrollTrigger.refresh(); irAlAncla();}});
+setTimeout(()=>{ if (tlPre.progress() < 1) tlPre.progress(1); }, 4000);
+tlPre
   .to(cnt, {v:100, duration:1.6, ease:'power2.inOut', onUpdate:()=>pc.textContent=Math.round(cnt.v)}, 0)
   .to(pb, {scaleX:1, duration:1.6, ease:'power2.inOut'}, 0)
   .to('#pre .word, #pre .pc, #pre .top', {opacity:0, y:-18, duration:.55, stagger:.04}, '>-.05')

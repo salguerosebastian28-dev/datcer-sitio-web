@@ -204,7 +204,6 @@ section{background:var(--bg);color:var(--fg);position:relative}
 /* el filo de abajo, que aparece con la barra */
 .hd-bg::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;z-index:2;
   background:rgba(2,13,31,.10)}
-@media (prefers-reduced-motion:reduce){ .hd-bg i{transform:none!important;filter:none!important} }
 #hd.up{transform:translateY(-102%)}
 #hd .lg{display:flex;align-items:center;gap:15px}
 
@@ -1133,15 +1132,6 @@ body.hidec #cx,body.hidec #cr{opacity:0}
   .figs .f{border-right:0;border-bottom:1px solid var(--fg-10)}
 }
 @media (max-width:900px) and (orientation:landscape) and (max-height:470px){#rt{display:grid}}
-@media (prefers-reduced-motion:reduce){
-  /* el marco no llega a abrirse porque su tween vive dentro del `if (!RM)`:
-     se deja abierto de salida en vez de enmarcado para siempre */
-  #hero{--hx:0}
-  *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
-  .ln>i,.wd>i{transform:none!important}
-}
-
-
 /* ============================================================
    BRILLO
    ------------------------------------------------------------
@@ -1362,8 +1352,6 @@ body.hidec #cx,body.hidec #cr{opacity:0}
 @keyframes doorsc{0%{transform:translateY(-100%)}55%,100%{transform:translateY(100%)}}
 
 @media (max-width:860px){ #door{height:520svh} }
-@media (prefers-reduced-motion:reduce){ .door-sc>i{animation:none} }
-
 /* ============================================================
    MOVIL Y TABLETA
    ------------------------------------------------------------
@@ -1426,8 +1414,6 @@ body.hidec #cx,body.hidec #cr{opacity:0}
   .wa a{padding:18px}
 }
 @keyframes hzPista{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
-@media (prefers-reduced-motion:reduce){ .hz-pista i{animation:none} }
-
 @media (max-width:420px){
   /* en los telefonos estrechos el numero baja debajo del nombre */
   .wa a{flex-direction:column;align-items:flex-start;gap:10px}
@@ -1658,8 +1644,6 @@ body.hidec #cx,body.hidec #cr{opacity:0}
 #hd .lg{transition:opacity .6s var(--e)}
 #hd.hv-sinlogo .lg{opacity:0;pointer-events:none}
 @media (max-width:860px){ .hv-logo{width:min(78vw,380px)} .hv-t{font-size:clamp(2rem,9vw,2.8rem)} }
-@media (prefers-reduced-motion:reduce){ .hv-brillo{animation:none;opacity:0} }
-
 /* «viven sus datos.» se perdia: su base era el violeta medio del sitio, el
    mismo de la fibra del fondo, y el brillo solo corria con el scroll. Aqui va
    en plata clara con un brillo metalico que la recorre sin parar, y
@@ -1670,8 +1654,6 @@ body.hidec #cx,body.hidec #cr{opacity:0}
   filter:drop-shadow(0 2px 3px rgba(2,13,31,.75)) drop-shadow(0 6px 26px rgba(2,13,31,.85));
   animation:hvMetal 4.8s linear infinite}
 @keyframes hvMetal{from{background-position:0% 0}to{background-position:-220% 0}}
-@media (prefers-reduced-motion:reduce){ #hero.hero-v .hv-t em{animation:none} }
-
 /* ---------- el menu cabe en cualquier alto ----------
    Diez entradas a 3,9rem medidas solo por el ancho no cabian en una ventana
    de ~850 px de alto: la ultima se salia por abajo. Ahora letra y aire miden

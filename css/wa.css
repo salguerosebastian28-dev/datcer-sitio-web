@@ -96,4 +96,3 @@
   .wa-pan{width:calc(100vw - 28px)}
   #wa{right:14px;bottom:14px}
 }
-@media (prefers-reduced-motion:reduce){ .wa-pt{animation:none} }
