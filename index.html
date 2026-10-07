@@ -75,77 +75,14 @@
      Van juntos dentro de .cover porque el hero es sticky: se queda quieto
      mientras la seccion 00B sube por encima. El sticky termina donde termina
      .cover, asi el hero no se queda pegado detras del resto de la pagina. -->
-<div class="cover sin-perla">
+<!-- ══ EL VUELO (scroll-world) ══
+     La portada es un solo recorrido de camara en seis escenas: el scroll mueve
+     el tiempo de cada clip y las escenas se funden una en otra. Motor:
+     js/scroll-world.js (github.com/oso95/scroll-world, adaptado). Escenas y
+     textos: js/mundo.js. Clips: assets/world/. Lo construye el JS; aqui solo
+     va el contenedor. -->
+<div id="world" aria-label="Recorrido: del rack al edificio"></div>
 
-<section id="hero" class="hero-v" data-ch="00" data-nm="Inicio">
-  <!-- La portada del inicio: el video de los servidores (haces de fibra que
-       salen de un rack). En bucle sin costura: el final esta fundido con el
-       principio. La portada de rayos X que habia aqui se fue a servicios. -->
-  <div class="bgm">
-    <div class="mv">
-      <video class="ph" autoplay muted loop playsinline preload="auto" poster="assets/img/hero-datos-poster.jpg" aria-hidden="true">
-        <source src="assets/video/hero-datos.mp4" type="video/mp4">
-      </video>
-    </div>
-  </div>
-  <div class="vg"></div>
-  <div class="rt" aria-hidden="true"></div>
-  <div class="dim"></div>
-  <div class="in">
-    <!-- el halo: una sombra suave solo detras del bloque central -->
-    <span class="hv-halo" aria-hidden="true"></span>
-    <!-- El logo se escribe con luz: un haz violeta lo recorre de izquierda a
-         derecha y deja el logo detras, como la fibra del video. -->
-    <div class="hv-logo">
-      <img src="assets/logo-plata.png" alt="DATCER">
-      <i class="hv-brillo" aria-hidden="true"></i>
-      <i class="hv-haz" aria-hidden="true"></i>
-    </div>
-    <h1 class="hv-t"><span class="w"><i>Diseñamos</i></span> <span class="w"><i>el</i></span> <span class="w"><i>lugar</i></span><br> <span class="w"><i>donde</i></span> <span class="w"><i><em>viven</em></i></span> <span class="w"><i><em>sus</em></i></span> <span class="w"><i><em>datos.</em></i></span></h1>
-    <div class="cta hv-cta">
-      <a class="btn fill" href="#contact"><span class="t">Solicitar consulta</span><span class="a"></span></a>
-      <a class="btn" href="servicios.html"><span class="t">Ver los veintiocho servicios</span><span class="a"></span></a>
-    </div>
-  </div>
-  <div id="sc"><span>Scroll</span><i class="l"></i></div>
-</section>
-
-<!-- El hero necesita recorrido PROPIO. Sin este tramo, el barrido de rayos X y
-     la apertura del marco ocurren en la misma pantalla en la que la seccion
-     siguiente ya esta subiendo a taparlo: el efecto se ejecuta, pero no da
-     tiempo a verlo. Aqui el hero se queda quieto mientras la fachada se vuelve
-     transparente, y solo despues empieza a subir lo de abajo. -->
-<div class="hold" aria-hidden="true"></div>
-
-<!-- ══ 00A CONECTIVIDAD ══
-     El video del rack del que brota la fibra, arrastrado por el scroll, y una
-     frase cada vez sincronizada con lo que hace la fibra. Sin caja propia:
-     el borde de arriba se disuelve sobre la portada y el negro del video se
-     funde con el navy de la pagina (mix-blend-mode:screen). Al final todo se
-     apaga hasta el navy y sube el modelo NODO con su horizonte. -->
-<section id="flujo" class="fl" data-ch="00" data-nm="Inicio">
-  <div class="fl-pin">
-    <video class="fl-v" muted playsinline preload="auto" poster="assets/img/flujo-poster.jpg" aria-hidden="true">
-      <source src="assets/video/flujo.mp4" type="video/mp4">
-    </video>
-    <span class="fl-halo" aria-hidden="true"></span>
-    <div class="fl-cap"><span class="lbl idx">00</span><span class="lbl">Conectividad</span></div>
-    <div class="fl-frases">
-      <h2 class="fl-f f1">Un solo <em>rack.</em></h2>
-      <h2 class="fl-f f2">Miles de <em>conexiones.</em></h2>
-      <div class="fl-f f3">
-        <h2>Ninguna puede <em>fallar.</em></h2>
-        <div class="fl-dato"><b><span class="fl-n">99,995</span>&nbsp;%</b><span class="lbl">Disponibilidad de dise&ntilde;o TIER IV &middot; Uptime Institute</span></div>
-      </div>
-    </div>
-    <i class="fl-prog" aria-hidden="true"><b></b></i>
-  </div>
-</section>
-
-<!-- ══ 00B DISEÑO DE DATA CENTER ══
-     El borde superior lleva .seam: la linea de horizonte con su halo. Es lo
-     primero que asoma sobre el hero y lo que da la lectura de "algo que sube",
-     en vez de dos fotos oscuras pegadas uno tras otro. -->
 <section id="intro" class="con-modelo" data-ch="00" data-nm="Inicio">
   <div class="seam"><i></i></div>
 
@@ -248,7 +185,7 @@
   </div>
 </section>
 
-</div><!-- /.cover -->
+
 
 <!-- ══ 01 NOSOTROS ══ -->
 <section class="navy sec" id="about" data-ch="01" data-nm="Nosotros">
@@ -975,6 +912,8 @@
 <script src="js/vendor/gsap.min.js"></script>
 <script src="js/vendor/ScrollTrigger.min.js"></script>
 <script src="js/vendor/three.min.js"></script>
+<script src="js/scroll-world.js"></script>
+<script src="js/mundo.js"></script>
 <script src="js/main.js"></script>
 <script src="js/nodo.js"></script>
 <script src="js/wa.js"></script>

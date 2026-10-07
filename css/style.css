@@ -1665,3 +1665,41 @@ body.hidec #cx,body.hidec #cr{opacity:0}
 #mn ol a{font-size:clamp(1.4rem,min(4.4vw,4.6vh),3.9rem);padding-block:clamp(6px,min(1.3vw,1.1vh),17px)}
 /* la etiqueta encima del dato, no pegada a el */
 #mn .side .lbl{display:block}
+
+/* ============================================================
+   EL VUELO DEL INICIO (scroll-world)
+   ------------------------------------------------------------
+   Los tokens del motor se sobreescriben aqui; sus estilos van en @layer sw,
+   asi que cualquier regla sin capa gana sin pelear especificidad.
+   ============================================================ */
+#world{--sw-bg:#020D1F;--sw-ink:#F2F4F8;--sw-ink-soft:rgba(227,230,235,.62);--sw-accent:#8473D7;
+  --sw-font-display:'Onest',system-ui,sans-serif;--sw-font-body:'Onest',system-ui,sans-serif}
+/* la cabecera es la del sitio; el motor no pone la suya ni su barra */
+#world .sw-topbar,#world .sw-scrollbar{display:none}
+/* al terminar el vuelo, las capas fijas se apagan (--sw-out lo escribe el motor) */
+#world .sw-sky,#world .sw-stage,#world .sw-copylayer,#world .sw-route,#world .sw-hint{
+  opacity:calc(1 - var(--sw-out,0))}
+#world.sw-fuera .sw-sky,#world.sw-fuera .sw-stage,#world.sw-fuera .sw-copylayer,
+#world.sw-fuera .sw-route,#world.sw-fuera .sw-hint{visibility:hidden}
+/* las capas fijas, por debajo de la cabecera, el menu y el boton de WhatsApp */
+#world .sw-stage{z-index:10}#world .sw-copylayer{z-index:20}
+#world .sw-route{z-index:30}#world .sw-hint{z-index:30}
+/* lo que sigue al vuelo sube por encima de las capas fijas */
+#intro{position:relative;z-index:50;background:var(--dark)}
+/* la voz del sitio: titular fino, etiqueta en mayusculas espaciadas */
+#world .sw-copy{width:min(46vw,560px)}
+#world .sw-copy__num{font-family:ui-monospace,Consolas,monospace;color:rgba(227,230,235,.5)}
+#world .sw-copy__eyebrow{font-weight:500;font-size:.72rem;letter-spacing:.2em;color:var(--sw-accent)}
+#world .sw-copy__title{font-weight:200;letter-spacing:-.045em;line-height:1.02;
+  font-size:clamp(2.4rem,4.9vw,5rem);text-shadow:0 4px 30px rgba(2,13,31,.75)}
+#world .sw-copy__body{color:rgba(242,244,248,.86);font-weight:300}
+#world .sw-copy__tags li{color:#fff;font-weight:500;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.22);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+#world .sw-btn{font-weight:500;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase}
+#world .sw-btn--primary{background:#F2F4F8;color:#020D1F}
+#world .sw-btn--ghost{color:#fff;border-color:rgba(255,255,255,.35);background:rgba(2,13,31,.4);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+#world .sw-route__label{color:#020D1F}
+#world .sw-hint{color:rgba(227,230,235,.7)}
+@media (max-width:860px){ #world .sw-copy{width:auto} #world .sw-copy__title{font-size:clamp(2rem,9vw,2.8rem)} }

@@ -294,7 +294,7 @@ const intro = document.getElementById('intro');
 const sube  = document.getElementById('flujo') || intro;
 const hvid  = document.querySelector('#hero .bgm video');
 
-if (intro){
+if (intro && document.getElementById('hero')){   /* sin la portada antigua no hay cruce */
   /* Dos recorridos distintos, y la diferencia importa:
 
      `abre()` es el tramo en el que el hero esta quieto y solo pasa lo suyo — el
