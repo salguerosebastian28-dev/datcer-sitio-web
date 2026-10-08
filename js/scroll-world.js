@@ -184,6 +184,12 @@ function mountScrollWorld(container, config) {
   // mid-scene pause. f(0)=0, f(1)=1 always, so seam frames are untouched.
   const lingerEase = (x, L) => { L = clamp(L); const c = x - 0.5; return (1 - L) * x + L * (4 * c * c * c + 0.5); };
   let vh = window.innerHeight, stageX = 0, totalW = 0, activeIndex = -1, ticking = false;
+  // DATCER: al llegar, sin tocar nada, el primer clip avanza solo hasta AUTO_MAX
+  // (la fibra brotando) en AUTO_SEG segundos. Arranca AUTO_ESPERA s despues de
+  // cargar, cuando ya se fue el precargador.
+  const AUTO_MAX = config.autoMax != null ? config.autoMax : 0;
+  const AUTO_SEG = config.autoSeg || 7, AUTO_ESPERA = config.autoEspera || 2.6;
+  let autoAvance = 0, autoT0 = 0;
   let laidOutW = window.innerWidth;   // width the current layout was computed at (see onResize)
 
   function layout() {
@@ -235,7 +241,10 @@ function mountScrollWorld(container, config) {
     for (let i = 0; i < NSEG; i++) {
       const s = SEGMENTS[i];
       if (y > s.start - 1.6 * vh && y < s.end + 1.6 * vh) loadClip(s);
-      const local = clamp((y - s.start) / (s.end - s.start), 0, 1);
+      let local = clamp((y - s.start) / (s.end - s.start), 0, 1);
+      // DATCER: en la primera escena el video avanza solo al llegar (autoAvance),
+      // y el scroll nunca lo hace retroceder: manda el mayor de los dos.
+      if (i === 0) local = Math.max(local, autoAvance);
       s.target = s.linger ? lingerEase(local, s.linger) : local;
       let outside = 0;
       if (y < s.start) outside = s.start - y; else if (y > s.end) outside = y - s.end;
@@ -282,7 +291,16 @@ function mountScrollWorld(container, config) {
     ticking = false;
   }
 
-  function raf() {
+  function raf(now) {
+    if (AUTO_MAX && autoAvance < AUTO_MAX) {
+      if (!autoT0) autoT0 = now || performance.now();
+      const t = ((now || performance.now()) - autoT0) / 1000 - AUTO_ESPERA;
+      if (t > 0) {
+        const x = clamp(t / AUTO_SEG);
+        autoAvance = AUTO_MAX * (1 - Math.pow(1 - x, 2.2));   // sale rapido y se asienta
+        read();
+      }
+    }
     const eps = isMobile() ? 0.02 : 0.008;   // coarser seek step on phones = fewer decodes
     for (let i = 0; i < NSEG; i++) {
       const s = SEGMENTS[i];

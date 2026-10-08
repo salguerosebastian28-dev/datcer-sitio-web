@@ -1703,3 +1703,8 @@ body.hidec #cx,body.hidec #cr{opacity:0}
 #world .sw-route__label{color:#020D1F}
 #world .sw-hint{color:rgba(227,230,235,.7)}
 @media (max-width:860px){ #world .sw-copy{width:auto} #world .sw-copy__title{font-size:clamp(2rem,9vw,2.8rem)} }
+
+/* la camara respira: un acercamiento lento y continuo en cada escena, para
+   que el vuelo nunca quede congelado aunque no se mueva el scroll */
+#world .sw-scene__video{animation:swRespira 16s ease-in-out infinite alternate;transform-origin:50% 45%}
+@keyframes swRespira{from{transform:scale(1)}to{transform:scale(1.07)}}

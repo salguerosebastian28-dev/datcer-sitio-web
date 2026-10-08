@@ -18,6 +18,9 @@
   mountScrollWorld(raiz, {
     nav: false, atmosphere: false, hint: 'Despl\u00e1cese', crossfade: 0.32,
     diveScroll: 1.4,
+    /* al llegar, sin tocar nada, la fibra brota sola: el primer clip avanza
+       hasta el 55 % en 7 s (desde ahi el scroll sigue, nunca retrocede) */
+    autoMax: .55, autoSeg: 7, autoEspera: 2.6,
     sections: [
       { id:'fibra', label:'Inicio', still:'assets/world/1-fibra.jpg', clip:'assets/world/1-fibra.mp4',
         accent:V, scroll:1.7, linger:.25,
