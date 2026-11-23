@@ -93,7 +93,7 @@ function mountScrollWorld(container, config) {
   // ---- build the interleaved segment chain: dive0, conn0, dive1, … diveN-1 ----
   const SEGMENTS = [];
   SECTIONS.forEach((s, i) => {
-    const dive = { kind: 'dive', si: i, clip: s.clip, clipM: s.clipMobile, still: s.still, stillM: s.stillMobile,
+    const dive = { kind: 'dive', si: i, clip: s.clip, clipM: s.clipMobile, framesM: s.framesMobile, still: s.still, stillM: s.stillMobile,
                    accent: s.accent, w: s.scroll || DIVE_W, linger: s.linger || 0 };
     SEGMENTS.push(dive);
     s._seg = dive;
@@ -212,9 +212,12 @@ function mountScrollWorld(container, config) {
     // Under prefers-reduced-motion we never load the clips at all — the stills stay up
     // and simply cross-dissolve as you scroll. No scrubbed video motion, no decode cost.
     if (reduce || s.loading || !s.clip) return;
+    if (usaCuadros(s)) { loadFrames(s); return; }
     s.loading = true;
     // Serve the lighter mobile encode on phones when one was provided.
-    const url = (isMobile() && s.clipM) ? s.clipM : s.clip;
+    // DATCER: el clip movil es un recorte vertical (540x900, GOP 4); solo sirve
+    // con el telefono en vertical. Acostado usa el horizontal de siempre.
+    const url = (isMobile() && s.clipM && window.innerHeight > window.innerWidth) ? s.clipM : s.clip;
     fetch(url).then(r => r.ok ? r.blob() : Promise.reject(new Error('404')))
       .then(blob => {
         const v = document.createElement('video');
@@ -222,14 +225,87 @@ function mountScrollWorld(container, config) {
         v.muted = true; v.playsInline = true; v.preload = 'auto';
         v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
         v.src = URL.createObjectURL(blob);
-        v.addEventListener('loadedmetadata', () => { s.ready = true; read(); });
+        // DATCER: iOS puede no disparar «loadeddata» hasta que el video se
+        // reproduce; por eso tambien se ceba al tener los metadatos.
+        v.addEventListener('loadedmetadata', () => { s.ready = true; read(); primeVideo(v, s); });
         // Reveal the video (hide the still poster) only once a real frame has
         // painted — on iOS a seeked-but-never-played muted video stays blank, so
         // hiding the still on metadata alone would flash an empty scene.
-        v.addEventListener('seeked', () => { s.el.classList.add('has-clip'); }, { once: true });
-        v.addEventListener('loadeddata', () => { try { v.pause(); } catch (e) {} if (userReady) primeVideo(v); });
+        // DATCER: en el telefono «seeked» no basta (iOS sigue en negro): la foto
+        // solo se quita cuando el video se reprodujo una vez (primeVideo). Si el
+        // telefono no deja reproducir (ahorro de bateria), queda la foto.
+        if (!isMobile()) v.addEventListener('seeked', () => { s.el.classList.add('has-clip'); s.painted = true; }, { once: true });
+        // Un video silenciado en linea puede reproducirse sin gesto, asi que se
+        // ceba al cargar; si el navegador lo niega, se reintenta al primer toque.
+        v.addEventListener('loadeddata', () => { try { v.pause(); } catch (e) {} primeVideo(v, s); });
         s.el.appendChild(v); s.video = v; s.hasClip = true;
       }).catch(() => { s.loading = false; });
+  }
+
+  // ---- DATCER: en el telefono, secuencia de imagenes en vez de video ----
+  // Arrastrar un <video> con el scroll depende de las reglas de cada telefono
+  // (iOS no pinta un video que no se ha reproducido, el ahorro de bateria
+  // bloquea la reproduccion, el decodificador se atasca con los saltos) y en
+  // iPhone el vuelo se quedaba en las fotos fijas. Una secuencia de imagenes
+  // dibujada en un canvas no depende de nada de eso: funciona en cualquier
+  // navegador. framesMobile: { dir, count } -> dir + 001.webp … count.webp
+  // (recorte vertical 540x900). Solo en el telefono en vertical; acostado y en
+  // el computador sigue el video.
+  function usaCuadros(s) {
+    return !!(s.framesM && isMobile() && window.innerHeight > window.innerWidth);
+  }
+  function loadFrames(s) {
+    s.loading = true; s.isFrames = true; s.hasClip = true;
+    const F = s.framesM, n = F.count;
+    const cv = el('canvas', 'sw-scene__video');
+    s.el.appendChild(cv);
+    s.cv = cv; s.ctx = cv.getContext('2d'); s.imgs = new Array(n); s.drawn = -1; s.nF = n;
+    // Orden de carga: primero un cuadro de cada 16, luego de cada 8, 4, 2 y
+    // el resto. Asi el vuelo ya se mueve (a saltos) con pocas imagenes y se
+    // va afinando mientras llegan las demas.
+    const order = [], seen = new Set();
+    for (let step = 16; step >= 1; step >>= 1)
+      for (let i = 0; i < n; i += step) if (!seen.has(i)) { seen.add(i); order.push(i); }
+    if (!seen.has(n - 1)) order.push(n - 1);
+    let k = 0, activos = 0;
+    const MAX = 6;
+    function siguiente() {
+      while (activos < MAX && k < order.length) {
+        const i = order[k++]; activos++;
+        const im = new Image();
+        im.decoding = 'async';
+        const fin = ok => {
+          activos--;
+          if (ok) { s.imgs[i] = im; if (!s.ready) { s.ready = true; read(); } }
+          siguiente();
+        };
+        im.onload = () => { (im.decode ? im.decode() : Promise.resolve()).then(() => fin(true), () => fin(true)); };
+        im.onerror = () => fin(false);
+        im.src = F.dir + String(i + 1).padStart(3, '0') + '.webp';
+      }
+    }
+    siguiente();
+  }
+  function drawFrame(s) {
+    const n = s.nF;
+    const want = Math.round(clamp(s.cur, 0, 1) * (n - 1));
+    // el cuadro cargado mas cercano al que pide el scroll
+    let idx = -1;
+    for (let d = 0; d < n; d++) {
+      if (want - d >= 0 && s.imgs[want - d]) { idx = want - d; break; }
+      if (want + d < n && s.imgs[want + d]) { idx = want + d; break; }
+    }
+    if (idx < 0) return;
+    const cv = s.cv, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const W = Math.round(cv.clientWidth * dpr), H = Math.round(cv.clientHeight * dpr);
+    if (!W || !H) return;
+    if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; s.drawn = -1; }
+    if (idx === s.drawn) return;
+    const im = s.imgs[idx], iw = im.naturalWidth, ih = im.naturalHeight;
+    const k = Math.max(W / iw, H / ih), dw = iw * k, dh = ih * k;
+    s.ctx.drawImage(im, (W - dw) / 2, (H - dh) * 0.44, dw, dh);   // como object-fit:cover, 44 % en vertical
+    s.drawn = idx;
+    if (!s.painted) { s.painted = true; s.el.classList.add('has-clip'); }
   }
 
   function read() {
@@ -251,7 +327,7 @@ function mountScrollWorld(container, config) {
       const op = smooth(1 - outside / fade);
       s.el.style.opacity = op; s.visible = op > 0.001;
       s.el.style.zIndex = (i === ci) ? '120' : String(100 + Math.round(op * 10));
-      if (!s.hasClip || !s.ready) {
+      if (!s.hasClip || !s.ready || !s.painted) {
         const sc = reduce ? 1 : 1.03 + local * 0.14;
         s.img.style.transform = `translateX(${stageX - 2}vw) scale(${sc.toFixed(3)})`;
       }
@@ -304,6 +380,13 @@ function mountScrollWorld(container, config) {
     const eps = isMobile() ? 0.02 : 0.008;   // coarser seek step on phones = fewer decodes
     for (let i = 0; i < NSEG; i++) {
       const s = SEGMENTS[i];
+      if (s.isFrames) {   // DATCER: secuencia de imagenes (telefono)
+        if (!s.ready) continue;
+        if (!s.visible && Math.abs(s.cur - s.target) < 0.002 && s.painted) continue;
+        s.cur += (s.target - s.cur) * 0.22;
+        drawFrame(s);
+        continue;
+      }
       if (!s.hasClip || !s.ready || !s.video) continue;
       // Never queue a seek while the decoder is still resolving the last one.
       // On phones a fast flick would otherwise pile up seeks and freeze the clip;
@@ -323,18 +406,32 @@ function mountScrollWorld(container, config) {
   // instant instead of showing a blank frame. `userReady` also makes freshly-loaded
   // clips prime themselves (see loadClip).
   let userReady = false;
-  function primeVideo(v) {
-    if (!isMobile() || !v) return;
-    try { const p = v.play(); if (p && p.then) p.then(() => { try { v.pause(); } catch (e) {} }).catch(() => {}); }
-    catch (e) {}
+  function primeVideo(v, s) {
+    if (!isMobile() || !v || (s && s.painted)) return;
+    const listo = () => {
+      try { v.pause(); } catch (e) {}
+      if (!s) return;
+      // El play pudo mover el video: se vuelve al punto que pide el scroll.
+      try { v.currentTime = clamp(s.cur, 0, 0.999) * (v.duration || 1); } catch (e) {}
+      s.painted = true; s.el.classList.add('has-clip');
+    };
+    try {
+      const p = v.play();
+      if (p && p.then) p.then(listo).catch(() => {});
+      else listo();
+    } catch (e) {}
   }
+  // DATCER: en iOS solo el FINAL del toque (touchend/click) cuenta como gesto
+  // que habilita play(); touchstart/pointerdown no. Y no basta una vez: los
+  // clips que cargan despues tambien se ceban en el siguiente toque, mientras
+  // quede alguno sin pintar.
   function onFirstGesture() {
-    if (userReady) return;
     userReady = true;
-    SEGMENTS.forEach(s => primeVideo(s.video));
+    let faltan = false;
+    SEGMENTS.forEach(s => { if (s.video && !s.painted) { primeVideo(s.video, s); faltan = true; } else if (!s.painted) faltan = true; });
+    if (!faltan) ['touchend', 'click', 'pointerdown', 'touchstart'].forEach(ev => window.removeEventListener(ev, onFirstGesture));
   }
-  window.addEventListener('pointerdown', onFirstGesture, { once: true, passive: true });
-  window.addEventListener('touchstart', onFirstGesture, { once: true, passive: true });
+  ['touchend', 'click', 'pointerdown', 'touchstart'].forEach(ev => window.addEventListener(ev, onFirstGesture, { passive: true }));
 
   // Particles are a per-frame cost we can't afford alongside video scrubbing on a phone.
   seedParticles(particles, reduce || coarse);
