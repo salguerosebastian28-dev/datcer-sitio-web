@@ -1,0 +1,103 @@
+/* ============================================================
+   DATCER · bancos de carga — pagina de servicio
+   Solo lo propio de esta pagina; el sistema visual sale de style.css.
+   La portada es la de shelters (bc-hero = sh-hero) con el video de
+   bancos de carga de fondo.
+   ============================================================ */
+
+/* ---------- portada ---------- */
+#bc-hero{position:relative;height:100svh;min-height:600px;display:flex;align-items:flex-end;
+  overflow:hidden;--bg:var(--dark);--fg:var(--light);background:var(--dark);
+  --hx:1;
+  clip-path:inset(
+    calc(var(--hx) * clamp(84px,10.5vh,124px))
+    calc(var(--hx) * clamp(12px,1.6vw,30px))
+    calc(var(--hx) * clamp(12px,1.6vw,30px))
+    round calc(var(--hx) * clamp(12px,1.5vw,26px)))}
+/* En movil tambien va enmarcado, como el hero del inicio: sin marco, la
+   cabecera caia sobre la foto clara y el logo no se leia. */
+#bc-hero .in{position:relative;z-index:3;width:100%;padding-bottom:clamp(28px,4.6vw,58px)}
+#bc-hero .tag{display:inline-block;margin-bottom:clamp(18px,2.6vw,34px);color:rgba(227,230,235,.72)}
+#bc-hero h1{max-width:11ch}
+#bc-hero .ft{display:grid;grid-template-columns:minmax(0,36ch) 1fr auto;align-items:end;
+  gap:clamp(20px,3vw,54px);margin-top:clamp(26px,3.6vw,50px);padding-top:26px;
+  padding-right:clamp(0px,5vw,112px);border-top:1px solid rgba(227,230,235,.15)}
+#bc-hero .ft p{color:rgba(227,230,235,.62);font-size:clamp(.95rem,1.05vw,1.1rem)}
+#bc-hero .cta{grid-column:3}
+/* la foto del módulo, con su parallax y el velo que sostiene el texto.
+   Aquí se probó `contain` con fondo desenfocado, recogerla a la derecha y darle
+   relieve al texto: el cliente volvió a esta, la primera. No rehacerlo. */
+#bc-hero .bc-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
+#bc-hero .bc-bg video,#bc-hero .bc-bg img{position:absolute;left:0;top:-7%;width:100%;height:114%;
+  object-fit:cover;object-position:52% 42%;will-change:transform}
+/* Sin velo: la foto va en su color. El cliente lo pidio asi, como en las
+   fichas de servicios. El texto se sostiene con sombra en capas -una corta
+   que dibuja el filo y una larga y difusa que separa del fondo-, no con un
+   filtro sobre la imagen. */
+#bc-hero .tag,#bc-hero h1,#bc-hero .ft p{
+  text-shadow:0 1px 2px rgba(2,13,31,.55),0 3px 14px rgba(2,13,31,.55),0 10px 44px rgba(2,13,31,.6)}
+#bc-hero .tag{color:#fff}
+#bc-hero .ft p{color:rgba(255,255,255,.94)}
+/* Solo detras del bloque de texto, abajo a la izquierda, una sombra que se
+   disuelve hacia la foto. El resto de la imagen queda sin tocar. Sin ella el
+   titular blanco se perdia sobre los paneles y el concreto claros. */
+#bc-hero .in::before{content:'';position:absolute;z-index:-1;pointer-events:none;
+  left:-12%;bottom:-18%;width:78%;height:118%;
+  background:radial-gradient(closest-side,rgba(2,13,31,.66),rgba(2,13,31,.38) 58%,rgba(2,13,31,0))}
+@media (max-width:860px){
+  #bc-hero .in::before{left:-20%;width:140%;bottom:-6%;height:118%;
+    background:linear-gradient(to top,rgba(2,13,31,.78) 0,rgba(2,13,31,.62) 55%,rgba(2,13,31,.3) 80%,rgba(2,13,31,0))}
+}
+/* el boton de contorno no se veia sobre la foto clara: lleva fondo */
+#bc-hero .cta .btn:not(.fill){background:rgba(2,13,31,.6);border-color:rgba(227,230,235,.28);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+
+
+/* ============================================================
+#bc-hero .ln>i{white-space:nowrap}
+
+/* ---------- cifras ---------- */
+.bc-tbl{list-style:none;margin-top:clamp(20px,2.4vw,32px);border-top:1px solid var(--fg-18)}
+.bc-tbl li{display:flex;align-items:baseline;gap:18px;padding:13px 0;border-bottom:1px solid var(--fg-10)}
+.bc-tbl li b{font-size:1.5rem;font-weight:200;letter-spacing:-.04em;min-width:2.6em;
+  font-variant-numeric:tabular-nums}
+.bc-tbl li span{font-size:.88rem;color:var(--fg-60)}
+
+/* ---------- que se prueba: tres equipos ---------- */
+.bc-eq{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.4vw,36px)}
+.bc-eq article{border-top:1px solid var(--fg-18);padding-top:clamp(18px,2vw,26px)}
+.bc-eq .idx{display:block;color:var(--fg-38);margin-bottom:14px}
+.bc-eq h3{font-size:clamp(1.3rem,1.9vw,1.8rem);font-weight:200;letter-spacing:-.03em;line-height:1.1;margin-bottom:14px}
+.bc-eq p{font-size:.95rem;line-height:1.6;color:var(--fg-60)}
+
+/* ---------- ficha de la prueba ---------- */
+.bc-spec{display:grid;grid-template-columns:1fr 1fr;gap:0 clamp(30px,5vw,80px)}
+.bc-spec .r{display:flex;justify-content:space-between;align-items:baseline;gap:20px;
+  padding:19px 0;border-bottom:1px solid var(--fg-18)}
+.bc-spec .k{color:var(--fg-60);font-size:.92rem}
+.bc-spec .v{font-size:clamp(1.05rem,1.6vw,1.5rem);font-weight:200;letter-spacing:-.03em;
+  text-align:right;font-variant-numeric:tabular-nums}
+.bc-spec .v em{font-style:normal;font-size:.6em;opacity:.55;margin-left:6px}
+
+/* ---------- preguntas frecuentes ---------- */
+.bc-faq{border-top:1px solid var(--fg-18)}
+.bc-faq details{border-bottom:1px solid var(--fg-18)}
+.bc-faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;
+  gap:24px;padding:clamp(18px,2vw,26px) 0;font-size:clamp(1.05rem,1.5vw,1.4rem);font-weight:300;letter-spacing:-.02em}
+.bc-faq summary::-webkit-details-marker{display:none}
+.bc-faq summary::after{content:'+';flex:none;font-size:1.4em;font-weight:200;line-height:1;transition:transform .4s var(--e)}
+.bc-faq details[open] summary::after{transform:rotate(45deg)}
+.bc-faq details p{max-width:70ch;padding-bottom:clamp(18px,2vw,26px);color:var(--fg-60);line-height:1.65}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:1080px){
+  .bc-spec{grid-template-columns:1fr}
+  .bc-eq{grid-template-columns:1fr}
+}
+@media (max-width:860px){
+  #bc-hero .ft{grid-template-columns:1fr;padding-right:0}
+  #bc-hero .cta{grid-column:1}
+  #bc-hero h1{max-width:none}
+}
